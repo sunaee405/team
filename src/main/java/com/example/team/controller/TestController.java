@@ -18,7 +18,7 @@ public class TestController {
 	public String testhtml() {
 		testService.testService();
 		
-		return "index";
+		return "testhtml";
 	}
 	
 	@GetMapping("/index")
