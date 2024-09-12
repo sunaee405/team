@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>RegisterProduct</title>
+
+<link rel="stylesheet" href="/css/product/4d4e407f2280d50c.css">
+<link rel="stylesheet" href="/css/product/e3048584c00a0406.css">
+<link rel="stylesheet" href="/css/product/a5055aa57af99147.css">
+<link rel="stylesheet" href="/css/product/9808ee4030aef597.css">
+<link rel="stylesheet" href="/css/product/a4ef56fda630c4e5.css">
+
+<script src="javascript/product/registerProduct.js"></script>
+
+<!-- <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/static/css/product/4d4e407f2280d50c.css"> -->
+<!-- <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/static/css/product/e3048584c00a0406.css"> -->
+<!-- <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/static/css/product/a5055aa57af99147.css"> -->
+<!-- <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/static/css/product/9808ee4030aef597.css"> -->
+<!-- <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/static/css/product/a4ef56fda630c4e5.css"> -->
+
+<!-- <link rel="stylesheet" type="text/css" href="/main-web/_next/static/css/4d4e407f2280d50c.css"> -->
+<!-- <link rel="stylesheet" type="text/css" href="/main-web/_next/static/css/e3048584c00a0406.css"> -->
+</head>
+<body>
+	<main class="relative flex-grow border-b-2"
+		style="min-height: 0px !important; height: auto !important;">
+		<div class="mx-auto max-w-[1280px] px-4 md:px-8 2xl:px-16 box-content">
+			<section class="mx-auto w-full max-w-[768px] pt-[72px]">
+				<div class="flex px-5 pb-1.5">
+				
+				<!-- ================================== 사진업로드 영역 시작 ============================================ -->
+					<div>
+						<input id="imageInput" name="media" type="file" multiple="" accept="image/png, image/jpeg, image/jpg" class="hidden">
+						<button id="imageUploadButton" class="flex items-center justify-center w-20 h-20 mr-1.5 bg-jnGray-200 rounded">
+							<div class="flex flex-col">
+								<svg width="32px" height="32px" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                					<path fill-rule="evenodd" 
+                						  clip-rule="evenodd"
+										  d="M15.728 20.4461C13.6481 20.4461 11.9619 18.7599 11.9619 16.68C11.9619 14.6001 13.6481 12.9138 15.728 12.9138C17.8079 12.9138 19.4942 14.6001 19.4942 16.68C19.4942 18.7599 17.8079 20.4461 15.728 20.4461Z"
+										  fill="#C2C6CE">
+									</path>
+                					<path fill-rule="evenodd"
+                						  clip-rule="evenodd"
+										  d="M10.4564 7.32295C10.9376 6.00587 11.5097 5.15997 12.8118 5.15997H17.9241C19.2253 5.15997 19.7975 6.00463 20.2785 7.32003H20.7897C24.7543 7.32003 27.968 10.4192 27.968 14.2417V19.119C27.968 22.9409 24.7543 26.04 20.7897 26.04H10.6669C6.7023 26.04 3.48798 22.9409 3.48798 19.119V14.2417C3.48798 10.487 6.58918 7.4303 10.4564 7.32295ZM21.3772 16.68C21.3772 19.8001 18.8481 22.3292 15.728 22.3292C12.6079 22.3292 10.0788 19.8001 10.0788 16.68C10.0788 13.5599 12.6079 11.0308 15.728 11.0308C18.8481 11.0308 21.3772 13.5599 21.3772 16.68ZM21.5988 11.88C21.5988 12.4 22.0204 12.8216 22.5403 12.8216C23.0603 12.8216 23.4819 12.4 23.4819 11.88C23.4819 11.36 23.0603 10.9385 22.5403 10.9385C22.0204 10.9385 21.5988 11.36 21.5988 11.88Z"
+										  fill="#C2C6CE">
+									</path>
+            					</svg>
+								<p id="imageCount" class="mt-1 text-xs text-jnGray-500">
+								</p>
+							</div>
+						</button>
+					</div>
+
+					<div id="previewContainer" class="overflow-hidden">
+						<ul class="flex items-center" id="imageList">
+						</ul>
+					</div>
+
+					<!-- ================================== 사진업로드 영역 끝 ============================================ -->
+					
+
+
+					<form class="flex flex-col justify-center mt-6 lg:mt-8">
+											<div class="flex flex-col px-5 space-y-5">
+												<div class="block">
+													<input id="productTitle" name="productTitle" type="text"
+														placeholder="상품명"
+														class="py-2 px-4 md:px-5 w-full appearance-none border text-input text-xs lg:text-sm font-body placeholder-body min-h-12 transition duration-200 ease-in-out bg-white border-gray-300 focus:border-heading h-11 md:h-12 focus:outline-none rounded-md"
+														autocomplete="off" spellcheck="false" aria-invalid="false">
+												</div>
+						<!-- 						<section name="productCategory"> -->
+						<!-- 							<div -->
+						<!-- 								class="flex flex-row w-full overflow-hidden text-sm font-medium h-60"> -->
+						<!-- 								<div id="category-depth-1" -->
+						<!-- 									class="w-1/3 h-full overflow-y-auto border border-solid rounded border-jnGray-300"> -->
+						<!-- 									<ul class="flex flex-col border-solid border-jnGray-300"> -->
+						<!-- 										<li class="false h-10 p-3" id="category-1"><button> -->
+						<!-- 												<p class="truncate break-keep">수입명품</p> -->
+						<!-- 											</button></li> -->
+						<!-- 										<li class="false h-10 p-3" id="category-2"><button> -->
+						<!-- 												<p class="truncate break-keep">패션의류</p> -->
+						<!-- 											</button></li> -->
+						<!-- 										<li class="false h-10 p-3" id="category-3"><button> -->
+						<!-- 												<p class="truncate break-keep">패션잡화</p> -->
+						<!-- 											</button></li> -->
+						<!-- 										<li class="false h-10 p-3" id="category-4"><button> -->
+						<!-- 												<p class="truncate break-keep">뷰티</p> -->
+						<!-- 											</button></li> -->
+						<!-- 										<li class="false h-10 p-3" id="category-5"><button> -->
+						<!-- 												<p class="truncate break-keep">출산/유아동</p> -->
+						<!-- 											</button></li> -->
+						<!-- 										<li class="false h-10 p-3" id="category-6"><button> -->
+						<!-- 												<p class="truncate break-keep">모바일/태블릿</p> -->
+						<!-- 											</button></li> -->
+						<!-- 										<li class="false h-10 p-3" id="category-7"><button> -->
+						<!-- 												<p class="truncate break-keep">가전제품</p> -->
+						<!-- 											</button></li> -->
+						<!-- 										<li class="false h-10 p-3" id="category-8"><button> -->
+						<!-- 												<p class="truncate break-keep">노트북/PC</p> -->
+						<!-- 											</button></li> -->
+						<!-- 										<li class="false h-10 p-3" id="category-9"><button> -->
+						<!-- 												<p class="truncate break-keep">카메라/캠코더</p> -->
+						<!-- 											</button></li> -->
+						<!-- 										<li class="false h-10 p-3" id="category-10"><button> -->
+						<!-- 												<p class="truncate break-keep">가구/인테리어</p> -->
+						<!-- 											</button></li> -->
+						<!-- 										<li class="false h-10 p-3" id="category-11"><button> -->
+						<!-- 												<p class="truncate break-keep">리빙/생활</p> -->
+						<!-- 											</button></li> -->
+						<!-- 										<li class="false h-10 p-3" id="category-12"><button> -->
+						<!-- 												<p class="truncate break-keep">게임</p> -->
+						<!-- 											</button></li> -->
+						<!-- 										<li class="false h-10 p-3" id="category-13"><button> -->
+						<!-- 												<p class="truncate break-keep">반려동물/취미</p> -->
+						<!-- 											</button></li> -->
+						<!-- 										<li class="false h-10 p-3" id="category-14"><button> -->
+						<!-- 												<p class="truncate break-keep">도서/음반/문구</p> -->
+						<!-- 											</button></li> -->
+						<!-- 										<li class="false h-10 p-3" id="category-15"><button> -->
+						<!-- 												<p class="truncate break-keep">티켓/쿠폰</p> -->
+						<!-- 											</button></li> -->
+						<!-- 										<li class="false h-10 p-3" id="category-16"><button> -->
+						<!-- 												<p class="truncate break-keep">스포츠</p> -->
+						<!-- 											</button></li> -->
+						<!-- 										<li class="false h-10 p-3" id="category-17"><button> -->
+						<!-- 												<p class="truncate break-keep">레저/여행</p> -->
+						<!-- 											</button></li> -->
+						<!-- 										<li class="false h-10 p-3" id="category-19"><button> -->
+						<!-- 												<p class="truncate break-keep">오토바이</p> -->
+						<!-- 											</button></li> -->
+						<!-- 										<li class="false h-10 p-3" id="category-20"><button> -->
+						<!-- 												<p class="truncate break-keep">공구/산업용품</p> -->
+						<!-- 											</button></li> -->
+						<!-- 										<li class="false h-10 p-3" id="category-21"><button> -->
+						<!-- 												<p class="truncate break-keep">무료나눔</p> -->
+						<!-- 											</button></li> -->
+						<!-- 										<li class="false h-10 p-3" id="category-1348"><button> -->
+						<!-- 												<p class="truncate break-keep">중고차</p> -->
+						<!-- 											</button></li> -->
+						<!-- 									</ul> -->
+						<!-- 								</div> -->
+						<!-- 								<div id="category-depth-2" -->
+						<!-- 									class="w-1/3 h-full overflow-y-auto border border-solid rounded border-jnGray-300 hidden"></div> -->
+						<!-- 								<div id="category-depth-3" -->
+						<!-- 									class="w-1/3 h-full overflow-y-auto border border-solid rounded border-jnGray-300 hidden"></div> -->
+						<!-- 							</div> -->
+						<!-- 						</section> -->
+						<!-- 					</div> -->
+						<!-- 					<div class="flex flex-col px-5 mt-5"> -->
+						<!-- 						<div -->
+						<!-- 							class="flex items-center justify-between w-full border border-gray-300 border-solid rounded px-4   -->
+						<!--         text-base scale-85 origin-top-left -mb-3  w-[117.65%] p-6  h-[60px] -->
+
+						<!--         false"> -->
+						<!-- 							<label for="search" class="flex items-center py-0.5 w-2/3"><span>₩</span><input -->
+						<!-- 								name="productPrice" type="text" inputmode="numeric" -->
+						<!-- 								class="ml-1 bg-white focus:outline-none h-11 md:h-12 placeholer-jnGray-500 w-2/3 disabled:opacity-100 placeholer-jnGray-500" -->
+						<!-- 								placeholder="판매가격" value=""></label> -->
+						<!-- 							<button -->
+						<!-- 								class="flex items-center justify-center text-center text-jnGray-900"> -->
+						<!-- 								<svg width="22" height="22" viewBox="0 0 22 22" fill="#FFFFFF" -->
+						<!-- 									xmlns="http://www.w3.org/2000/svg" class="mr-1 "> -->
+						<!-- 									<path -->
+						<!-- 										d="M12 21C16.9706 21 21 16.9706 21 12C21 7.02944 16.9706 3 12 3C7.02944 3 3 7.02944 3 12C3 16.9706 7.02944 21 12 21Z" -->
+						<!-- 										stroke="#9CA3AF" stroke-width="1.5" stroke-linecap="round" -->
+						<!-- 										stroke-linejoin="round"></path> -->
+						<!-- 									<path d="M16 9L10.5 14.5L8 12" stroke="#C2C6CE" -->
+						<!-- 										stroke-width="1.5" stroke-linecap="round" -->
+						<!-- 										stroke-linejoin="round"></path></svg> -->
+						<!-- 								무료나눔 -->
+						<!-- 							</button> -->
+						<!-- 						</div> -->
+						<!-- 					</div> -->
+						<!-- 					<section class="flex flex-col px-5 space-y-5"> -->
+						<!-- 						<div class="relative"> -->
+						<!-- 							<div> -->
+						<!-- 								<textarea id="productDescription" name="productDescription" -->
+						<!-- 									class="px-4 py-3 items-center w-full rounded appearance-none transition duration-300 ease-in-out text-heading text-sm focus:outline-none focus:ring-0 bg-white border border-gray-300 focus:shadow focus:outline-none focus:border-heading placeholder-body inline-block w-full px-4 py-4 mt-6 outline-none align-middle overflow-x-scroll appearance-none resize-none border-solid border border-jnGray-300 placeholder:text-jnGray-500 h-[220px] text-sm" -->
+						<!-- 									autocomplete="off" spellcheck="false" rows="4" -->
+						<!-- 									placeholder="- 상품명(브랜드)																																																- 구매 시기																																																- 사용 기간																																																- 하자 여부																																																* 실제 촬영한 사진과 함께 상세 정보를 입력해주세요.																																																* 카카오톡 아이디 첨부 시 게시물 삭제 및 이용제재 처리될 수 있어요.																																																 																																																안전하고 건전한 거래환경을 위해 과학기술정보통신부, 한국인터넷진흥원, 중고나라가 함께합니다." -->
+						<!-- 									maxlength="1000"></textarea> -->
+						<!-- 							</div> -->
+						<!-- 							<span class="absolute right-0 text-sm leading-5 text-gray-400">0 -->
+						<!-- 								/ 1000</span> -->
+						<!-- 						</div> -->
+						<!-- 						<p class="font-semibold">상품상태</p> -->
+						<!-- 						<div class="flex gap-3"> -->
+						<!-- 							<button -->
+						<!-- 								class="h-10 w-[80px] rounded-md border border-solid font-semibold text-base mb-2 text-white bg-jngreen border-jngreen">중고</button> -->
+						<!-- 							<button -->
+						<!-- 								class="h-10 w-[80px] rounded-md border border-solid font-semibold text-base mb-2 border-jnblack text-jnblack bg-white">새상품</button> -->
+						<!-- 						</div> -->
+						<!-- 						<div> -->
+						<!-- 							<p class="font-semibold">거래방법</p> -->
+						<!-- 							<ul class="flex flex-wrap items-start mt-4 mb-2 [&amp;>*]:mb-2"> -->
+						<!-- 								<li -->
+						<!-- 									class="flex items-center justify-center text-sm font-medium truncate break-keep mr-3.5 last:mr-0"><label -->
+						<!-- 									for="isPost" class="flex items-end"><div -->
+						<!-- 											class="hidden appearance-none"> -->
+						<!-- 											<input id="isPost" name="tradeType" type="checkbox" -->
+						<!-- 												class="py-2 px-4 md:px-5 w-full appearance-none border text-input text-xs lg:text-sm font-body placeholder-body min-h-12 transition duration-200 ease-in-out bg-gray-100 border-gray-300 focus:shadow focus:bg-white focus:border-primary rounded-md" -->
+						<!-- 												autocomplete="off" spellcheck="false" aria-invalid="false" -->
+						<!-- 												value="0"> -->
+						<!-- 										</div> -->
+						<!-- 										<svg stroke="currentColor" fill="currentColor" -->
+						<!-- 											stroke-width="0" viewBox="0 0 512 512" color="#9CA3AF" -->
+						<!-- 											height="20" width="20" xmlns="http://www.w3.org/2000/svg" -->
+						<!-- 											style="color: rgb(156, 163, 175);"> -->
+						<!-- 											<path -->
+						<!-- 												d="M256 8C119.033 8 8 119.033 8 256s111.033 248 248 248 248-111.033 248-248S392.967 8 256 8zm0 48c110.532 0 200 89.451 200 200 0 110.532-89.451 200-200 200-110.532 0-200-89.451-200-200 0-110.532 89.451-200 200-200m140.204 130.267l-22.536-22.718c-4.667-4.705-12.265-4.736-16.97-.068L215.346 303.697l-59.792-60.277c-4.667-4.705-12.265-4.736-16.97-.069l-22.719 22.536c-4.705 4.667-4.736 12.265-.068 16.971l90.781 91.516c4.667 4.705 12.265 4.736 16.97.068l172.589-171.204c4.704-4.668 4.734-12.266.067-16.971z"></path></svg> -->
+						<!-- 										<p class="ml-1.5">택배거래</p></label></li> -->
+						<!-- 								<li -->
+						<!-- 									class="flex items-center justify-center text-sm font-medium truncate break-keep mr-3.5 last:mr-0"><label -->
+						<!-- 									for="isMeet" class="flex items-end"><div -->
+						<!-- 											class="hidden appearance-none"> -->
+						<!-- 											<input id="isMeet" name="tradeType" type="checkbox" -->
+						<!-- 												class="py-2 px-4 md:px-5 w-full appearance-none border text-input text-xs lg:text-sm font-body placeholder-body min-h-12 transition duration-200 ease-in-out bg-gray-100 border-gray-300 focus:shadow focus:bg-white focus:border-primary rounded-md" -->
+						<!-- 												autocomplete="off" spellcheck="false" aria-invalid="false" -->
+						<!-- 												value="0"> -->
+						<!-- 										</div> -->
+						<!-- 										<svg stroke="currentColor" fill="currentColor" -->
+						<!-- 											stroke-width="0" viewBox="0 0 512 512" color="#9CA3AF" -->
+						<!-- 											height="20" width="20" xmlns="http://www.w3.org/2000/svg" -->
+						<!-- 											style="color: rgb(156, 163, 175);"> -->
+						<!-- 											<path -->
+						<!-- 												d="M256 8C119.033 8 8 119.033 8 256s111.033 248 248 248 248-111.033 248-248S392.967 8 256 8zm0 48c110.532 0 200 89.451 200 200 0 110.532-89.451 200-200 200-110.532 0-200-89.451-200-200 0-110.532 89.451-200 200-200m140.204 130.267l-22.536-22.718c-4.667-4.705-12.265-4.736-16.97-.068L215.346 303.697l-59.792-60.277c-4.667-4.705-12.265-4.736-16.97-.069l-22.719 22.536c-4.705 4.667-4.736 12.265-.068 16.971l90.781 91.516c4.667 4.705 12.265 4.736 16.97.068l172.589-171.204c4.704-4.668 4.734-12.266.067-16.971z"></path></svg> -->
+						<!-- 										<p class="ml-1.5">직거래</p></label></li> -->
+						<!-- 							</ul> -->
+						<!-- 						</div> -->
+						<!-- 					</section> -->
+						<!-- 					<section class="w-full px-5 text-sm font-medium mb-7"> -->
+						<!-- 						<div class="h-px mb-4 bg-jnGray-200"></div> -->
+						<!-- 					</section> -->
+
+						<div class="relative flex gap-4 px-5 py-3">
+							<button data-variant="flat"
+								class="text-[13px] md:text-sm leading-4 inline-flex items-center cursor-pointer transition ease-in-out duration-300 font-semibold font-body text-center justify-center border-0 border-transparent placeholder-white focus-visible:outline-none focus:outline-none rounded-md bg-heading text-white px-5 md:px-6 lg:px-8 py-4 md:py-3.5 lg:py-4 hover:text-white hover:bg-gray-600 hover:shadow-cart w-[20%] break-keep"
+								type="submit">등록</button>
+						</div>
+
+					</form>
+			</section>
+		</div>
+
+	</main>
+</body>
+</html>
