@@ -7,8 +7,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class TeamApplication {
 
 	public static void main(String[] args) {
-		//test
-		//충돌
 		SpringApplication.run(TeamApplication.class, args);
 	}
 
