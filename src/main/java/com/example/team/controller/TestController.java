@@ -34,7 +34,7 @@ public class TestController {
 	}
 	
 	@GetMapping("/charts")
-	public String charts() {
+	public String charts() {	
 		
 		return "charts";
 	}
