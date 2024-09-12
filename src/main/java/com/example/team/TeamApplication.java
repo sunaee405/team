@@ -7,6 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class TeamApplication {
 	
 	//충돌 test 
+	//test3
 	public static void main(String[] args) {
 		// 충돌확인 4시 57분
 		SpringApplication.run(TeamApplication.class, args);
