@@ -7,7 +7,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class TeamApplication {
 
 	public static void main(String[] args) {
-		//ㄷㄳ니ㅏ허ㅣㅓ힎
+		//test
+		//충돌
 		SpringApplication.run(TeamApplication.class, args);
 	}
 
