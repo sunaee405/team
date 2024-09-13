@@ -30,11 +30,11 @@ public class ProductController {
 	@Inject
 	private ProductService productService;
 
-	@GetMapping("/product/registerProduct")
-	public String registerProduct() {
-
-		return "/product/registerProduct";
-	}
+//	@GetMapping("/product/registerProduct")
+//	public String registerProduct() {
+//
+//		return "/product/registerProduct";
+//	}
 
 	@GetMapping("/getProductCategory")
 	@ResponseBody
@@ -47,16 +47,26 @@ public class ProductController {
 	public List<Map<String, Object>> getProductLocation() {
 		return productService.getProductLocation();
 	}
+	
+	@GetMapping("/getProductState")
+	@ResponseBody
+	public List<Map<String, Object>> getProductState() {
+		return productService.getProductState();
+	}
+	
 
 	@PostMapping("/insertProduct")
 	@ResponseBody
 	public ResponseEntity<?> insertProduct(@RequestParam("media") MultipartFile[] media, //
-			@RequestParam Map<String, String> params) throws Exception {
+										   @RequestParam Map<String, String> params) throws Exception {
 		
 		String productTitle = params.get("productTitle");
 		String categoryCode = params.get("categoryMcoId") + params.get("categoryScoId") + params.get("categoryDcoId");
 		String locationCode = params.get("locationMcoId") + params.get("locationScoId") + params.get("locationDcoId");
-
+		String stateCode = params.get("stateMcoId") + params.get("stateScoId") + params.get("stateDcoId");
+		String productPrice = params.get("productPrice");
+		String productDescription = params.get("productDescription");
+		
 		// 파일 저장 경로 설정
 		String desktopPath = "C:\\Users\\ITWILL\\Desktop\\upload";
 		List<String> savedFileNames = new ArrayList<>();
@@ -76,6 +86,9 @@ public class ProductController {
 		productData.put("fileNames", String.join(",", savedFileNames)); 
 		productData.put("categoryCode", categoryCode);// 파일명을 ','로 구분하여 저장
 		productData.put("locationCode", locationCode);
+		productData.put("stateCode", stateCode);
+		productData.put("productPrice", productPrice);
+		productData.put("productDescription", productDescription);
 		// 서비스 호출
 		productService.insertProduct(productData);
 

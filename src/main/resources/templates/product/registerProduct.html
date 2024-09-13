@@ -4,14 +4,14 @@
 <meta charset="UTF-8">
 <title>RegisterProduct</title>
 
-<link rel="stylesheet" href="/css/product/4d4e407f2280d50c.css">
-<link rel="stylesheet" href="/css/product/e3048584c00a0406.css">
-<link rel="stylesheet" href="/css/product/a5055aa57af99147.css">
-<link rel="stylesheet" href="/css/product/9808ee4030aef597.css">
-<link rel="stylesheet" href="/css/product/a4ef56fda630c4e5.css">
+<link rel="stylesheet" href="/static/css/product/4d4e407f2280d50c.css">
+<link rel="stylesheet" href="/static/css/product/e3048584c00a0406.css">
+<link rel="stylesheet" href="/static/css/product/a5055aa57af99147.css">
+<link rel="stylesheet" href="/static/css/product/9808ee4030aef597.css">
+<link rel="stylesheet" href="/static/css/product/a4ef56fda630c4e5.css">
 
-<script src="../javascript/jquery-3.6.0.js"></script>
-<script src="../javascript/product/registerProduct.js"></script>
+<script src="../static/javascript/jquery-3.6.0.js"></script>
+<script src="../static/javascript/product/registerProduct.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 
@@ -24,8 +24,9 @@
 				<div class="flex px-5 pb-1.5">
 				
 				<!-- ================================== 사진업로드 영역 시작 ============================================ -->
-					<p class="font-semibold">상품사진</p> 
+					
 					<div>
+						<p class="font-semibold">상품사진</p> 
 						<input id="imageInput" name="media" type="file" multiple="" accept="image/png, image/jpeg, image/jpg" class="hidden">
 						<button id="imageUploadButton" class="flex items-center justify-center w-20 h-20 mr-1.5 bg-jnGray-200 rounded">
 							<div class="flex flex-col">
@@ -112,9 +113,7 @@
 								<span class="absolute right-0 text-sm leading-5 text-gray-400">0/1000</span>
 								
 							<p class="font-semibold">상품상태</p> 
-								<div class="flex gap-3">
-									<button class="h-10 w-[80px] rounded-md border border-solid font-semibold text-base mb-2 text-white bg-jngreen border-jngreen">중고</button>
-									<button class="h-10 w-[80px] rounded-md border border-solid font-semibold text-base mb-2 border-jnblack text-jnblack bg-white">새상품</button>
+								<div id="productState_depth" class="flex gap-3">
 								</div>	
 						
 						

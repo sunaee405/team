@@ -1,6 +1,10 @@
 package com.example.team.service;
 
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -24,38 +28,49 @@ public class ProductService {
 
 	@Autowired
 	ProductRepository productRepository;
-	
+
 	@Autowired
 	ProductMapper productMapper;
-	
-	public void insertProduct(Map<String, Object> productData) {
-        String productTitle = (String) productData.get("productTitle");
-        String fileNames = (String) productData.get("fileNames");
-        String categoryCode = (String) productData.get("categoryCode");
-        String locationCode = (String) productData.get("locationCode");
 
-        // 엔티티 생성 후 데이터 설정
-        ProductEntity productEntity = new ProductEntity();
-        productEntity.setPRO_TITLE(productTitle);
-        productEntity.setPRO_IMG(fileNames); // 파일명들을 ,로 구분하여 저장
-        productEntity.setPRO_CATEGORY(categoryCode);
-        productEntity.setPRO_LOCATION(locationCode);
-        
-        // 리포지토리를 통해 DB에 저장
-        productRepository.save(productEntity);
-    }
+	public void insertProduct(Map<String, Object> productData) {
+		String productTitle = (String) productData.get("productTitle");
+		String fileNames = (String) productData.get("fileNames");
+		String categoryCode = (String) productData.get("categoryCode");
+		String locationCode = (String) productData.get("locationCode");
+		String stateCode = (String) productData.get("stateCode");
+		String productPrice = (String) productData.get("productPrice");
+		String productDescription = (String) productData.get("productDescription");
+
+		// 현재 시간을 LocalDateTime으로 설정 (초까지만)
+	    LocalDateTime currentDateTime = LocalDateTime.now().withNano(0);
+
+		// 엔티티 생성 후 데이터 설정
+		ProductEntity productEntity = new ProductEntity();
+		productEntity.setPRO_TITLE(productTitle);
+		productEntity.setPRO_IMG(fileNames); // 파일명들을 ,로 구분하여 저장
+		productEntity.setPRO_CATEGORY(categoryCode);
+		productEntity.setPRO_LOCATION(locationCode);
+		productEntity.setPRO_STATE(stateCode);
+		productEntity.setPRO_PRICE(productPrice);
+		productEntity.setPRO_CONTENT(productDescription);
+		productEntity.setPRO_DATE(currentDateTime);
+
+		// 리포지토리를 통해 DB에 저장
+		productRepository.save(productEntity);
+	}
 
 	public List<Map<String, Object>> getProductCategory() {
-		 // Mapper에서 데이터 조회
-        return productMapper.getProductCategory();
+		// Mapper에서 데이터 조회
+		return productMapper.getProductCategory();
 	}
-	
+
 	public List<Map<String, Object>> getProductLocation() {
-		 // Mapper에서 데이터 조회
-       return productMapper.getProductLocation();
+		// Mapper에서 데이터 조회
+		return productMapper.getProductLocation();
 	}
-	
-	
-	
+
+	public List<Map<String, Object>> getProductState() {
+		return productMapper.getProductState();
+	}
 
 }

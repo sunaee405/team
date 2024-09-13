@@ -33,7 +33,8 @@ public class ProductEntity {
 	@Column(length = 50)
 	private String PRO_CATEGORY;
 	
-	private Timestamp PRO_DATE;
+	@Column(name = "PRO_DATE", columnDefinition = "DATETIME(0)")
+	private LocalDateTime PRO_DATE;
 	
 	@Column(length = 50)
 	private String PRO_LOCATION;

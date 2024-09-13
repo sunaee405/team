@@ -197,6 +197,57 @@ $(document).ready(function() {
 		}
 	});
 
+
+	$.ajax({
+		url: '/getProductState',  // 상품 상태 데이터를 가져오는 엔드포인트
+		type: 'GET',
+		success: function(data) {
+			var productStateDiv = document.getElementById('productState_depth');
+			productStateDiv.innerHTML = '';  // 기존 버튼을 초기화
+
+			// 상품 상태 값들을 가져와서 버튼을 생성
+			data.forEach(function(item, index) {
+				var button = document.createElement('button');
+				button.type = 'button';
+				button.classList.add('h-10', 'w-[80px]', 'rounded-md', 'border', 'border-solid', 'font-semibold', 'text-base', 'mb-2');  // 기본 비선택 상태
+				button.textContent = item["DCO_VALUE"];  // 버튼 텍스트는 DCO_VALUE로 설정
+
+				// 버튼의 data-* 속성에 DCO_ID, SCO_ID, MCO_ID 저장
+				button.setAttribute('data-stateid', item["DCO_ID"]);
+				button.setAttribute('data-scoid', item["SCO_ID"]);
+				button.setAttribute('data-mcoid', item["MCO_ID"]);
+
+				// 첫 번째 버튼이 초기 선택 상태로 설정되도록 함
+				if (index === 0) {
+					button.classList.add('text-white', 'bg-jngreen', 'border-jngreen');
+					button.classList.add('selected');  // 초기 선택된 상태로 설정
+				} else {
+					button.classList.add('text-jnblack', 'bg-white', 'border-jnblack');
+				}
+
+				// 버튼 클릭 이벤트
+				button.addEventListener('click', function() {
+					// 이전에 선택된 버튼의 스타일을 기본 상태로 변경
+					var selectedButton = document.querySelector('#productState_depth .selected');
+					if (selectedButton) {
+						selectedButton.classList.remove('selected', 'text-white', 'bg-jngreen', 'border-jngreen');
+						selectedButton.classList.add('text-jnblack', 'bg-white', 'border-jnblack');
+					}
+
+					// 현재 클릭된 버튼을 선택 상태로 설정
+					this.classList.add('selected', 'text-white', 'bg-jngreen', 'border-jngreen');
+					this.classList.remove('text-jnblack', 'bg-white', 'border-jnblack');
+				});
+
+				// 생성한 버튼을 div 안에 추가
+				productStateDiv.appendChild(button);
+			});
+		},
+		error: function(xhr, status, error) {
+			console.error('Error occurred while fetching product state:', error);
+		}
+	});
+
 	// 폼 제출 시 이미지 파일도 함께 전송
 	document.getElementById('insertProductForm').addEventListener('submit', function(e) {
 		e.preventDefault();
@@ -220,7 +271,7 @@ $(document).ready(function() {
 		formData.append('categoryScoId', categoryScoId);
 		formData.append('categoryMcoId', categoryMcoId);
 
-		// 선택된 지역의 MCO_ID, SCO_ID, DCO_ID 가져오기 (추가될 기능)
+		// 선택된 지역의 MCO_ID, SCO_ID, DCO_ID 가져오기
 		const locationSelect = document.getElementById('locationList2');
 		const selectedLocationOption = locationSelect.options[locationSelect.selectedIndex];
 		const locationDcoId = selectedLocationOption.value; // DCO_ID (예: 'LOD1')
@@ -231,6 +282,17 @@ $(document).ready(function() {
 		formData.append('locationDcoId', locationDcoId);
 		formData.append('locationScoId', locationScoId);
 		formData.append('locationMcoId', locationMcoId);
+		
+		// 선택된 상품 상태의 DCO_ID, SCO_ID, MCO_ID 가져오기
+		const selectedStateButton = document.querySelector('#productState_depth .selected');
+		const selectedStateDcoId = selectedStateButton.getAttribute('data-stateid');
+		const selectedStateScoId = selectedStateButton.getAttribute('data-scoid');
+		const selectedStateMcoId = selectedStateButton.getAttribute('data-mcoid');
+
+		// 선택된 상품 상태 값 FormData에 추가
+		formData.append('stateDcoId', selectedStateDcoId);  // 선택된 상품 상태의 DCO_ID
+		formData.append('stateScoId', selectedStateScoId);  // 선택된 상품 상태의 SCO_ID
+		formData.append('stateMcoId', selectedStateMcoId);  // 선택된 상품 상태의 MCO_ID
 
 		// FormData의 내용을 콘솔에 출력 (디버깅용)
 		for (var pair of formData.entries()) {
