@@ -11,7 +11,6 @@ public class RedirectController {
 	@GetMapping("/redirect/**")
 	public String redirectPage(HttpServletRequest request) {
 		String pageUrl = request.getRequestURI();
-		
 		pageUrl = pageUrl.replace("/redirect", "");
 		
 	    return pageUrl;
