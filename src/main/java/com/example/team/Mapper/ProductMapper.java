@@ -14,6 +14,8 @@ public interface ProductMapper {
 	
 	List<Map<String, Object>> getProductLocation();
 	
+	List<Map<String, Object>> getProductState();
+	
 	
 	
 	
