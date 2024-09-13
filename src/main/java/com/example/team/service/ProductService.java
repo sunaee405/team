@@ -31,15 +31,15 @@ public class ProductService {
 	public void insertProduct(Map<String, Object> productData) {
         String productTitle = (String) productData.get("productTitle");
         String fileNames = (String) productData.get("fileNames");
-        String proCategory = (String) productData.get("proCategory");
-        String proLocation = (String) productData.get("proLocation");
+        String categoryCode = (String) productData.get("categoryCode");
+        String locationCode = (String) productData.get("locationCode");
 
         // 엔티티 생성 후 데이터 설정
         ProductEntity productEntity = new ProductEntity();
         productEntity.setPRO_TITLE(productTitle);
         productEntity.setPRO_IMG(fileNames); // 파일명들을 ,로 구분하여 저장
-        productEntity.setPRO_CATEGORY(proCategory);
-        productEntity.setPRO_LOCATION(proLocation);
+        productEntity.setPRO_CATEGORY(categoryCode);
+        productEntity.setPRO_LOCATION(locationCode);
         
         // 리포지토리를 통해 DB에 저장
         productRepository.save(productEntity);

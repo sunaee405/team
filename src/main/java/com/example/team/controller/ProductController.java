@@ -41,7 +41,7 @@ public class ProductController {
 	public List<Map<String, Object>> getProductCategory() {
 		return productService.getProductCategory();
 	}
-	
+
 	@GetMapping("/getProductLocation")
 	@ResponseBody
 	public List<Map<String, Object>> getProductLocation() {
@@ -51,11 +51,11 @@ public class ProductController {
 	@PostMapping("/insertProduct")
 	@ResponseBody
 	public ResponseEntity<?> insertProduct(@RequestParam("media") MultipartFile[] media, //
-			@RequestParam("productTitle") String productTitle,  @RequestParam("categoryDcoId") String categoryDcoId,
-			@RequestParam("categoryScoId") String categoryScoId, @RequestParam("categoryMcoId") String categoryMcoId,
-			@RequestParam("locationDcoId") String locationDcoId, @RequestParam("locationScoId") String locationScoId,
-			@RequestParam("locationMcoId") String locationMcoId)
-			throws Exception {
+			@RequestParam Map<String, String> params) throws Exception {
+		
+		String productTitle = params.get("productTitle");
+		String categoryCode = params.get("categoryMcoId") + params.get("categoryScoId") + params.get("categoryDcoId");
+		String locationCode = params.get("locationMcoId") + params.get("locationScoId") + params.get("locationDcoId");
 
 		// 파일 저장 경로 설정
 		String desktopPath = "C:\\Users\\ITWILL\\Desktop\\upload";
@@ -69,15 +69,13 @@ public class ProductController {
 		}
 
 		// 카테고리 값을 MCO_ID + SCO_ID + DCO_ID 형태로 변환
-		String proCategory = categoryMcoId + categoryScoId + categoryDcoId; // 'MAMPRS' + 'PCD1'
-		String proLocation = locationMcoId + locationScoId + locationDcoId; // 'MAMPRS' + 'PCD1'
 
 		// 파일명을 Map에 저장
 		Map<String, Object> productData = new HashMap<>();
 		productData.put("productTitle", productTitle);
 		productData.put("fileNames", String.join(",", savedFileNames)); 
-		productData.put("proCategory", proCategory);// 파일명을 ','로 구분하여 저장
-		productData.put("proLocation", proLocation);
+		productData.put("categoryCode", categoryCode);// 파일명을 ','로 구분하여 저장
+		productData.put("locationCode", locationCode);
 		// 서비스 호출
 		productService.insertProduct(productData);
 

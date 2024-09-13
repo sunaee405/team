@@ -24,6 +24,7 @@
 				<div class="flex px-5 pb-1.5">
 				
 				<!-- ================================== 사진업로드 영역 시작 ============================================ -->
+					<p class="font-semibold">상품사진</p> 
 					<div>
 						<input id="imageInput" name="media" type="file" multiple="" accept="image/png, image/jpeg, image/jpg" class="hidden">
 						<button id="imageUploadButton" class="flex items-center justify-center w-20 h-20 mr-1.5 bg-jnGray-200 rounded">
@@ -82,6 +83,52 @@
 								<div id="location-depth-2" class="hidden">
 									<!-- 여기에서 두 번째 지역 선택 (DCO_VALUE) -->
 								</div>
+							</div>
+						</section>
+						
+						<!--  ============================== 판매 가격 ============================== -->
+						
+						<div class="flex flex-col px-5 mt-5">
+							<div class="flex items-center justify-between w-full border border-gray-300 border-solid rounded px-4  
+										text-base scale-85 origin-top-left -mb-3  w-[117.65%] p-6  h-[60px]  false"> 
+								<label for="search" class="flex items-center py-0.5 w-2/3">
+						 			<span>₩</span>
+						 			<input name="productPrice" type="text" inputmode="numeric"
+										   class="ml-1 bg-white focus:outline-none h-11 md:h-12 placeholer-jnGray-500 w-2/3 disabled:opacity-100 placeholer-jnGray-500"
+										   placeholder="판매가격" value="">
+								</label>
+							</div> 
+						</div>
+						
+						<section class="flex flex-col px-5 space-y-5">
+							<div class="relative">
+								<div>
+									<textarea id="productDescription" name="productDescription"
+											  class="px-4 py-3 items-center w-full rounded appearance-none transition duration-300 ease-in-out text-heading text-sm focus:outline-none focus:ring-0 bg-white border border-gray-300 focus:shadow focus:outline-none focus:border-heading placeholder-body inline-block w-full px-4 py-4 mt-6 outline-none align-middle overflow-x-scroll appearance-none resize-none border-solid border border-jnGray-300 placeholder:text-jnGray-500 h-[220px] text-sm"
+											  autocomplete="off" spellcheck="false" rows="4"
+											  placeholder="- 상세정보를 입력해주세요"
+											  maxlength="1000"></textarea>
+								</div>
+								<span class="absolute right-0 text-sm leading-5 text-gray-400">0/1000</span>
+								
+							<p class="font-semibold">상품상태</p> 
+								<div class="flex gap-3">
+									<button class="h-10 w-[80px] rounded-md border border-solid font-semibold text-base mb-2 text-white bg-jngreen border-jngreen">중고</button>
+									<button class="h-10 w-[80px] rounded-md border border-solid font-semibold text-base mb-2 border-jnblack text-jnblack bg-white">새상품</button>
+								</div>	
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
 							</div>
 						</section>
 											
