@@ -11,9 +11,11 @@ public class PageInterceptors implements WebMvcConfigurer {
 	
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
-		// static 파일 경로 설정
-        registry.addResourceHandler("/static/**")
-                .addResourceLocations("classpath:/static/");
+		// static 파일 경로설정
+		registry.addResourceHandler("/static/**")
+        		.addResourceLocations("classpath:/static/");
+		registry.addResourceHandler("/javascript/**")
+				.addResourceLocations("classpath:/static/javascript/");
 	}
 	
 	@Bean
