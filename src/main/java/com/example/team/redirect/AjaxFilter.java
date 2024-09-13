@@ -24,7 +24,11 @@ public class AjaxFilter implements Filter {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         String rHeader = httpRequest.getHeader("X-Requested-With"); // ajax
         String url = httpRequest.getRequestURI();
-        System.out.println(url);
+        
+        if(url.equals("/favicon.ico")) {
+        	response.getWriter().write("");
+        	return;
+        }
 
         // 조건에 맞는 URL은 필터링에서 제외
         if (url.startsWith("/redirect/") || url.equals("/") || url.startsWith("/static/")) {
