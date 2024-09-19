@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.FileCopyUtils;
@@ -47,13 +48,24 @@ public class ProductController {
 	public List<Map<String, Object>> getProductLocation() {
 		return productService.getProductLocation();
 	}
-	
+
 	@GetMapping("/getProductState")
 	@ResponseBody
 	public List<Map<String, Object>> getProductState() {
 		return productService.getProductState();
 	}
-	
+
+	@GetMapping("/getProductType")
+	@ResponseBody
+	public List<Map<String, Object>> getProductType() {
+		return productService.getProductType();
+	}
+
+	@GetMapping("/getProductNego")
+	@ResponseBody
+	public List<Map<String, Object>> getProductNego() {
+		return productService.getProductNego();
+	}
 
 	@PostMapping("/insertProduct")
 	@ResponseBody
@@ -61,14 +73,22 @@ public class ProductController {
 										   @RequestParam Map<String, String> params) throws Exception {
 		
 		String productTitle = params.get("productTitle");
-		String categoryCode = params.get("categoryMcoId") + params.get("categoryScoId") + params.get("categoryDcoId");
-		String locationCode = params.get("locationMcoId") + params.get("locationScoId") + params.get("locationDcoId");
-		String stateCode = params.get("stateMcoId") + params.get("stateScoId") + params.get("stateDcoId");
+		String categoryCode = params.get("categoryDcoId");
+		String locationCode = params.get("locationDcoId");
+		String stateCode = params.get("stateDcoId");
+		String typeCode = params.get("typeDcoId");
+		String negoCode = params.get("negoDcoId");
 		String productPrice = params.get("productPrice");
 		String productDescription = params.get("productDescription");
 		
+		
 		// 파일 저장 경로 설정
-		String desktopPath = "C:\\Users\\ITWILL\\Desktop\\upload";
+		
+		// 집
+// 		String desktopPath = "C:\\Users\\Anibal\\Desktop\\upload";
+		
+		// 학원
+ 		String desktopPath = "C:\\Users\\ITWILL\\Desktop\\upload";
 		List<String> savedFileNames = new ArrayList<>();
 
 		for (MultipartFile file : media) { // media 배열로 파일 처리
@@ -76,7 +96,7 @@ public class ProductController {
 			String fileName = uuid.toString() + "_" + file.getOriginalFilename();
 			FileCopyUtils.copy(file.getBytes(), new File(desktopPath, fileName));
 			savedFileNames.add(fileName);
-		}
+		}  
 
 		// 카테고리 값을 MCO_ID + SCO_ID + DCO_ID 형태로 변환
 
@@ -89,11 +109,14 @@ public class ProductController {
 		productData.put("stateCode", stateCode);
 		productData.put("productPrice", productPrice);
 		productData.put("productDescription", productDescription);
+		productData.put("typeCode", typeCode);
+		productData.put("negoCode", negoCode);
+		
 		// 서비스 호출
 		productService.insertProduct(productData);
 
 		return ResponseEntity.ok().body("Product successfully saved!");
+
 	}
 
 }
-

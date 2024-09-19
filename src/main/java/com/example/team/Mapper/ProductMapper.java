@@ -16,6 +16,10 @@ public interface ProductMapper {
 	
 	List<Map<String, Object>> getProductState();
 	
+	List<Map<String, Object>> getProductType();
+	
+	List<Map<String, Object>> getProductNego();
+	
 	
 	
 	

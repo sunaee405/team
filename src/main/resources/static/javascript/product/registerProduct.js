@@ -94,10 +94,7 @@ $(document).ready(function() {
 		url: '/getProductCategory',
 		type: 'GET',
 		success: function(data) {
-			// div 요소를 찾아서 그 안에 select 요소 생성
 			var categoryDiv = document.getElementById('category-depth-1');
-
-			// select 요소 생성
 			var selectElement = document.createElement('select');
 			selectElement.id = 'categoryList';
 			selectElement.classList.add('flex', 'flex-col', 'border-solid', 'border-jnGray-300');
@@ -106,23 +103,20 @@ $(document).ready(function() {
 			var defaultOption = document.createElement('option');
 			defaultOption.value = '';
 			defaultOption.textContent = '카테고리 선택';
+			defaultOption.disabled = true;  // 기본 옵션을 비활성화하여 목록에 표시되지 않게 함
+			defaultOption.selected = true;  // 기본 선택 상태로 유지
 			selectElement.appendChild(defaultOption);
 
 			// 가져온 데이터로 option 요소들을 추가
 			data.forEach(function(item) {
 				var option = document.createElement('option');
-				option.value = item["DCO_ID"];  // DCO_ID 값을 value로 설정
-				option.textContent = item["DCO_VALUE"];  // DCO_VALUE 값을 표시 텍스트로 설정
-
-				// 각 옵션에 SCO_ID, MCO_ID를 data-* 속성으로 추가
-				option.setAttribute('data-scoid', item["SCO_ID"]);  // SCO_ID 저장
-				option.setAttribute('data-mcoid', item["MCO_ID"]);  // MCO_ID 저장
-
-				// select에 옵션 추가
+				option.value = item["DCO_ID"];
+				option.textContent = item["DCO_VALUE"];
+				option.setAttribute('data-scoid', item["SCO_ID"]);
+				option.setAttribute('data-mcoid', item["MCO_ID"]);
 				selectElement.appendChild(option);
 			});
 
-			// 생성한 select 요소를 div 안에 추가
 			categoryDiv.appendChild(selectElement);
 		},
 		error: function(xhr, status, error) {
@@ -130,6 +124,7 @@ $(document).ready(function() {
 		}
 	});
 
+	// 동일한 방식으로 지역 셀렉트 박스에 추가
 	$.ajax({
 		url: '/getProductLocation',
 		type: 'GET',
@@ -142,9 +137,11 @@ $(document).ready(function() {
 			var defaultOption = document.createElement('option');
 			defaultOption.value = '';
 			defaultOption.textContent = '지역 선택';
+			defaultOption.disabled = true;  // 기본 옵션을 비활성화하여 목록에 표시되지 않게 함
+			defaultOption.selected = true;  // 기본 선택 상태로 유지
 			selectElement.appendChild(defaultOption);
 
-			var scoMap = new Map();  // SCO_ID로 묶기 위해 Map 사용
+			var scoMap = new Map();
 			data.forEach(function(item) {
 				if (!scoMap.has(item["SCO_ID"])) {
 					scoMap.set(item["SCO_ID"], []);
@@ -153,7 +150,6 @@ $(document).ready(function() {
 					option.textContent = item["SCO_VALUE"];
 					selectElement.appendChild(option);
 				}
-				// 각 SCO_ID에 해당하는 DCO 정보 저장
 				scoMap.get(item["SCO_ID"]).push({ DCO_ID: item["DCO_ID"], DCO_VALUE: item["DCO_VALUE"], MCO_ID: item["MCO_ID"] });
 			});
 
@@ -174,10 +170,12 @@ $(document).ready(function() {
 				var defaultOption2 = document.createElement('option');
 				defaultOption2.value = '';
 				defaultOption2.textContent = '세부 지역 선택';
+				defaultOption2.disabled = true;  // 기본 옵션을 비활성화하여 목록에 표시되지 않게 함
+				defaultOption2.selected = true;  // 기본 선택 상태로 유지
 				selectElement2.appendChild(defaultOption2);
 
 				dcoList.forEach(function(dcoItem) {
-					if (dcoItem["DCO_ID"] && dcoItem["DCO_VALUE"]) {  // DCO_ID와 DCO_VALUE가 있는 경우에만 옵션 추가
+					if (dcoItem["DCO_ID"] && dcoItem["DCO_VALUE"]) {
 						var option2 = document.createElement('option');
 						option2.value = dcoItem["DCO_ID"];
 						option2.textContent = dcoItem["DCO_VALUE"];
@@ -192,8 +190,6 @@ $(document).ready(function() {
 		},
 		error: function(xhr, status, error) {
 			console.error('Error occurred:', error);
-			console.log('Status:', status);
-			console.log('Response Text:', xhr.responseText);
 		}
 	});
 
@@ -248,6 +244,115 @@ $(document).ready(function() {
 		}
 	});
 
+	$.ajax({
+		url: '/getProductType',  // 판매 타입 데이터를 가져오는 엔드포인트
+		type: 'GET',
+		success: function(data) {
+			console.log("Received data: ", data);  // 데이터가 제대로 들어오는지 확인
+			var productTypeDiv = document.getElementById('productType_depth');
+			productTypeDiv.innerHTML = '';  // 기존 버튼을 초기화
+
+			// 판매 타입 값들을 가져와서 버튼을 생성
+			data.forEach(function(item, index) {
+				var button = document.createElement('button');
+				button.type = 'button';
+				button.classList.add('h-10', 'w-[80px]', 'rounded-md', 'border', 'border-solid', 'font-semibold', 'text-base', 'mb-2');  // 기본 비선택 상태
+				button.textContent = item["DCO_VALUE"];  // 버튼 텍스트는 DCO_VALUE로 설정
+
+				// 버튼의 data-* 속성에 DCO_ID 저장
+				button.setAttribute('data-typeid', item["DCO_ID"]);
+
+				// 첫 번째 버튼이 초기 선택 상태로 설정되도록 함
+				if (index === 0) {
+					button.classList.add('text-white', 'bg-jngreen', 'border-jngreen');
+					button.classList.add('selected');  // 초기 선택된 상태로 설정
+				} else {
+					button.classList.add('text-jnblack', 'bg-white', 'border-jnblack');
+				}
+
+				// 버튼 클릭 이벤트
+				button.addEventListener('click', function() {
+					// 이전에 선택된 버튼의 스타일을 기본 상태로 변경
+					var selectedButton = document.querySelector('#productType_depth .selected');
+					if (selectedButton) {
+						selectedButton.classList.remove('selected', 'text-white', 'bg-jngreen', 'border-jngreen');
+						selectedButton.classList.add('text-jnblack', 'bg-white', 'border-jnblack');
+					}
+
+					// 현재 클릭된 버튼을 선택 상태로 설정
+					this.classList.add('selected', 'text-white', 'bg-jngreen', 'border-jngreen');
+					this.classList.remove('text-jnblack', 'bg-white', 'border-jnblack');
+				});
+
+				// 생성한 버튼을 div 안에 추가
+				productTypeDiv.appendChild(button);
+			});
+		},
+		error: function(xhr, status, error) {
+			console.error('Error occurred while fetching product type:', error);
+		}
+	});
+
+	$.ajax({
+		url: '/getProductNego',  // 네고 여부 데이터를 가져오는 엔드포인트
+		type: 'GET',
+		success: function(data) {
+			console.log("Received data for nego: ", data);  // 데이터가 제대로 들어오는지 확인
+			var productNegoDiv = document.getElementById('productNego_depth');
+			productNegoDiv.innerHTML = '';  // 기존 버튼을 초기화
+
+			// 네고 여부 값들을 가져와서 버튼을 생성
+			data.forEach(function(item, index) {
+				var button = document.createElement('button');
+				button.type = 'button';
+				button.classList.add('h-10', 'w-[80px]', 'rounded-md', 'border', 'border-solid', 'font-semibold', 'text-base', 'mb-2');  // 기본 비선택 상태
+				button.textContent = item["DCO_VALUE"];  // 버튼 텍스트는 DCO_VALUE로 설정
+
+				// 버튼의 data-* 속성에 DCO_ID 저장
+				button.setAttribute('data-negoid', item["DCO_ID"]);
+
+				// 첫 번째 버튼이 초기 선택 상태로 설정되도록 함
+				if (index === 0) {
+					button.classList.add('text-white', 'bg-jngreen', 'border-jngreen');
+					button.classList.add('selected');  // 초기 선택된 상태로 설정
+				} else {
+					button.classList.add('text-jnblack', 'bg-white', 'border-jnblack');
+				}
+
+				// 버튼 클릭 이벤트
+				button.addEventListener('click', function() {
+					// 이전에 선택된 버튼의 스타일을 기본 상태로 변경
+					var selectedButton = document.querySelector('#productNego_depth .selected');
+					if (selectedButton) {
+						selectedButton.classList.remove('selected', 'text-white', 'bg-jngreen', 'border-jngreen');
+						selectedButton.classList.add('text-jnblack', 'bg-white', 'border-jnblack');
+					}
+
+					// 현재 클릭된 버튼을 선택 상태로 설정
+					this.classList.add('selected', 'text-white', 'bg-jngreen', 'border-jngreen');
+					this.classList.remove('text-jnblack', 'bg-white', 'border-jnblack');
+				});
+
+				// 생성한 버튼을 div 안에 추가
+				productNegoDiv.appendChild(button);
+			});
+		},
+		error: function(xhr, status, error) {
+			console.error('Error occurred while fetching product nego:', error);
+		}
+	});
+
+	// textarea와 charCount 요소를 가져옵니다.
+	const productDescription = document.getElementById('productDescription');
+	const charCount = document.getElementById('charCount');
+
+	// textarea의 input 이벤트에 대해 리스너를 추가합니다.
+	productDescription.addEventListener('input', function() {
+		// 글자 수를 계산하고 span에 업데이트합니다.
+		const currentLength = productDescription.value.length;
+		charCount.textContent = `${currentLength}/1000`;
+	});
+
 	// 폼 제출 시 이미지 파일도 함께 전송
 	document.getElementById('insertProductForm').addEventListener('submit', function(e) {
 		e.preventDefault();
@@ -263,36 +368,46 @@ $(document).ready(function() {
 		const categorySelect = document.getElementById('categoryList');
 		const selectedCategoryOption = categorySelect.options[categorySelect.selectedIndex];
 		const categoryDcoId = selectedCategoryOption.value; // DCO_ID (예: 'PCD1')
-		const categoryScoId = selectedCategoryOption.getAttribute('data-scoid'); // SCO_ID (예: 'PRS')
-		const categoryMcoId = selectedCategoryOption.getAttribute('data-mcoid'); // MCO_ID (예: 'MAM')
+		//		const categoryScoId = selectedCategoryOption.getAttribute('data-scoid'); // SCO_ID (예: 'PRS')
+		//		const categoryMcoId = selectedCategoryOption.getAttribute('data-mcoid'); // MCO_ID (예: 'MAM')
 
 		// 카테고리 값 FormData에 추가
 		formData.append('categoryDcoId', categoryDcoId);
-		formData.append('categoryScoId', categoryScoId);
-		formData.append('categoryMcoId', categoryMcoId);
+		//		formData.append('categoryScoId', categoryScoId);
+		//		formData.append('categoryMcoId', categoryMcoId);
 
 		// 선택된 지역의 MCO_ID, SCO_ID, DCO_ID 가져오기
 		const locationSelect = document.getElementById('locationList2');
 		const selectedLocationOption = locationSelect.options[locationSelect.selectedIndex];
 		const locationDcoId = selectedLocationOption.value; // DCO_ID (예: 'LOD1')
-		const locationScoId = selectedLocationOption.getAttribute('data-scoid'); // SCO_ID (예: 'LOS')
-		const locationMcoId = selectedLocationOption.getAttribute('data-mcoid'); // MCO_ID (예: 'LOM')
+		//		const locationScoId = selectedLocationOption.getAttribute('data-scoid'); // SCO_ID (예: 'LOS')
+		//		const locationMcoId = selectedLocationOption.getAttribute('data-mcoid'); // MCO_ID (예: 'LOM')
 
 		// 지역 값 FormData에 추가
 		formData.append('locationDcoId', locationDcoId);
-		formData.append('locationScoId', locationScoId);
-		formData.append('locationMcoId', locationMcoId);
-		
+		//		formData.append('locationScoId', locationScoId);
+		//		formData.append('locationMcoId', locationMcoId);
+
 		// 선택된 상품 상태의 DCO_ID, SCO_ID, MCO_ID 가져오기
 		const selectedStateButton = document.querySelector('#productState_depth .selected');
 		const selectedStateDcoId = selectedStateButton.getAttribute('data-stateid');
-		const selectedStateScoId = selectedStateButton.getAttribute('data-scoid');
-		const selectedStateMcoId = selectedStateButton.getAttribute('data-mcoid');
+		//		const selectedStateScoId = selectedStateButton.getAttribute('data-scoid');
+		//		const selectedStateMcoId = selectedStateButton.getAttribute('data-mcoid');
 
 		// 선택된 상품 상태 값 FormData에 추가
 		formData.append('stateDcoId', selectedStateDcoId);  // 선택된 상품 상태의 DCO_ID
-		formData.append('stateScoId', selectedStateScoId);  // 선택된 상품 상태의 SCO_ID
-		formData.append('stateMcoId', selectedStateMcoId);  // 선택된 상품 상태의 MCO_ID
+		//		formData.append('stateScoId', selectedStateScoId);  // 선택된 상품 상태의 SCO_ID
+		//		formData.append('stateMcoId', selectedStateMcoId);  // 선택된 상품 상태의 MCO_ID
+
+		// 선택된 판매 타입의 DCO_ID 가져오기
+		const selectedTypeButton = document.querySelector('#productType_depth .selected');
+		const selectedTypeDcoId = selectedTypeButton.getAttribute('data-typeid');
+		formData.append('typeDcoId', selectedTypeDcoId);
+
+		// 선택된 네고 여부의 DCO_ID 가져오기
+		const selectedNegoButton = document.querySelector('#productNego_depth .selected');
+		const selectedNegoDcoId = selectedNegoButton.getAttribute('data-negoid');
+		formData.append('negoDcoId', selectedNegoDcoId);  // 네고 여부의 DCO_ID 추가
 
 		// FormData의 내용을 콘솔에 출력 (디버깅용)
 		for (var pair of formData.entries()) {
