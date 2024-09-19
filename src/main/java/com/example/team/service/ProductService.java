@@ -31,6 +31,28 @@ public class ProductService {
 
 	@Autowired
 	ProductMapper productMapper;
+	
+	public List<Map<String, Object>> getProductCategory() {
+		// Mapper에서 데이터 조회
+		return productMapper.getProductCategory();
+	}
+
+	public List<Map<String, Object>> getProductLocation() {
+		// Mapper에서 데이터 조회
+		return productMapper.getProductLocation();
+	}
+
+	public List<Map<String, Object>> getProductState() {
+		return productMapper.getProductState();
+	}
+	
+	public List<Map<String, Object>> getProductType() {
+		return productMapper.getProductType();
+	}
+	
+	public List<Map<String, Object>> getProductNego() {
+		return productMapper.getProductNego();
+	}
 
 	public void insertProduct(Map<String, Object> productData) {
 		String productTitle = (String) productData.get("productTitle");
@@ -40,6 +62,8 @@ public class ProductService {
 		String stateCode = (String) productData.get("stateCode");
 		String productPrice = (String) productData.get("productPrice");
 		String productDescription = (String) productData.get("productDescription");
+		String typeCode = (String) productData.get("typeCode");
+		String negoCode = (String) productData.get("negoCode");
 
 		// 현재 시간을 LocalDateTime으로 설정 (초까지만)
 	    LocalDateTime currentDateTime = LocalDateTime.now().withNano(0);
@@ -54,23 +78,12 @@ public class ProductService {
 		productEntity.setPRO_PRICE(productPrice);
 		productEntity.setPRO_CONTENT(productDescription);
 		productEntity.setPRO_DATE(currentDateTime);
+		productEntity.setPRO_STATUS("STS1");
+		productEntity.setPRO_TYPE(typeCode);
+		productEntity.setPRO_NEG(negoCode);
 
 		// 리포지토리를 통해 DB에 저장
 		productRepository.save(productEntity);
-	}
-
-	public List<Map<String, Object>> getProductCategory() {
-		// Mapper에서 데이터 조회
-		return productMapper.getProductCategory();
-	}
-
-	public List<Map<String, Object>> getProductLocation() {
-		// Mapper에서 데이터 조회
-		return productMapper.getProductLocation();
-	}
-
-	public List<Map<String, Object>> getProductState() {
-		return productMapper.getProductState();
 	}
 
 }
