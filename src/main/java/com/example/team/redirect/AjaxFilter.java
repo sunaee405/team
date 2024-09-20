@@ -16,31 +16,31 @@ import jakarta.servlet.http.HttpServletRequest;
 @Component
 @WebFilter(urlPatterns = "/**")
 public class AjaxFilter implements Filter {
-	
-	@Override
-    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
-            throws IOException, ServletException {
 
-        HttpServletRequest httpRequest = (HttpServletRequest) request;
-        String rHeader = httpRequest.getHeader("X-Requested-With"); // ajax
-        String url = httpRequest.getRequestURI();
-        
+	@Override
+	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+			throws IOException, ServletException {
+
+		HttpServletRequest httpRequest = (HttpServletRequest) request;
+		String rHeader = httpRequest.getHeader("X-Requested-With"); // ajax
+		String url = httpRequest.getRequestURI();
+		
         // 이미지 요청 제외
         if (url.startsWith("/images/")) {
             chain.doFilter(request, response);
             return;
         }
         
+        // 주소 요청에 확장자 들어있으면 계속 진행
         if (url.matches(".*\\..+")) {
         	 chain.doFilter(request, response); // 요청을 계속 진행
              return;
         }
         
         
-        // 웹소켓 핸드셰이크 요청을 무시
+        // 웹소켓 요청일시 통과
         if (url.startsWith("/chat")) {
             chain.doFilter(request, response);
-            
             return;
         }
         
@@ -56,15 +56,12 @@ public class AjaxFilter implements Filter {
             return;
         }
 
-        // AJAX 요청이 아니고 오류 페이지가 아닌 경우 URL 포워딩
-        if (!"XMLHttpRequest".equals(rHeader) && !url.startsWith("/error")) {
-            RequestDispatcher dispatcher = httpRequest.getRequestDispatcher("/redirect" + url);
-//        	RequestDispatcher dispatcher = httpRequest.getRequestDispatcher(url);
-            dispatcher.forward(request, response); // 요청을 포워딩
-        } else {
-            chain.doFilter(request, response); // AJAX 요청 또는 오류 페이지인 경우 요청을 계속 진행
-        }
-        
-    }
-	
+		// AJAX 요청이 아니고 오류 페이지가 아닌 경우 주소 변경해서 재요청
+		if (!"XMLHttpRequest".equals(rHeader) && !url.startsWith("/error")) {
+			RequestDispatcher dispatcher = httpRequest.getRequestDispatcher("/redirect" + url);
+			dispatcher.forward(request, response); // 요청을 포워딩
+		} else {
+			chain.doFilter(request, response); // AJAX 요청 또는 오류 페이지인 경우 요청을 계속 진행
+		}
+	}
 }
