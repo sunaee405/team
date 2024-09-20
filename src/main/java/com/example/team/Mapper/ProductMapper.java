@@ -19,6 +19,8 @@ public interface ProductMapper {
 	List<Map<String, Object>> getProductType();
 	
 	List<Map<String, Object>> getProductNego();
+
+	List<Map<String, Object>> getSortList();
 	
 	
 	

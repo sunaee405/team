@@ -11,6 +11,10 @@ import java.util.Map;
 import org.apache.ibatis.logging.LogException;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.example.team.Mapper.ProductMapper;
@@ -31,7 +35,9 @@ public class ProductService {
 
 	@Autowired
 	ProductMapper productMapper;
-	
+
+	// =================================== 상품 등록 ===================================
+
 	public List<Map<String, Object>> getProductCategory() {
 		// Mapper에서 데이터 조회
 		return productMapper.getProductCategory();
@@ -45,11 +51,11 @@ public class ProductService {
 	public List<Map<String, Object>> getProductState() {
 		return productMapper.getProductState();
 	}
-	
+
 	public List<Map<String, Object>> getProductType() {
 		return productMapper.getProductType();
 	}
-	
+
 	public List<Map<String, Object>> getProductNego() {
 		return productMapper.getProductNego();
 	}
@@ -66,24 +72,37 @@ public class ProductService {
 		String negoCode = (String) productData.get("negoCode");
 
 		// 현재 시간을 LocalDateTime으로 설정 (초까지만)
-	    LocalDateTime currentDateTime = LocalDateTime.now().withNano(0);
+		LocalDateTime currentDateTime = LocalDateTime.now().withNano(0);
 
 		// 엔티티 생성 후 데이터 설정
 		ProductEntity productEntity = new ProductEntity();
-		productEntity.setPRO_TITLE(productTitle);
-		productEntity.setPRO_IMG(fileNames); // 파일명들을 ,로 구분하여 저장
-		productEntity.setPRO_CATEGORY(categoryCode);
-		productEntity.setPRO_LOCATION(locationCode);
-		productEntity.setPRO_STATE(stateCode);
-		productEntity.setPRO_PRICE(productPrice);
-		productEntity.setPRO_CONTENT(productDescription);
-		productEntity.setPRO_DATE(currentDateTime);
-		productEntity.setPRO_STATUS("STS1");
-		productEntity.setPRO_TYPE(typeCode);
-		productEntity.setPRO_NEG(negoCode);
+		productEntity.setProTitle(productTitle);
+		productEntity.setProImg(fileNames); // 파일명들을 ,로 구분하여 저장
+		productEntity.setProCategory(categoryCode);
+		productEntity.setProLocation(locationCode);
+		productEntity.setProState(stateCode);
+		productEntity.setProPrice(productPrice);
+		productEntity.setProContent(productDescription);
+		productEntity.setProDate(currentDateTime);
+		productEntity.setProStatus("STS1");
+		productEntity.setProType(typeCode);
+		productEntity.setProNeg(negoCode);
 
 		// 리포지토리를 통해 DB에 저장
 		productRepository.save(productEntity);
 	}
+
+	// =================================== 상품 목록 ===================================
+
+	public List<Map<String, Object>> getSortList() {
+		return productMapper.getSortList();
+	}
+
+	public Page<ProductEntity> getProductsSortedByViews(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return productRepository.findAllByOrderByProViewsDesc(pageable);
+    }
+	
+	
 
 }
