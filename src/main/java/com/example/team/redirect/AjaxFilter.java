@@ -31,16 +31,16 @@ public class AjaxFilter implements Filter {
             return;
         }
         
+        // 주소 요청에 확장자 들어있으면 계속 진행
         if (url.matches(".*\\..+")) {
         	 chain.doFilter(request, response); // 요청을 계속 진행
              return;
         }
         
         
-        // 웹소켓 핸드셰이크 요청을 무시
+        // 웹소켓 요청일시 통과
         if (url.startsWith("/chat")) {
             chain.doFilter(request, response);
-            
             return;
         }
         
@@ -56,17 +56,12 @@ public class AjaxFilter implements Filter {
             return;
         }
 
-
-		// AJAX 요청이 아니고 오류 페이지가 아닌 경우 URL 포워딩
+		// AJAX 요청이 아니고 오류 페이지가 아닌 경우 주소 변경해서 재요청
 		if (!"XMLHttpRequest".equals(rHeader) && !url.startsWith("/error")) {
 			RequestDispatcher dispatcher = httpRequest.getRequestDispatcher("/redirect" + url);
 			dispatcher.forward(request, response); // 요청을 포워딩
 		} else {
 			chain.doFilter(request, response); // AJAX 요청 또는 오류 페이지인 경우 요청을 계속 진행
 		}
-
-		
 	}
-
-	
 }
