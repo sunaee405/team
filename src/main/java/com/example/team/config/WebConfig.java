@@ -21,7 +21,7 @@ public class WebConfig implements WebMvcConfigurer {
 //    public ITemplateResolver yourTemplateResolver() {
 //        SpringResourceTemplateResolver resolver = new SpringResourceTemplateResolver();
 //        resolver.setOrder(1);
-//        resolver.setPrefix("classpath:/templates/"); // 템플릿 파일의 위치를 지정합니다.
+//        resolver.setPrefix("classpath:/templates/"); // 템플릿 파일의 위치를 지정
 //        resolver.setSuffix(".html");
 //        resolver.setTemplateMode(TemplateMode.HTML);
 //        resolver.setCacheable(true);

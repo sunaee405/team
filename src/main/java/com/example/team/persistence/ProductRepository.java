@@ -14,7 +14,9 @@ import com.example.team.model.ProductEntity;
 public interface ProductRepository extends JpaRepository<ProductEntity, Long>{
 	
 	// 조회수 기준으로 정렬
-    Page<ProductEntity> findAllByOrderByProViewsDesc(Pageable pageable);
+//    Page<ProductEntity> findAllByOrderByProViewsDesc(Pageable pageable);
+
+//	Page<ProductEntity> getProductsSortedByViews(Pageable pageable);
 	
 	
 }

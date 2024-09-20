@@ -98,11 +98,9 @@ public class ProductService {
 		return productMapper.getSortList();
 	}
 
-	public Page<ProductEntity> getProductsSortedByViews(int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
-        return productRepository.findAllByOrderByProViewsDesc(pageable);
-    }
-	
-	
+	public List<Map<String, Object>> getProductsSortedByViews(int offset, int size) {
+		return productMapper.getProductsSortedByViews(offset, size);
+	}
+
 
 }

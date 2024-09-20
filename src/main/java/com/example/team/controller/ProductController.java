@@ -44,7 +44,7 @@ public class ProductController {
 //
 //		return "/product/registerProduct";
 //	}
-	
+
 //	@GetMapping("/images/{filename:.+}")
 //    @ResponseBody
 //    public ResponseEntity<Resource> serveFile(@PathVariable String filename) throws MalformedURLException {
@@ -59,9 +59,6 @@ public class ProductController {
 //            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 //        }
 //    }
-	
-	
-    
 
 	// =================================== 상품 등록 ===================================
 
@@ -154,12 +151,15 @@ public class ProductController {
 		return productService.getSortList();
 	}
 
-	@GetMapping("/listMainProducts")
-	@ResponseBody
-	public List<ProductEntity> getProductsSortedByViews(@RequestParam(name = "page", defaultValue = "0") int page,
-			@RequestParam(name = "size", defaultValue = "20") int size) {
-		Page<ProductEntity> productPage = productService.getProductsSortedByViews(page, size);
-		return productPage.getContent();
+	@GetMapping("/listProductsSortedByViews")
+
+	public ResponseEntity<List<Map<String, Object>>> getProductsSortedByViews(@RequestParam("page") int page,
+																			  @RequestParam("size") int size) {
+		
+		int offset = (page - 1) * size;
+		List<Map<String, Object>> products = productService.getProductsSortedByViews(offset, size);
+
+		return new ResponseEntity<>(products, HttpStatus.OK);
 	}
 
 }
