@@ -56,6 +56,7 @@ public class AjaxFilter implements Filter {
             return;
         }
 
+
 		// AJAX 요청이 아니고 오류 페이지가 아닌 경우 URL 포워딩
 		if (!"XMLHttpRequest".equals(rHeader) && !url.startsWith("/error")) {
 			RequestDispatcher dispatcher = httpRequest.getRequestDispatcher("/redirect" + url);
@@ -64,6 +65,7 @@ public class AjaxFilter implements Filter {
 			chain.doFilter(request, response); // AJAX 요청 또는 오류 페이지인 경우 요청을 계속 진행
 		}
 
+		
 	}
 
 	
