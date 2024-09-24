@@ -1,0 +1,188 @@
+@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css");
+
+* {
+  box-sizing: border-box;
+}
+body {
+  font-family: "Montserrat", sans-serif;
+  margin: 0;
+  padding: 0;
+}
+.wrapper {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #ebecf0;
+  overflow: hidden;
+}
+.container {
+  border-radius: 10px;
+  box-shadow: 1px -1px 10px #fff, 5px 5px 10px #babebc;
+  width: 400px; 
+  height: auto; 
+  display: flex;
+  flex-direction: column; 
+  justify-content: center; 
+  align-items: center; 
+  padding: 20px;
+}
+form {
+  background: #ebecf0; 
+  display: flex;
+  flex-direction: column;
+  padding: 0 50px;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+}
+form input {
+  background: #eee;
+  padding: 16px;
+  margin: 8px 0;
+  width: 85%;
+  border: 0;
+  outline: none;
+  border-radius: 20px;
+  box-shadow: inset 7px 2px 10px #babebc, inset -5px -5px 12px #fff;
+}
+button {
+  border-radius: 20px;
+  border: none;
+  outline: none;
+  font-size: 12px;
+  font-weight: bold;
+  padding: 15px 45px;
+  margin: 14px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: transform 80ms ease-in;
+}
+.formBtn {
+  box-shadow: -5px -5px 10px #fff, 5px 5px 8px #babebc;
+}
+.formBtn:active {
+  box-shadow: inset 1px 1px 2px #babebc, inset -1px -1px 2px #fff;
+}
+.social-links {
+  margin: 20px 0;
+}
+form h1 {
+  font-weight: bold;
+  margin: 0;
+  color: #000;
+}
+p {
+  font-size: 16px;
+  font-weight: bold;
+  letter-spacing: 0.5px;
+  margin: 20px 0 30px;
+}
+span {
+  font-size: 12px;
+  color: #000;
+  letter-spacing: 0.5px;
+  margin-bottom: 10px;
+}
+.social-links div {
+  width: 40px;
+  height: 40px;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 5px;
+  border-radius: 50%;
+  box-shadow: -5px -5px 10px #fff, 5px 5px 8px #babebc;
+  cursor: pointer;
+}
+.social-links a {
+  color: #000;
+}
+.social-links div:active {
+  box-shadow: inset 1px 1px 2px #babebc, inset -1px -1px 2px #fff;
+}
+
+
+.radioGroup {
+  display: flex !important;
+  justify-content: center important;
+  gap: 20px !important; 
+  margin-top: 10px !important;
+}
+
+
+.radioGroup label {
+  display: flex !important;
+  align-items: center !important;
+  font-size: 14px !important; 
+}
+
+
+.radioGroup input[type="radio"] {
+  width: 20px  !important; 
+  height: 20px  !important; 
+  box-shadow: none !important;
+}
+
+
+.phoneGroup {
+    display: flex; 
+    align-items: center; 
+    margin-left: 38px;
+    width: 100%; 
+}
+
+#phone {
+    flex: 2; 
+    margin-right: 10px; 
+    padding: 16px; 
+    border-radius: 20px; 
+    border: 0; 
+    box-shadow: inset 7px 2px 10px #babebc, inset -5px -5px 12px #fff; 
+}
+
+#checkPhone {
+    flex: 1; 
+    padding: 16px; 
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 20px; 
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+#checkPhone:hover {
+    background-color: #0056b3;
+}
+
+
+
+#checkNumber {
+    flex: 2; 
+    margin-right: 10px; 
+    padding: 16px; 
+    border-radius: 20px; 
+    border: 0; 
+    box-shadow: inset 7px 2px 10px #babebc, inset -5px -5px 12px #fff; 
+}
+
+
+#check {
+    flex: 1; 
+    padding: 16px; 
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 20px; 
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+#check:hover {
+    background-color: #0056b3;
+}
+
+
