@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.team.model.ChattingEntity;
@@ -25,7 +26,38 @@ public class MyPageController {
 	private MyPageService myPageService;
 	
 	
+	// 상단영역 카테고리 불러오기
+	@GetMapping("/getCategory")
+	public ResponseEntity getCategory() {
+		
+		List<Map<String, Object>> categoryList = myPageService.getCategory();
+		
+		System.out.println(categoryList);
+		
+		return ResponseEntity.ok().body(categoryList);
+	}
 	
+	
+	
+	// 메인페이지 상품메뉴 생성
+	@GetMapping("/getMainProductList")
+	public ResponseEntity<?> getMainProductList(@RequestParam Map<String, Object> data) {
+		
+		List<Map<String, Object>> productList = myPageService.getMainProductList(data);
+		
+		System.out.println(productList);
+		System.out.println(!productList.isEmpty());
+		
+		if(!productList.isEmpty()) {
+			return ResponseEntity.status(HttpStatus.OK).body(productList);
+		} else {
+			return ResponseEntity.badRequest().body("emptyList");
+		}
+	}
+	
+	
+	
+	// 세션에서 값 가져오기
 	@GetMapping("/getSession")
 	public String getSession(HttpSession session) {
 //		String memberNum = (String) session.getAttribute("memberNum");
@@ -64,8 +96,8 @@ public class MyPageController {
 	// 채팅방 값 찾기 + 값 없으면 채팅방 생성
 	@PostMapping("/chatRoom")
 	public ResponseEntity<?> getChatRoom(@RequestBody Map<String, Object> data, HttpSession session) {
+		int user1 = Integer.parseInt((String)data.get("SELMEMBER"));
 //		int user2 = session.getAttribute("memberNum");
-		int user1 = Integer.parseInt((String)data.get("user1"));
 		int user2 = 2;
 		
 		
