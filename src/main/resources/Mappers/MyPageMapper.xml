@@ -3,7 +3,38 @@
   "-//mybatis.org//DTD Mapper 3.0//EN"
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.example.team.Mapper.ChattingMapper">
+<mapper namespace="com.example.team.Mapper.MyPageMapper">
+	<select id="getMainProductList" resultType="Map">
+	SELECT MEM_NO
+		, PRO_NO
+		, PRO_VIEWS
+		, PRO_DATE
+		, PRO_CATEGORY
+		, PRO_LOCATION
+		, PRO_NEG
+		, PRO_PRICE
+		, PRO_STATE
+		, PRO_STATUS
+		, PRO_TITLE
+		, PRO_TYPE
+		, PRO_CONTENT
+		, PRO_IMG
+	FROM PRODUCT
+	WHERE 1 = 1
+	<choose>
+		<when test="TYPE != null and TYPE = 'Latest'">
+			ORDER BY PRO_DATE
+		</when>
+		<when test="TYPE != null and TYPE = 'Popular'">
+			ORDER BY PRO_VIEWS
+		</when>
+		<when test="TYPE != null and TYPE = 'Price'">
+			ORDER BY PRO_PRICE
+		</when>
+	</choose>
+	LIMIT 20;
+	</select>
+
 
 	<select id="getChatRoom" resultType="map">
 	<choose>
