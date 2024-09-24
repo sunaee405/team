@@ -45,7 +45,6 @@ dependencies {
 	implementation 'net.nurigo:sdk:4.3.0'
 	
 	//spring security
-	implementation 'org.springframework.boot:spring-boot-starter-security'
 	
 	// 채팅창 실시간 통신용 웹소켓
 	implementation 'org.springframework.boot:spring-boot-starter-websocket'

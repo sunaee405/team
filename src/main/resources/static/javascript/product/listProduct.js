@@ -78,6 +78,134 @@ $(document).ready(function() {
 		}
 	});
 
+	// 지역 데이터를 가져오기 위한 AJAX 요청
+	$.ajax({
+		url: '/getProductLocation', // 지역 데이터를 가져오는 API 엔드포인트
+		type: 'GET',
+		success: function(locations) {
+			let locationFilter = $('#location-filter'); // <tr> 선택
+
+			// 상위 지역(SCO_VALUE) 목록만 표시하기 위한 변수
+			let currentSCO = '';
+			let locationList = `
+            <td>
+                <div class="flex items-center w-full chawkbazarBreadcrumb">
+                    <ol class="flex flex-wrap items-center w-full mt-0 lg:mt-0">
+                        <li class="flex-shrink-0 px-0 mt-0 text-sm break-all transition duration-200 ease-in text-body first:ps-0 last:pe-0 hover:text-heading">
+                            <a class="text-base font-semibold text-jnBlack font-medium text-base text-jnBlack active" href="#" data-id="">
+                                전체
+                            </a>
+                        </li>
+                        <li class="pl-0 mx-2 mt-0 text-sm leading-5 text-jnGray-500 lg:mt-0">|</li>
+        `;
+
+			// 지역 항목을 추가 (상위 지역(SCO_VALUE) 기준으로)
+			locations.forEach(function(location, index) {
+				if (location.SCO_VALUE !== currentSCO) {
+					currentSCO = location.SCO_VALUE;
+
+					let locationItem = `
+                    <li class="flex-shrink-0 px-0 mt-0 text-sm break-all transition duration-200 ease-in text-body first:ps-0 last:pe-0 hover:text-heading">
+                        <a class="text-base font-semibold text-jnBlack font-medium text-base text-jnBlack" href="#" data-sco="${location.SCO_ID}">
+                            ${location.SCO_VALUE}
+                        </a>
+                    </li>
+                `;
+
+					// " | " 구분자는 첫 번째 항목 이후부터 추가
+					if (index > 0) {
+						locationList += `<li class="pl-0 mx-2 mt-0 text-sm leading-5 text-jnGray-500 lg:mt-0">|</li>`;
+					}
+
+					locationList += locationItem;
+				}
+			});
+
+			// 닫는 ol 태그
+			locationList += `
+                    </ol>
+                </div>
+            </td>
+        `;
+
+			// 생성된 상위 지역 목록을 <tr>에 추가
+			locationFilter.append(locationList);
+
+			// 상위 지역 클릭 이벤트 설정 (하위 지역 표시)
+			$('#location-filter a').click(function(event) {
+				event.preventDefault();
+				let scoId = $(this).data('sco'); // 상위 지역(SCO_ID) 값 가져오기
+
+				// 모든 상위 지역 버튼의 active 클래스 제거
+				$('#location-filter a').removeClass('active');
+				// 클릭된 상위 지역 버튼에 active 클래스 추가
+				$(this).addClass('active');
+
+				// 하위 지역 목록이 이미 있는 경우 제거
+				$('#sub-location-filter').remove();
+
+				// 하위 지역 목록을 동적으로 추가
+				loadSubLocations(scoId, locations); // 하위 지역을 표시하는 함수 호출
+			});
+		},
+		error: function(xhr, status, error) {
+			console.error('지역 로드 오류:', error);
+		}
+	});
+
+	// 하위 지역(DCO_VALUE)을 로드하고 표시하는 함수
+	function loadSubLocations(scoId, locations) {
+		let subLocationFilter = `
+        <tr id="sub-location-filter">
+            <td>
+                <div class="flex items-center w-full chawkbazarBreadcrumb">
+                    <ol class="flex flex-wrap items-center w-full mt-0 lg:mt-0">
+    `;
+
+		// 선택된 상위 지역의 하위 지역(DCO_VALUE)을 필터링
+		let subLocations = locations.filter(function(location) {
+			return location.SCO_ID === scoId;
+		});
+
+		// 하위 지역(DCO_VALUE) 항목 추가
+		subLocations.forEach(function(subLocation, index) {
+			let subLocationItem = `
+            <li class="flex-shrink-0 px-0 mt-0 text-sm break-all transition duration-200 ease-in text-body first:ps-0 last:pe-0 hover:text-heading">
+                <a class="text-base font-semibold text-jnBlack font-medium text-base text-jnBlack" href="#" data-id="${subLocation.DCO_ID}">
+                    ${subLocation.DCO_VALUE}
+                </a>
+            </li>
+        `;
+
+			// 구분자 추가
+			if (index > 0) {
+				subLocationFilter += `<li class="pl-0 mx-2 mt-0 text-sm leading-5 text-jnGray-500 lg:mt-0">|</li>`;
+			}
+
+			subLocationFilter += subLocationItem;
+		});
+
+		// 닫는 ol 태그
+		subLocationFilter += `
+                    </ol>
+                </div>
+            </td>
+        </tr>
+    `;
+
+		// 하위 지역 목록을 #location-filter 다음에 추가
+		$('#location-filter').after(subLocationFilter);
+
+		// 하위 지역 클릭 이벤트 설정
+		$('#sub-location-filter a').click(function(event) {
+			event.preventDefault();
+			let dcoId = $(this).data('id'); // DCO_ID 값 가져오기
+
+			// 하위 지역 필터링 로직 추가 가능
+			console.log('선택된 하위 지역 DCO_ID:', dcoId);
+		});
+	}
+
 	// 정렬 목록을 가져와서 버튼을 생성
 	$.ajax({
 		url: '/getSortList',
