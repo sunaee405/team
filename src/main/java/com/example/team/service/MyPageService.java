@@ -55,4 +55,11 @@ public class MyPageService {
 	}
 
 
+
+	// 공통코드 호출
+	public Map<String, Object> getDetailCode() {
+		return myPageMapper.getDetailCode();
+	}
+
+
 }

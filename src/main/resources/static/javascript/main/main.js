@@ -1,8 +1,56 @@
 const TypeList = ["Price", "Popular", "Latest"];
+let dcCode;
 
 $(function() {
-	getMainProductList();
+	getDetailCode();
+    getMainProductList();
+    
+//    debugger;
 });
+
+function getDetailCode() {
+	
+	
+	$.ajax({
+	    url: "/getDetailCode",
+	    method: 'GET',
+	    dataType: 'json',
+	    success: (data) => {
+	        debugger; // 성공 시 실행될 코드
+	    },
+	    error: (error) => {
+	        debugger; // 에러 발생 시 실행될 코드
+	    }
+	}); 
+		
+//    fetch('/getDetailCode', {
+//        method: 'GET',
+//        headers: {
+//            'X-Requested-With': 'XMLHttpRequest',
+//            'Content-Type': 'application/json'
+//        }
+//    })
+//    .then(response => {
+//		debugger;
+//        if (!response.ok) {
+//            throw new Error('Network response was not ok');
+//            
+//        }
+//        return response.json();
+//    })
+//    .then(data => {
+//		debugger;
+//        alert(data);
+//    })
+//    .catch(error => {
+//		debugger;
+//        console.error('Error:', error);
+//    });
+}
+
+
+
+
 
 //<button class="bannerButton w-7 h-7 text-black flex items-center justify-center absolute z-10 transition duration-250 transform top-1/2 focus:outline-none rounded-full text-sm md:text-base lg:w-9 lg:h-9 lg:text-xl xl:w-10 xl:h-10 3xl:w-12 3xl:h-12 3xl:text-2xl left-2 bg-transparent shadow-transparent hover:bg-transparent hover:text-black -translate-y-[calc(50%+1em)]" id="main-banner-carousel-prev" aria-label="prev-button"><svg width="26" height="28" viewBox="0 0 26 28" fill="none" xmlns="http://www.w3.org/2000/svg" class="rotate-[0deg]"><g filter="url(#filter0_d_19461_8348)"><path fill-rule="evenodd" clip-rule="evenodd" d="M15.8122 5.34218C16.4517 6.0669 16.3825 7.17278 15.6578 7.81224L8.645 14L15.6578 20.1878C16.3825 20.8273 16.4517 21.9331 15.8122 22.6579C15.1727 23.3826 14.0669 23.4517 13.3421 22.8122L5.26706 15.6872C4.25192 14.7914 4.25192 13.2086 5.26706 12.3129L13.3421 5.1878C14.0669 4.54835 15.1727 4.61747 15.8122 5.34218Z" fill="white"></path></g><defs><filter id="filter0_d_19461_8348" x="0.505707" y="0.75" width="19.7443" height="26.5" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB"><feFlood flood-opacity="0" result="BackgroundImageFix"></feFlood><feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"></feColorMatrix><feOffset></feOffset><feGaussianBlur stdDeviation="2"></feGaussianBlur><feComposite in2="hardAlpha" operator="out"></feComposite><feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.35 0"></feColorMatrix><feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_19461_8348"></feBlend><feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_19461_8348" result="shape"></feBlend></filter></defs></svg></button>
 // 목록 슬라이드 버튼
@@ -79,6 +127,10 @@ async function getMainProductList() {
             // 각 정렬 요소 영역 찍어주는 함수
             productSection(Type);
             
+            
+            
+            
+            
             result.forEach(function(productMap) {
 				// 각 상품 영역 찍어주는 함수
                 forProductList(Type, productMap);
@@ -114,6 +166,31 @@ async function getMainProductList() {
 };
 
 
+function getDetailCode() {
+	fetch('/getDetailCode', {
+	    method: 'GET',
+		    headers: {
+		        'X-Requested-With': 'XMLHttpRequest', // 필터에서 ajax 요청으로 인식하도록 헤더 설정
+		        'Content-Type': 'application/json' // 요청 데이터 형식
+		    }
+		})
+	.then(response => response.json())
+	.then(data => {
+		return new Map(Object.entries(data));
+	})
+	.catch(Error => {
+		
+	});
+}
+
+
+
+
+
+
+
+
+
 // 각 상품 영역 찍어주는 함수
 function forProductList(Type, data) {
 	
@@ -136,6 +213,7 @@ function forProductList(Type, data) {
 			</div>
 		</a>`
 		;
+		
 	$(`.${Type}Section`).append(productList);
 	
 }
