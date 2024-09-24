@@ -167,9 +167,11 @@ public class ProductController {
 	        @RequestParam("page") int page, 
 	        @RequestParam("size") int size, 
 	        @RequestParam(value = "sortType", defaultValue = "date") String sortType,
-	        @RequestParam(value = "categoryId", required = false) String categoryId) {
+	        @RequestParam(value = "categoryId", required = false) String categoryId,
+	        @RequestParam(value = "locationScoId", required = false) String locationScoId,
+	        @RequestParam(value = "locationDcoId", required = false) String locationDcoId) {
 	    
-	    return productService.getProductsSorted(page, size, sortType, categoryId);
+	    return productService.getProductsSorted(page, size, sortType, categoryId, locationScoId, locationDcoId);
 	}
 	
 	

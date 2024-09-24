@@ -122,6 +122,12 @@
            <if test="categoryId != null and categoryId != ''">
            AND PRO.PRO_CATEGORY = #{categoryId}
            </if>
+           <if test="locationScoId != null and locationScoId != ''">
+           AND TSC1.SCO_ID = #{locationScoId}
+           </if>
+           <if test="locationDcoId != null and locationDcoId != ''">
+           AND TDC1.DCO_ID = #{locationDcoId}
+           </if>
     	<choose>
 	        <when test="sortType == 'views'">
             ORDER BY PRO.PRO_VIEWS DESC
@@ -146,9 +152,21 @@
     	SELECT COUNT(*) 
     	  FROM PRODUCT PRO
     	 WHERE 1=1
-         <if test="categoryId != null and categoryId != ''">
+           <if test="categoryId != null and categoryId != ''">
            AND PRO.PRO_CATEGORY = #{categoryId}
-         </if>
+           </if>
+           <if test="locationScoId != null and locationScoId != ''">
+           AND PRO.PRO_LOCATION IN (
+        SELECT TDC.DCO_ID 
+          FROM TEST_DETAIL_CODE TDC
+          JOIN TEST_SUB_CODE TSC
+            ON TDC.SCO_ID = TSC.SCO_ID
+         WHERE TSC.SCO_ID = #{locationScoId}
+        	)
+    	  </if>
+    	  <if test="locationDcoId != null and locationDcoId != ''">
+     	   AND PRO.PRO_LOCATION = #{locationDcoId}
+    	 </if>
 	</select>
 
 

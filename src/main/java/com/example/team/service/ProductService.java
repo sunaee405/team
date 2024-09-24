@@ -112,10 +112,10 @@ public class ProductService {
 //		return result;
 //	}
 	
-	public Map<String, Object> getProductsSorted(int page, int size, String sortType, String categoryId) {
+	public Map<String, Object> getProductsSorted(int page, int size, String sortType, String categoryId, String locationScoId, String locationDcoId) {
 	    int start = (page - 1) * size;
-	    List<Map<String, Object>> products = productMapper.getProductsSorted(start, size, sortType, categoryId);
-	    int totalProducts = productMapper.getTotalProducts(categoryId); // 카테고리별로 제품 수 조회
+	    List<Map<String, Object>> products = productMapper.getProductsSorted(start, size, sortType, categoryId, locationScoId, locationDcoId);
+	    int totalProducts = productMapper.getTotalProducts(categoryId, locationScoId, locationDcoId); // 카테고리별로 제품 수 조회
 	    int totalPages = (int) Math.ceil((double) totalProducts / size);
 
 	    Map<String, Object> result = new HashMap<>();
