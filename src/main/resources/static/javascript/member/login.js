@@ -21,10 +21,11 @@ $(document).ready(function() {
               <a href="#"><i class="fa fa-linkedin" aria-hidden="true"></i></a>
             </div>
           </div>
-          <input type="email" placeholder="ID">
+          <input type="text" placeholder="ID">
           <input type="password" placeholder="Password">
           <button type="button" class="formBtn" id="signInBtn">로그인</button>
           <button type="button" class="formBtn" id="signUpBtn">회원가입</button>
+          <button type="button" class="formBtn" id="findIdBtn">아이디,비밀번호찾기</button>
         </form>
       </div>
     </div>
@@ -74,6 +75,36 @@ $(document).ready(function() {
       </div>
     `;
 
+	// 아이디 찾기  틀 start 
+	const findId = `
+    <div class="wrapper">
+      <div class="container">
+        <form>
+          <h1>아이디찾기</h1>
+          <div class="social-links">
+            <div>
+              <a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a>
+            </div>
+            <div>
+              <a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+            </div>
+            <div>
+              <a href="#"><i class="fa fa-linkedin" aria-hidden="true"></i></a>
+            </div>
+          </div>
+          <div class="phoneGroup">
+          	<input type="email" id="findEmail" placeholder="받을 메일 주소">
+  			<button type="button" class="findIdBtn" >인증</button>
+		  </div>
+		  <button type="button" class="formBtn" id="rollBack">로그인 하러가기</button>
+		  <button type="button" class="formBtn" id="findPwBtn">비밀번호 찾으러가기</button>		
+        </form>
+      </div>
+    </div>
+    `;
+
+
+
 	// 초기화면 실행 start
 	showSignIn();
 
@@ -87,6 +118,11 @@ $(document).ready(function() {
 		$("body").html(signUp);
 	}
 
+	// 아이디 찾기 페이지 body에 추가 함수 start
+	function showFindId() {
+		$("body").html(findId);
+	}
+
 	// 회원가입 버튼 클릭 이벤트 start
 	$(document).on("click", "#signUpBtn", function() {
 		showSignUp();
@@ -95,6 +131,11 @@ $(document).ready(function() {
 	// 로그인 페이지로 돌아가는 rollback 클릭 이벤트 start
 	$(document).on("click", "#rollBack", function() {
 		showSignIn();
+	});
+
+	// 아이디 찾기 버튼 클릭 함수 start
+	$(document).on("click", "#findIdBtn", function() {
+		showFindId();
 	});
 
 	//회원가입시 필드값 유무 검사 함수 start
@@ -232,26 +273,26 @@ $(document).ready(function() {
 	//	});
 
 	// 인증 문자 발송 ajax 함수 start
-//	function sendMessage(phone) {
-//		$.ajax({
-//			url: '/send-message',
-//			type: 'POST',
-//			data: JSON.stringify({ phone: phone }),
-//			contentType: 'application/json',
-//			success: function(response) {
-//				alert('본인인증 메시지가 전송되었습니다.');
-//				sessionStorage.setItem('randomNumber', response.randomNumber);
-//				isPhoneCheck = false;
-//			},
-//			error: function(xhr) {
-//				if (xhr.status === 409) { 
-//					alert(xhr.responseText); 
-//				} else {
-//					alert('메시지 전송에 실패했습니다.');
-//				}
-//			}
-//		});
-//	}
+	//	function sendMessage(phone) {
+	//		$.ajax({
+	//			url: '/send-message',
+	//			type: 'POST',
+	//			data: JSON.stringify({ phone: phone }),
+	//			contentType: 'application/json',
+	//			success: function(response) {
+	//				alert('본인인증 메시지가 전송되었습니다.');
+	//				sessionStorage.setItem('randomNumber', response.randomNumber);
+	//				isPhoneCheck = false;
+	//			},
+	//			error: function(xhr) {
+	//				if (xhr.status === 409) { 
+	//					alert(xhr.responseText); 
+	//				} else {
+	//					alert('메시지 전송에 실패했습니다.');
+	//				}
+	//			}
+	//		});
+	//	}
 
 	// 폼 초기화 함수 start
 	function resetForm() {
