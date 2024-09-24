@@ -1,0 +1,37 @@
+@charset "UTF-8";
+
+/* 고유한 페이지네이션 컨테이너 클래스 */
+ul.pagination-nav {
+	display: flex;
+	list-style: none;
+	padding: 0;
+	justify-content: center; /* 네비게이션 중앙 정렬 */
+}
+
+/* 고유한 페이지네이션 아이템 클래스 */
+ul.pagination-nav li.pagination-item {
+	margin-right: 8px; /* 버튼 간의 간격 */
+}
+
+/* 고유한 페이지네이션 링크 스타일 */
+ul.pagination-nav li.pagination-item a.pagination-link {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 40px; /* 버튼 너비를 일정하게 설정 */
+	height: 40px; /* 버튼 높이 설정 */
+	padding: 5px;
+	text-decoration: none;
+	font-size: 16px; /* 아이콘 크기 조절 */
+	background-color: #f0f0f0; /* 기본 배경색 */
+	border-radius: 4px; /* 버튼 모서리 둥글게 */
+}
+
+ul.pagination-nav li.pagination-item a.pagination-link:hover {
+	background-color: #ddd; /* 호버 시 배경색 변경 */
+}
+
+ul.pagination-nav li.pagination-item a.pagination-link.active {
+	background-color: #0DCC5A; /* 현재 페이지 배경색 */
+	color: white;
+}

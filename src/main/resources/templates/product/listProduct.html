@@ -9,12 +9,12 @@
 <link rel="stylesheet" href="/static/css/product/a5055aa57af99147.css">
 <link rel="stylesheet" href="/static/css/product/9808ee4030aef597.css">
 <link rel="stylesheet" href="/static/css/product/a4ef56fda630c4e5.css">
+<link rel="stylesheet" href="/static/css/product/listProduct.css">
 
 <link rel="stylesheet"
 	href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600&display=swap">
 
 <script src="/static/javascript/jquery-3.6.0.js"></script>
-<script src="/static/javascript/product/listProduct.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 </head>
@@ -29,7 +29,7 @@
 			<div class="w-full 2xl:-ms-9" style="height: auto !important;">
 			
 			
-<!-- 				<div class="relative"> -->
+				<div class="relative">
 <!-- 					<h1 class="a11yHidden">수입명품 중고거래 | 중고나라 카페에서 운영하는 공식 사이트</h1> -->
 <!-- 					<h2 class="text-[28px] font-normal mb-[10px]">검색 결과</h2> -->
 <!-- 					<button class="absolute right-1 top-2 lg:hidden"> -->
@@ -154,7 +154,7 @@
 <!-- 							</tr> -->
 <!-- 						</tbody> -->
 <!-- 					</table> -->
-<!-- 				</div> -->
+				</div>
 
 
 
@@ -189,30 +189,35 @@
 				<!--  ================================= 상품 목록 샘플 1 ========================================  -->
 				
 				<ul class="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 min-[1600px]:grid-cols-5 gap-x-3 lg:gap-x-5 xl:gap-x-7 gap-y-3 xl:gap-y-5 2xl:gap-y-8 search-results [&amp;_div]:ps-0">
-					<li class="">
-					<div>
-						<a class="relative group box-border overflow-hidden flex rounded-md cursor-pointer pe-0 pb-2 lg:pb-3 flex-col items-start transition duration-200 ease-in-out transform bg-white"
-						   href="/product/184796318">
-							<div class="relative w-full rounded-md overflow-hidden dim pt-[100%] mb-3 md:mb-3.5">
+				
+				
+<!-- 					<li class=""> -->
+<!-- 					<div> -->
+<!-- 						<a class="relative group box-border overflow-hidden flex rounded-md cursor-pointer pe-0 pb-2 lg:pb-3 flex-col items-start transition duration-200 ease-in-out transform bg-white" -->
+<!-- 						   href="/product/184796318"> -->
+<!-- 							<div class="relative w-full rounded-md overflow-hidden dim pt-[100%] mb-3 md:mb-3.5"> -->
 <!-- 							<img src="${pageContext.request.contextPath}/resources/img/${adminDTO.ST_PICTURE}"> -->
-									<img >
-										 이미지는 JS에서 불로오고 있으니 패스
-							</div>
-							<div class="w-full overflow-hidden p-2 md:px-2.5 xl:px-4">
-								<h2 class="line-clamp-2 min-h-[2lh] text-sm md:text-base">PRO_TITLE</h2>
-									<div class="font-semibold space-s-2 mt-0.5 text-heading lg:text-lg lg:mt-1.5">PRO_PRICE + 원</div>
-									<div class="my-1 h-6">
-										<span class="text-sm text-gray-400">PRO_LOCATION 값을 이용해서 그 값을 참조하는 TEST_DETAIL_CODE 테이블의 DCO_VALUE와 그 행의 SCO_ID를 참조하는 TEST_SUB_CODE테이블의 SCO_VALUE를 가져와서 SCO_VALUE+" "+DCO_VALUE</span>
-										<span class="mx-1 text-sm text-gray-400">|</span>
-										<span class="text-sm text-gray-400">PRO_DATE를 이용해서 몇분전, 몇시간전, 몇일전을 계산해서 보이기</span>
-									</div>
-									<div class="flex justify-between">
-										<div class="text-xs text-gray-400 text-muted">찜 3 ∙ 조회수 0</div>
-									</div>
-							</div>
-						</a>
-					</div>
-					</li>
+<!-- 									<img > -->
+<!-- 										 이미지는 JS에서 불로오고 있으니 패스 -->
+<!-- 							</div> -->
+<!-- 							<div class="w-full overflow-hidden p-2 md:px-2.5 xl:px-4"> -->
+<!-- 							PRO_TITLE -->
+<!-- 								<h2 class="line-clamp-2 min-h-[2lh] text-sm md:text-base"></h2> -->
+<!-- 								PRO_PRICE + 원 -->
+<!-- 									<div class="font-semibold space-s-2 mt-0.5 text-heading lg:text-lg lg:mt-1.5"></div> -->
+<!-- 									<div class="my-1 h-6"> -->
+<!-- 										<span class="text-sm text-gray-400">PRO_LOCATION 값을 이용해서 그 값을 참조하는 TEST_DETAIL_CODE 테이블의 DCO_VALUE와 그 행의 SCO_ID를 참조하는 TEST_SUB_CODE테이블의 SCO_VALUE를 가져와서 SCO_VALUE+" "+DCO_VALUE</span> -->
+<!-- 										<span class="mx-1 text-sm text-gray-400">|</span> -->
+<!-- 										<span class="text-sm text-gray-400">PRO_DATE를 이용해서 몇분전, 몇시간전, 몇일전을 계산해서 보이기</span> -->
+<!-- 									</div> -->
+<!-- 									<div class="flex justify-between"> -->
+<!-- 										<div class="text-xs text-gray-400 text-muted">조회수 0</div> -->
+<!-- 									</div> -->
+<!-- 							</div> -->
+<!-- 						</a> -->
+<!-- 					</div> -->
+<!-- 					</li> -->
+						
 						
 				</ul>
 
@@ -230,31 +235,37 @@
 
 
 				<div class="bottom-0 py-3 m-auto text-center bg-white lg:mb-2">
-					<ul class="flex justify-center space-x-2 space-x-reverse">
-						<li class="w-4 mr-2"><a class="items-center hidden h-full"
-							href="/search?category=1&amp;page=0&amp;productFilterType=APP"><svg
-									stroke="currentColor" fill="currentColor" stroke-width="0"
-									viewBox="0 0 24 24" height="1em" width="1em"
-									xmlns="http://www.w3.org/2000/svg">
-											<path d="M15.41 16.09l-4.58-4.59 4.58-4.59L14 5.5l-6 6 6 6z"></path></svg></a></li>
-						<li class="w-10 h-10 rounded-md shrink-0 bg-jngreen/80 text-white"><a
-							class="block leading-10"
-							href="/search?category=1&amp;page=1&amp;productFilterType=APP">1</a></li>
+					<ul class="flex justify-center space-x-2 space-x-reverse pagination-nav">
+<!-- 						<li class="w-4 mr-2"><a class="items-center hidden h-full" -->
+<!--  							href="/search?category=1&amp;page=0&amp;productFilterType=APP"> -->
+<!-- 						<svg stroke="currentColor" fill="currentColor" stroke-width="0" -->
+<!-- 							viewBox="0 0 24 24" height="1em" width="1em" -->
+<!-- 							xmlns="http://www.w3.org/2000/svg"> -->
+<!-- 											<path d="M15.41 16.09l-4.58-4.59 4.58-4.59L14 5.5l-6 6 6 6z"></path></svg></a></li> -->
+<!-- 						<li class="w-10 h-10 rounded-md shrink-0 bg-jngreen/80 text-white"><a -->
+<!-- 							class="block leading-10" -->
+<!-- 							href="/search?category=1&amp;page=1&amp;productFilterType=APP">1</a></li> -->
 
-						<li class="w-10 h-10 rounded-md shrink-0"><a
-							class="block leading-10"
-							href="/search?category=1&amp;page=2&amp;productFilterType=APP">2</a></li>
+<!-- 						<li class="w-10 h-10 rounded-md shrink-0"><a -->
+<!-- 							class="block leading-10" -->
+<!-- 							href="/search?category=1&amp;page=2&amp;productFilterType=APP">2</a></li> -->
 
-						<li class="w-4 mr-2"><a class="items-center h-full flex"
-							href="/search?category=1&amp;page=2&amp;productFilterType=APP"><svg
-									stroke="currentColor" fill="currentColor" stroke-width="0"
-									viewBox="0 0 24 24" height="1em" width="1em"
-									xmlns="http://www.w3.org/2000/svg">
-											<path d="M8.59 16.34l4.58-4.59-4.58-4.59L10 5.75l6 6-6 6z"></path></svg></a></li>
+<!-- 						<li class="w-4 mr-2"><a class="items-center h-full flex" -->
+<!-- 							href="/search?category=1&amp;page=2&amp;productFilterType=APP"> -->
+<!-- 								<svg  -->
+<!-- 									stroke="currentColor" fill="currentColor" stroke-width="0" -->
+<!-- 									viewBox="0 0 24 24" height="1em" width="1em" -->
+<!-- 									xmlns="http://www.w3.org/2000/svg"> -->
+<!-- 											<path d="M8.59 16.34l4.58-4.59-4.58-4.59L10 5.75l6 6-6 6z"></path></svg></a></li> -->
+					
 					</ul>
 				</div>
 			</div>
 		</div>
 	</main>
+	
+	<script src="/static/javascript/product/listProduct.js"></script>
+	
+	
 </body>
 </html>

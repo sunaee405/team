@@ -96,24 +96,47 @@
 		   AND TDC.DCO_ID LIKE 'ARD%'
 	</select>
 	
-	<select id="getProductsSortedByViews" resultType="map">
-		SELECT PRO.PRO_NO
-			 , PRO.PRO_VIEWS
-			 , PRO.PRO_DATE
-			 , TDC1.DCO_VALUE AS LOCATION_VALUE
-			 , PRO.PRO_PRICE
-			 , PRO.PRO_STATUS
-			 , PRO.PRO_TITLE
-			 , TDC2.DCO_VALUE AS TYPE_VALUE
-			 , PRO.PRO_IMG
-		  FROM PRODUCT PRO 
-		  JOIN TEST_DETAIL_CODE TDC1 
-		  	ON PRO.PRO_LOCATION = TDC1.DCO_ID
-		  JOIN TEST_DETAIL_CODE TDC2 
-		    ON PRO.PRO_TYPE = TDC2.DCO_ID 
-		 ORDER BY PRO.PRO_VIES DESC
-		 LIMIT #{size} 
-		OFFSET #{offset};
+	<select id="getProductsSorted" resultType="map">
+    	SELECT PRO.PRO_NO
+        	 , PRO.PRO_VIEWS
+         	 , PRO.PRO_DATE
+         	 , TSC1.SCO_VALUE AS LOCATION_SUB
+          	 , TDC1.DCO_VALUE AS LOCATION_VALUE
+         	 , PRO.PRO_PRICE
+         	 , PRO.PRO_STATUS
+         	 , PRO.PRO_TITLE
+         	 , TDC2.DCO_VALUE AS TYPE_VALUE
+         	 , PRO.PRO_IMG
+    	  FROM PRODUCT PRO 
+    	  JOIN TEST_DETAIL_CODE TDC1 
+        	ON PRO.PRO_LOCATION = TDC1.DCO_ID
+    	  JOIN TEST_SUB_CODE TSC1
+        	ON TDC1.SCO_ID = TSC1.SCO_ID
+    	  JOIN TEST_DETAIL_CODE TDC2 
+        	ON PRO.PRO_TYPE = TDC2.DCO_ID
+    	<choose>
+	        <when test="sortType == 'views'">
+            ORDER BY PRO.PRO_VIEWS DESC
+        	</when>
+        	<when test="sortType == 'date'">
+            ORDER BY PRO.PRO_DATE DESC
+        	</when>
+        	<when test="sortType == 'price_high'">
+            ORDER BY CAST(PRO.PRO_PRICE AS UNSIGNED) DESC
+	        </when>
+    	    <when test="sortType == 'price_low'">
+            ORDER BY CAST(PRO.PRO_PRICE AS UNSIGNED) ASC
+        	</when>
+        	<otherwise>
+            ORDER BY PRO.PRO_DATE DESC
+        	</otherwise>
+    	</choose>
+    	LIMIT #{start}, #{size}
+	</select>
+	
+	<select id="getTotalProducts" resultType="int">
+    	SELECT COUNT(*) 
+    	  FROM PRODUCT
 	</select>
 
 

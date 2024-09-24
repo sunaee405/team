@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -98,9 +99,16 @@ public class ProductService {
 		return productMapper.getSortList();
 	}
 
-	public List<Map<String, Object>> getProductsSortedByViews(int offset, int size) {
-		return productMapper.getProductsSortedByViews(offset, size);
+	public Map<String, Object> getProductsSorted(int page, int size, String sortType) {
+		int start = (page - 1) * size;
+		List<Map<String, Object>> products = productMapper.getProductsSorted(start, size, sortType);
+		int totalProducts = productMapper.getTotalProducts();
+		int totalPages = (int) Math.ceil((double) totalProducts / size);
+
+		Map<String, Object> result = new HashMap<>();
+		result.put("products", products);
+		result.put("totalPages", totalPages);
+		result.put("currentPage", page);
+		return result;
 	}
-
-
 }

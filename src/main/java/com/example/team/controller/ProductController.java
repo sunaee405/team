@@ -151,15 +151,15 @@ public class ProductController {
 		return productService.getSortList();
 	}
 
-	@GetMapping("/listProductsSortedByViews")
-
-	public ResponseEntity<List<Map<String, Object>>> getProductsSortedByViews(@RequestParam("page") int page,
-																			  @RequestParam("size") int size) {
-		
-		int offset = (page - 1) * size;
-		List<Map<String, Object>> products = productService.getProductsSortedByViews(offset, size);
-
-		return new ResponseEntity<>(products, HttpStatus.OK);
+	@GetMapping("/listProductsSorted")
+	@ResponseBody
+	public Map<String, Object> listProductsSorted(
+	        @RequestParam("page") int page, 
+	        @RequestParam("size") int size, 
+	        @RequestParam(value = "sortType", defaultValue = "date") String sortType) {
+	    
+	    return productService.getProductsSorted(page, size, sortType);
 	}
-
+	
+	
 }

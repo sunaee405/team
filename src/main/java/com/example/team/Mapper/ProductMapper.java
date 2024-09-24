@@ -14,22 +14,23 @@ import com.example.team.model.ProductEntity;
 @Mapper
 @Repository
 public interface ProductMapper {
-	
+
 	List<Map<String, Object>> getProductCategory();
-	
+
 	List<Map<String, Object>> getProductLocation();
-	
+
 	List<Map<String, Object>> getProductState();
-	
+
 	List<Map<String, Object>> getProductType();
-	
+
 	List<Map<String, Object>> getProductNego();
 
 	List<Map<String, Object>> getSortList();
 
-	List<Map<String, Object>> getProductsSortedByViews(@Param("offset") int offset, @Param("size") int size);
-	
-	
-	
-	
+	// 페이징 처리를 위한 메서드 수정
+	List<Map<String, Object>> getProductsSorted(@Param("start") int start, @Param("size") int size, @Param("sortType") String sortType);
+
+	// 총 제품 개수 조회 메서드
+	int getTotalProducts();
+
 }
