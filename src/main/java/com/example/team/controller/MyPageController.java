@@ -26,13 +26,19 @@ public class MyPageController {
 	private MyPageService myPageService;
 	
 	
+	// 공통코드 불러오기
+	@GetMapping("/getDetailCode")
+	public ResponseEntity<?> getDetailCode() {
+		Map<String, Object> code = myPageService.getDetailCode();
+		System.out.println(code);
+		return ResponseEntity.ok().body(code);
+	}
+	
+	
 	// 상단영역 카테고리 불러오기
 	@GetMapping("/getCategory")
 	public ResponseEntity getCategory() {
-		
 		List<Map<String, Object>> categoryList = myPageService.getCategory();
-		
-		System.out.println(categoryList);
 		
 		return ResponseEntity.ok().body(categoryList);
 	}
@@ -44,9 +50,6 @@ public class MyPageController {
 	public ResponseEntity<?> getMainProductList(@RequestParam Map<String, Object> data) {
 		
 		List<Map<String, Object>> productList = myPageService.getMainProductList(data);
-		
-		System.out.println(productList);
-		System.out.println(!productList.isEmpty());
 		
 		if(!productList.isEmpty()) {
 			return ResponseEntity.status(HttpStatus.OK).body(productList);
