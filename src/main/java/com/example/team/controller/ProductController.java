@@ -151,14 +151,25 @@ public class ProductController {
 		return productService.getSortList();
 	}
 
+//	@GetMapping("/listProductsSorted")
+//	@ResponseBody
+//	public Map<String, Object> listProductsSorted(
+//	        @RequestParam("page") int page, 
+//	        @RequestParam("size") int size, 
+//	        @RequestParam(value = "sortType", defaultValue = "date") String sortType) {
+//	    
+//	    return productService.getProductsSorted(page, size, sortType);
+//	}
+	
 	@GetMapping("/listProductsSorted")
 	@ResponseBody
 	public Map<String, Object> listProductsSorted(
 	        @RequestParam("page") int page, 
 	        @RequestParam("size") int size, 
-	        @RequestParam(value = "sortType", defaultValue = "date") String sortType) {
+	        @RequestParam(value = "sortType", defaultValue = "date") String sortType,
+	        @RequestParam(value = "categoryId", required = false) String categoryId) {
 	    
-	    return productService.getProductsSorted(page, size, sortType);
+	    return productService.getProductsSorted(page, size, sortType, categoryId);
 	}
 	
 	

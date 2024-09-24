@@ -35,3 +35,16 @@ ul.pagination-nav li.pagination-item a.pagination-link.active {
 	background-color: #0DCC5A; /* 현재 페이지 배경색 */
 	color: white;
 }
+
+.sort-btn {
+    font-weight: normal; /* 기본 상태는 normal */
+    cursor: pointer;
+}
+
+.sort-btn.active {
+    font-weight: bold; /* 클릭된 버튼은 bold 처리 */
+}
+
+a.active {
+    font-weight: bold;
+}

@@ -1,7 +1,8 @@
 $(document).ready(function() {
 	// 현재 정렬 기준을 저장 (기본은 '최신순')
 	let currentSortType = 'date';
-	let currentCategoryId = ''; // 기본값은 전체 (모든 카테고리)
+	let currentCategoryId = '';  // 기본값은 전체 (모든 카테고리)
+
 
 	// 카테고리 데이터를 가져오기 위한 AJAX 요청
 	$.ajax({
@@ -9,6 +10,9 @@ $(document).ready(function() {
 		type: 'GET',
 		success: function(categories) {
 			let categoryFilter = $('#category-filter'); // <tr> 선택
+
+			// 기존 내용을 비우기
+			// categoryFilter.empty();
 
 			// 카테고리 데이터를 ID의 오름차순으로 정렬
 			categories.sort(function(a, b) {
@@ -21,7 +25,7 @@ $(document).ready(function() {
                 <div class="flex items-center w-full chawkbazarBreadcrumb">
                     <ol class="flex flex-wrap items-center w-full mt-0 lg:mt-0">
                         <li class="flex-shrink-0 px-0 mt-0 text-sm break-all transition duration-200 ease-in text-body first:ps-0 last:pe-0 hover:text-heading">
-                            <a class="text-base font-semibold text-jnBlack font-medium text-base text-jnBlack active" href="#" data-id="">
+                            <a class="text-base font-semibold text-jnBlack font-medium text-base text-jnBlack" href="#" data-id="">
                                 전체
                             </a>
                         </li>
@@ -60,18 +64,16 @@ $(document).ready(function() {
 			// 카테고리 버튼 클릭 이벤트 설정 (필터링)
 			$('#category-filter a').click(function(event) {
 				event.preventDefault();
-				currentCategoryId = $(this).data('id'); // DCO_ID 값 업데이트
-				console.log('선택된 카테고리 ID:', currentCategoryId);
-
+				let categoryId = $(this).data('id'); // DCO_ID 값
+				console.log('선택된 카테고리 ID:', categoryId); // 선택된 카테고리 ID 출력
+				
 				// 모든 카테고리 버튼의 active 클래스 제거
-				$('#category-filter a').removeClass('active');
-				// 클릭된 카테고리 버튼에 active 클래스 추가
-				$(this).addClass('active');
+                $('#category-filter a').removeClass('active');
+                // 클릭된 카테고리 버튼에 active 클래스 추가
+                $(this).addClass('active');
 
-				// 현재 선택된 카테고리 ID를 업데이트
-
-				loadProducts(1); // 첫 페이지부터 다시 로드
-			});
+                loadProducts(1); // 첫 페이지부터 다시 로드
+            });
 		},
 		error: function(xhr, status, error) {
 			console.error('카테고리 로드 오류:', error);
@@ -141,15 +143,14 @@ $(document).ready(function() {
 
 	// 상품 목록을 불러오는 함수
 	function loadProducts(page) {
-		console.log('페이지 로딩:', page, '정렬 기준:', currentSortType, '카테고리 ID:', currentCategoryId); // 페이지 번호 및 정렬 기준 로깅
+		console.log('페이지 로딩:', page, '정렬 기준:', currentSortType); // 페이지 번호 및 정렬 기준 로깅
 		$.ajax({
 			url: '/listProductsSorted',
 			type: 'GET',
 			data: {
 				page: page,
 				size: 20, // 페이지당 20개의 상품을 가져옴
-				sortType: currentSortType, // 선택한 정렬 기준을 서버로 전송
-				categoryId: currentCategoryId // 선택한 카테고리 ID를 서버로 전송
+				sortType: currentSortType // 선택한 정렬 기준을 서버로 전송
 			},
 			dataType: 'json',
 			success: function(response) {
@@ -187,30 +188,30 @@ $(document).ready(function() {
 
 					// 상품 HTML 생성
 					productListHtml += `
-                <li class="">
-                    <div>
-                        <a class="relative group box-border overflow-hidden flex rounded-md cursor-pointer pe-0 pb-2 lg:pb-3 flex-col items-start transition duration-200 ease-in-out transform bg-white" href="/product/${product.PRO_NO}">
-                            <div class="relative w-full rounded-md overflow-hidden dim pt-[0%] mb-3 md:mb-3.5">
-                                <img src="${imageUrl}" alt="Product Image">
-                            </div>
-                            <div class="w-full overflow-hidden p-2 md:px-2.5 xl:px-4">
-                                <h2 class="line-clamp-2 min-h-[2lh] text-sm md:text-base">${product.PRO_TITLE}</h2>
-                                <div class="font-semibold space-s-2 mt-0.5 text-heading lg:text-lg lg:mt-1.5">
-                                    ${product.PRO_PRICE}원
+                    <li class="">
+                        <div>
+                            <a class="relative group box-border overflow-hidden flex rounded-md cursor-pointer pe-0 pb-2 lg:pb-3 flex-col items-start transition duration-200 ease-in-out transform bg-white" href="/product/${product.PRO_NO}">
+                                <div class="relative w-full rounded-md overflow-hidden dim pt-[0%] mb-3 md:mb-3.5">
+                                    <img src="${imageUrl}" alt="Product Image">
                                 </div>
-                                <div class="my-1 h-6">
-                                    <span class="text-sm text-gray-400">${product.LOCATION_SUB} ${product.LOCATION_VALUE}</span>
-                                    <span class="mx-1 text-sm text-gray-400">|</span>
-                                    <span class="text-sm text-gray-400">${timeAgo}</span>
+                                <div class="w-full overflow-hidden p-2 md:px-2.5 xl:px-4">
+                                    <h2 class="line-clamp-2 min-h-[2lh] text-sm md:text-base">${product.PRO_TITLE}</h2>
+                                    <div class="font-semibold space-s-2 mt-0.5 text-heading lg:text-lg lg:mt-1.5">
+                                        ${product.PRO_PRICE}원
+                                    </div>
+                                    <div class="my-1 h-6">
+                                        <span class="text-sm text-gray-400">${product.LOCATION_SUB} ${product.LOCATION_VALUE}</span>
+                                        <span class="mx-1 text-sm text-gray-400">|</span>
+                                        <span class="text-sm text-gray-400">${timeAgo}</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <div class="text-xs text-gray-400 text-muted">조회수 ${product.PRO_VIEWS}</div>
+                                    </div>
                                 </div>
-                                <div class="flex justify-between">
-                                    <div class="text-xs text-gray-400 text-muted">조회수 ${product.PRO_VIEWS}</div>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                </li>
-            `;
+                            </a>
+                        </div>
+                    </li>
+                `;
 				});
 
 				// 상품 목록 HTML을 삽입
@@ -315,3 +316,5 @@ $(document).ready(function() {
 	// 초기 페이지 로드
 	loadProducts(1);
 });
+
+

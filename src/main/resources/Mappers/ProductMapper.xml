@@ -8,6 +8,7 @@
 	<select id="getProductCategory" resultType="map">
 		SELECT TDC.DCO_ID
 			 , TDC.DCO_VALUE
+			 , TDC.ID
 			 , TSC.SCO_ID
 			 , TMC.MCO_ID
 		  FROM TEST_DETAIL_CODE TDC
@@ -100,6 +101,7 @@
     	SELECT PRO.PRO_NO
         	 , PRO.PRO_VIEWS
          	 , PRO.PRO_DATE
+         	 , TDC3.DCO_VALUE AS PRO_CATEGORY
          	 , TSC1.SCO_VALUE AS LOCATION_SUB
           	 , TDC1.DCO_VALUE AS LOCATION_VALUE
          	 , PRO.PRO_PRICE
@@ -114,6 +116,12 @@
         	ON TDC1.SCO_ID = TSC1.SCO_ID
     	  JOIN TEST_DETAIL_CODE TDC2 
         	ON PRO.PRO_TYPE = TDC2.DCO_ID
+          JOIN TEST_DETAIL_CODE TDC3 
+        	ON PRO.PRO_CATEGORY = TDC3.DCO_ID
+         WHERE 1=1
+           <if test="categoryId != null and categoryId != ''">
+           AND PRO.PRO_CATEGORY = #{categoryId}
+           </if>
     	<choose>
 	        <when test="sortType == 'views'">
             ORDER BY PRO.PRO_VIEWS DESC
@@ -136,7 +144,11 @@
 	
 	<select id="getTotalProducts" resultType="int">
     	SELECT COUNT(*) 
-    	  FROM PRODUCT
+    	  FROM PRODUCT PRO
+    	 WHERE 1=1
+         <if test="categoryId != null and categoryId != ''">
+           AND PRO.PRO_CATEGORY = #{categoryId}
+         </if>
 	</select>
 
 

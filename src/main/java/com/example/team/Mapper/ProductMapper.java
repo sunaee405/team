@@ -28,9 +28,12 @@ public interface ProductMapper {
 	List<Map<String, Object>> getSortList();
 
 	// 페이징 처리를 위한 메서드 수정
-	List<Map<String, Object>> getProductsSorted(@Param("start") int start, @Param("size") int size, @Param("sortType") String sortType);
+	List<Map<String, Object>> getProductsSorted(@Param("start") int start
+											  , @Param("size") int size
+											  , @Param("sortType") String sortType
+											  , @Param("categoryId") String categoryId);
 
 	// 총 제품 개수 조회 메서드
-	int getTotalProducts();
+	int getTotalProducts(@Param("categoryId") String categoryId);
 
 }
