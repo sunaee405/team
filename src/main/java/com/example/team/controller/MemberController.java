@@ -45,9 +45,15 @@ public class MemberController {
 	@PostMapping("/checkEmail")
 	public ResponseEntity<String> checkEmail(@RequestBody Map<String, String> data) {
 		String MEM_EMAIL = data.get("MEM_EMAIL");
-		String MEM_ID = memberService.checkEmail(MEM_EMAIL);
-		System.out.println(MEM_ID);
-		return ResponseEntity.ok(MEM_ID);
+		String MEM_ID = data.get("MEM_ID");
+		String type = data.get("type");
+		String result = "";
+		if("sendPw".equals(type)) {
+			result = memberService.checkPwEmail(MEM_EMAIL, MEM_ID);
+		}else {
+			result = memberService.checkEmail(MEM_EMAIL);
+		}
+		return ResponseEntity.ok(result);
 	}
 
 	@PostMapping("/sendEmail")
@@ -55,14 +61,14 @@ public class MemberController {
 		String MEM_EMAIL = data.get("MEM_EMAIL");
 		String type = data.get("type");
 		String randomNumber = randomNumber();
-		
-		memberService.sendEmail(MEM_EMAIL, type , randomNumber);
 
-		session.setAttribute("emailNumber", randomNumber);	
-		
+		memberService.sendEmail(MEM_EMAIL, type, randomNumber);
+
+		session.setAttribute("emailNumber", randomNumber);
+
 		return ResponseEntity.ok().build();
 	}
-	
+
 	private String randomNumber() {
 		Random random = new Random();
 		int randomCode = 1000 + random.nextInt(9000); // 1000 ~ 9999 사이의 숫자

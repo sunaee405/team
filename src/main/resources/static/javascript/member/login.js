@@ -2,7 +2,6 @@ $(document).ready(function() {
 	var isPhoneCheck = false;
 	var isNicknameCheck = false;
 	var isEmailCheck = false;
-	var MEM_ID = '';
 
 	// 본인인증 사용횟수 제한 때문에 주석쳐둠
 
@@ -89,7 +88,7 @@ $(document).ready(function() {
     <div class="wrapper">
       <div class="container">
         <form>
-          <h1>아이디찾기</h1>
+          <h1>아이디 찾기</h1>
           <div class="social-links">
             <div>
               <a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a>
@@ -105,12 +104,70 @@ $(document).ready(function() {
           	<input type="email" class="checkInput" id="findEmail" placeholder="받을 메일 주소">
   			<button type="button" class="checkButton"  id=sendFindEmail >인증</button>
 		  </div>
-		  <button type="button" class="formBtn" id="rollBack">로그인 하러가기</button>
-		  <button type="button" class="formBtn" id="findPwBtn">비밀번호 찾으러가기</button>		
+		  <button type="button" class="formBtn" id="rollBack">로그인</button>
+		  <button type="button" class="formBtn" id="findPwBtn">비밀번호 찾기</button>		
         </form>
       </div>
     </div>
     `;
+
+	// 비밀번호 찾기  틀 start 
+	const findPw = `
+    <div class="wrapper">
+      <div class="container">
+        <form>
+          <h1>비밀번호 찾기</h1>
+          <div class="social-links">
+            <div>
+              <a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a>
+            </div>
+            <div>
+              <a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+            </div>
+            <div>
+              <a href="#"><i class="fa fa-linkedin" aria-hidden="true"></i></a>
+            </div>
+          </div>
+          <input type="text" id="findPwId" placeholder="ID">
+          <div class="checkGroup">
+          	<input type="email" class="checkInput" id="findPwEmail" placeholder="받을 메일 주소">
+  			<button type="button" class="checkButton"  id=sendFindPwEmail >인증</button>
+		  </div>
+		  <button type="button" class="formBtn" id="rollBack">로그인</button>
+        </form>
+      </div>
+    </div>
+    `;
+
+
+	const resetPw = `
+    <div class="wrapper">
+      <div class="container">
+        <form>
+          <h1>비밀번호 찾기</h1>
+          <div class="social-links">
+            <div>
+              <a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a>
+            </div>
+            <div>
+              <a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+            </div>
+            <div>
+              <a href="#"><i class="fa fa-linkedin" aria-hidden="true"></i></a>
+            </div>
+          </div>
+          <input type="text" id="nowId" placeholder="ID">
+          <input type="text" id="nowPw" placeholder="PW">
+          
+          <input type="password" id="resetpw" placeholder="Password 10자이내" maxlength="10" >
+          <input type="password" id="resetpw2" placeholder="Password Check" >
+          <span id="checkPw" ></span>
+		  <button type="button" class="formBtn" id="resetPwBtn">비밀번호 수정</button>
+        </form>
+      </div>
+    </div>
+    `;
+
 
 
 
@@ -132,6 +189,11 @@ $(document).ready(function() {
 		$("body").html(findId);
 	}
 
+	// 비밀번호 찾기 페이지 body에 추가 함수 start
+	function showFindPw() {
+		$("body").html(findPw);
+	}
+
 	// 회원가입 버튼 클릭 이벤트 start
 	$(document).on("click", "#signUpBtn", function() {
 		showSignUp();
@@ -147,6 +209,11 @@ $(document).ready(function() {
 		showFindId();
 	});
 
+	// 아이디 찾기 버튼 클릭 함수 start
+	$(document).on("click", "#findPwBtn", function() {
+		showFindPw();
+	});
+
 	//회원가입시 필드값 유무 검사 함수 start
 	$(document).on("click", "#signUpSubmit", function() {
 		if (!inputCheck('#id', 'ID를 입력해 주세요!')) return;
@@ -160,9 +227,14 @@ $(document).ready(function() {
 			return;
 		}
 		//		if (isPhoneCheck == false) {
-		//			alert('본인인증 해주세요!');
+		//			alert('휴대폰 인증 해주세요!');
 		//			return;
 		//		}
+		
+				if (isEmailCheck == false) {
+					alert('이메일 인증 해주세요!');
+					return;
+				}
 
 		if (isNicknameCheck == false) {
 			alert('닉네임이 유효하지 않습니다.');
@@ -394,7 +466,7 @@ $(document).ready(function() {
 
 	// id찾기 이메일 인증 버튼 클릭 함수 starat	
 	$(document).on("click", "#sendFindEmail", function() {
-		var type = "send";
+		var type = "sendId";
 		var email = $('#findEmail').val();
 
 		if (!email) {
@@ -406,29 +478,51 @@ $(document).ready(function() {
 
 	});
 
+	// pw찾기 이메일 인증 버튼 클릭 함수 starat	
+	$(document).on("click", "#sendFindPwEmail", function() {
+		var type = "sendPw";
+		var email = $('#findPwEmail').val();
+		var id = $('#findPwId').val();
+		if (!email) {
+			alert("이메일을 먼저 입력해주세요.");
+			return;
+		}
+
+		if (!id) {
+			alert("아이디를 먼저 입력해주세요");
+			return;
+		}
+
+		checkEmail(type, email, id);
+
+	});
+
+
 	// 이메일 중복체크 함수  start
-	function checkEmail(type, email) {
+	function checkEmail(type, email, id) {
 
 		$.ajax({
 			type: 'POST',
 			url: '/members/checkEmail',
-			data: JSON.stringify({ MEM_EMAIL: email }),
+			data: JSON.stringify({ MEM_EMAIL: email
+								  ,type: type 
+								  ,MEM_ID: id
+								}),
 			contentType: 'application/json',
 			success: function(response) {
-				MEM_ID = response;
 				if (type === 'check') {
-					if (MEM_ID) {
+					if (response) {
 						alert("이미 가입된 이메일입니다.");
 					} else {
 						alert("본인 인증 발송 되었습니다");
 						sendEmail(type, email);
 					}
-				} else if (type === 'send') {
-					if (MEM_ID) {
+				} else  {
+					if (response) {
 						alert("메일 발송 되었습니다");
 						sendEmail(type, email);
 					} else {
-						alert("가입된 아이디가 없습니다");
+						alert("일치하는 아이디가 없습니다");
 					}
 				}
 
@@ -442,9 +536,9 @@ $(document).ready(function() {
 		$.ajax({
 			url: '/members/sendEmail',
 			type: 'POST',
-			data: JSON.stringify({
-				type: type
-				, MEM_EMAIL: email
+			data: JSON.stringify({ type: type
+				                  ,MEM_EMAIL: email
+
 			}),
 			contentType: 'application/json',
 			success: function(response) {

@@ -20,5 +20,11 @@ public interface MemberRepository extends JpaRepository<MemberEntity, Long> {
 
 	@Query("SELECT m.MEM_ID FROM MemberEntity m WHERE m.MEM_EMAIL = ?1")
 	String checkEmail(String MEM_EMAIL);
-
+	
+	@Query("SELECT m.MEM_ID FROM MemberEntity m WHERE m.MEM_EMAIL = ?1 AND m.MEM_ID = ?2")
+	String checkPwEmail(String MEM_EMAIL, String MEM_ID);
+	
+	@Query("SELECT m.MEM_PW FROM MemberEntity m WHERE m.MEM_EMAIL = ?1")
+	String checkPwEmail(String MEM_EMAIL);
+	
 }

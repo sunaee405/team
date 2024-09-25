@@ -47,6 +47,11 @@ public class MemberService {
 	public String checkEmail(String MEM_EMAIL) {
 		return memberRepository.checkEmail(MEM_EMAIL);
 	}
+	
+	public String checkPwEmail(String MEM_EMAIL, String MEM_ID) {
+		return memberRepository.checkPwEmail(MEM_EMAIL, MEM_ID);
+	}
+	
 
 	public void sendEmail(String MEM_EMAIL, String type , String randomNumber) {
 		
@@ -56,13 +61,16 @@ public class MemberService {
 		if ("check".equals(type)) {
 			message.setSubject("땡땡 사이트 인증메일 입니다.");
 			message.setText("인증번호 [" + randomNumber +"]");
-		} else if ("send".equals(type)) {
+		} else if ("sendId".equals(type)) {
 			String MEM_ID = memberRepository.checkEmail(MEM_EMAIL);
 			message.setSubject("떙땡 사이트 아이디 입니다.");
 			message.setText("ID:" + MEM_ID);
+		}else if ("sendPw".equals(type)) {
+			String MEM_PW = memberRepository.checkPwEmail(MEM_EMAIL);
+			message.setSubject("떙땡 사이트 아이디 입니다.");
+			message.setText("PW:" + MEM_PW);
 		}
-
-		// 메일 전송
+		
 		mailSender.send(message);	
 		
 	}
