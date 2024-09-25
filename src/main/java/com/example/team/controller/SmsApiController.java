@@ -50,7 +50,7 @@ public class SmsApiController {
 		
 		this.messageService.sendOne(new SingleMessageSendingRequest(message));
 
-		session.setAttribute("verificationCode", randomNumber);
+		session.setAttribute("randomNumber", randomNumber);
 		 
 		try {
 			return randomNumber;

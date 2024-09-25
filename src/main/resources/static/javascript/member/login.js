@@ -1,6 +1,8 @@
 $(document).ready(function() {
 	var isPhoneCheck = false;
 	var isNicknameCheck = false;
+	var isEmailCheck = false;
+	var MEM_ID = '';
 
 	// 본인인증 사용횟수 제한 때문에 주석쳐둠
 
@@ -49,23 +51,30 @@ $(document).ready(function() {
             <input type="text" id="nickname" placeholder="닉네임 7자이내 한글만가능" maxlength="7">
             <span id="nicknameMessage" style="color: red;"></span>
             <input type="text" id="birth" placeholder="생년월일 ex)980319" maxlength="6" pattern="\d{6}" oninput="this.value = this.value.replace(/[^0-9]/g, '');"  >
-            <input type="email" id="email" placeholder="이메일"   >
+            <div class="checkGroup">
+            <input type="email" class="checkInput" id="email" placeholder="이메일">
+            <button type="button" class="checkButton" id="sendEmailButton">메일인증</button>
+            </div>
             <span id="emailSub" style="color: blue; font-size: 12px; display: none;">아이디/비밀번호 찾기 시 해당 메일로 발송됩니다.</span>
-            <div class="phoneGroup">
-    			<input type="text" id="phone" placeholder="전화번호 -제외" maxlength="11" pattern="\d{11}" oninput="this.value = this.value.replace(/[^0-9]/g, '');"  >
-  				<button type="button" class="checkPhone" id="checkPhone">본인인증</button>
+            <div class="checkGroup">
+    			<input type="text" class="checkInput" id="checkEmail" placeholder="인증번호 입력" >
+  				<button type="button" class="checkButton" id="checkEmailButton">확인</button>
 			</div>
-			<div class="phoneGroup">
-    			<input type="text" id="checkNumber" placeholder="인증번호 입력"  >
-  				<button type="button" class="check" id="check">확인</button>
+            <div class="checkGroup">
+    			<input type="text" class="checkInput" id="phone" placeholder="전화번호 -제외" maxlength="11" pattern="\d{11}" oninput="this.value = this.value.replace(/[^0-9]/g, '');"  >
+  				<button type="button" class="checkButton" id="checkPhone">본인인증</button>
+			</div>
+			<div class="checkGroup">
+    			<input type="text" class="checkInput" id="checkNumber" placeholder="인증번호 입력"  >
+  				<button type="button" class="checkButton" id="check">확인</button>
 			</div>
 			
             <div class="radioGroup">
               <label>
-                <input type="radio" name="gender" value="male"   /> 남
+                <input type="radio" name="gender" value="male"/> 남
               </label>
               <label>
-                <input type="radio" name="gender" value="female"   /> 여
+                <input type="radio" name="gender" value="female"/> 여
               </label>
             </div>
             <button type="button" class="formBtn" id="signUpSubmit">가입하기</button>
@@ -92,9 +101,9 @@ $(document).ready(function() {
               <a href="#"><i class="fa fa-linkedin" aria-hidden="true"></i></a>
             </div>
           </div>
-          <div class="phoneGroup">
-          	<input type="email" id="findEmail" placeholder="받을 메일 주소">
-  			<button type="button" class="findIdBtn" >인증</button>
+          <div class="checkGroup">
+          	<input type="email" class="checkInput" id="findEmail" placeholder="받을 메일 주소">
+  			<button type="button" class="checkButton"  id=sendFindEmail >인증</button>
 		  </div>
 		  <button type="button" class="formBtn" id="rollBack">로그인 하러가기</button>
 		  <button type="button" class="formBtn" id="findPwBtn">비밀번호 찾으러가기</button>		
@@ -216,6 +225,13 @@ $(document).ready(function() {
 	//	});
 
 
+	// 이메일 수정 했을때 다시 본인인증 함수 
+	$(document).on("input", "#email", function() {
+		isEmailCheck = false;
+		sessionStorage.removeItem('emailNumber');
+	});
+
+
 	// 비밀번호 2차 체크 함수 start
 	$(document).on("input", "#pw2", function() {
 		const pw = $('#pw').val();
@@ -255,24 +271,7 @@ $(document).ready(function() {
 	});
 
 
-	// 인증번호 확인 버튼 클릭 이벤트 start
-	//	$(document).on("click", "#check", function() {
-	//		let enterNumber = $('#checkNumber').val();
-	//		let randomNumber = sessionStorage.getItem('randomNumber');
-	//		if (!randomNumber) {
-	//			alert('먼저 본인인증을 진행해 주세요!');
-	//			return;
-	//		}
-	//		if (enterNumber === randomNumber) {
-	//			alert('인증이 완료되었습니다!');
-	//			isPhoneCheck = true;
-	//			sessionStorage.removeItem('randomNumber');
-	//		} else {
-	//			alert('인증번호가 틀립니다. 다시 시도해 주세요.');
-	//		}
-	//	});
-
-	// 인증 문자 발송 ajax 함수 start
+	// 전화번호 인증 문자 발송 ajax 함수 start
 	//	function sendMessage(phone) {
 	//		$.ajax({
 	//			url: '/send-message',
@@ -293,6 +292,43 @@ $(document).ready(function() {
 	//			}
 	//		});
 	//	}
+
+
+	//  전화번호 인증번호 확인 버튼 클릭 이벤트 start
+	//	$(document).on("click", "#check", function() {
+	//		let enterNumber = $('#checkNumber').val();
+	//		let randomNumber = sessionStorage.getItem('randomNumber');
+	//		if (!randomNumber) {
+	//			alert('먼저 본인인증을 진행해 주세요!');
+	//			return;
+	//		}
+	//		if (enterNumber === randomNumber) {
+	//			alert('인증이 완료되었습니다!');
+	//			isPhoneCheck = true;
+	//			sessionStorage.removeItem('randomNumber');
+	//		} else {
+	//			alert('인증번호가 틀립니다. 다시 시도해 주세요.');
+	//		}
+	//	});
+
+
+	//이메일 인증 확인 버튼 클릭 이벤트 start
+	$(document).on("click", "#checkEmailButton", function() {
+		let enterNumber = $('#checkEmail').val();
+		let emailNumber = sessionStorage.getItem('emailNumber');
+		if (!emailNumber) {
+			alert('먼저 본인인증을 진행해 주세요!');
+			return;
+		}
+		if (enterNumber === emailNumber) {
+			alert('인증이 완료되었습니다!');
+			isEmailCheck = true;
+			sessionStorage.removeItem('emailNumber');
+		} else {
+			alert('인증번호가 틀립니다. 다시 시도해 주세요.');
+		}
+	});
+
 
 	// 폼 초기화 함수 start
 	function resetForm() {
@@ -342,12 +378,79 @@ $(document).ready(function() {
 
 	}
 
+	// 회원가입 이메일 인증 버튼 클릭 함수 
+	$(document).on("click", "#sendEmailButton", function() {
+		var type = "check";
+		var email = $('#email').val();
+
+		if (!email) {
+			alert("이메일을 먼저 입력해주세요.");
+			return;
+		}
+
+		checkEmail(type, email);
+
+	});
+
+	// id찾기 이메일 인증 버튼 클릭 함수 starat	
+	$(document).on("click", "#sendFindEmail", function() {
+		var type = "send";
+		var email = $('#findEmail').val();
+
+		if (!email) {
+			alert("이메일을 먼저 입력해주세요.");
+			return;
+		}
+
+		checkEmail(type, email);
+
+	});
+
+	// 이메일 중복체크 함수  start
+	function checkEmail(type, email) {
+
+		$.ajax({
+			type: 'POST',
+			url: '/members/checkEmail',
+			data: JSON.stringify({ MEM_EMAIL: email }),
+			contentType: 'application/json',
+			success: function(response) {
+				MEM_ID = response;
+				if (type === 'check') {
+					if (MEM_ID) {
+						alert("이미 가입된 이메일입니다.");
+					} else {
+						alert("본인 인증 발송 되었습니다");
+						sendEmail(type, email);
+					}
+				} else if (type === 'send') {
+					if (MEM_ID) {
+						alert("메일 발송 되었습니다");
+						sendEmail(type, email);
+					} else {
+						alert("가입된 아이디가 없습니다");
+					}
+				}
 
 
+			}
+		});
+	}
 
-
-
-
+	// 이메일 보내는 함수 start
+	function sendEmail(type, email) {
+		$.ajax({
+			url: '/members/sendEmail',
+			type: 'POST',
+			data: JSON.stringify({
+				type: type
+				, MEM_EMAIL: email
+			}),
+			contentType: 'application/json',
+			success: function(response) {
+			}
+		});
+	}
 
 
 
