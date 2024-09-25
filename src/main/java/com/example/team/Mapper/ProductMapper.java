@@ -33,11 +33,18 @@ public interface ProductMapper {
 											  , @Param("sortType") String sortType
 											  , @Param("categoryId") String categoryId
 											  , @Param("locationScoId") String locationScoId
-											  , @Param("locationDcoId") String locationDcoId);
+											  , @Param("locationDcoId") String locationDcoId
+											  , @Param("searchKeyword") String searchKeyword);
 
 	// 총 제품 개수 조회 메서드
 	int getTotalProducts(@Param("categoryId") String categoryId
 					   , @Param("locationScoId") String locationScoId
-					   , @Param("locationDcoId") String locationDcoId);
+					   , @Param("locationDcoId") String locationDcoId
+					   , @Param("searchKeyword") String searchKeyword);
+	
+
+	Map<String, Object> getContentProduct(int proNo);
+	
+	
 
 }

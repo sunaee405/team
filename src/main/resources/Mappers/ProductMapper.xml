@@ -5,6 +5,8 @@
 
 <mapper namespace="com.example.team.Mapper.ProductMapper">
 
+<!-- ===================================  상품 등록  =====================================  -->
+
 	<select id="getProductCategory" resultType="map">
 		SELECT TDC.DCO_ID
 			 , TDC.DCO_VALUE
@@ -81,6 +83,10 @@
 		   AND TSC.SCO_ID LIKE 'NES'
 		   AND TDC.DCO_ID LIKE 'NED%'
 	</select>
+	
+	
+	
+<!-- ===================================  상품 목록  =====================================  -->
 
 	<select id="getSortList" resultType="map">
 		SELECT TDC.DCO_ID
@@ -128,6 +134,9 @@
            <if test="locationDcoId != null and locationDcoId != ''">
            AND TDC1.DCO_ID = #{locationDcoId}
            </if>
+           <if test="searchKeyword != null and searchKeyword != ''">
+           AND PRO.PRO_TITLE LIKE CONCAT('%', #{searchKeyword}, '%')
+           </if>
     	<choose>
 	        <when test="sortType == 'views'">
             ORDER BY PRO.PRO_VIEWS DESC
@@ -167,8 +176,39 @@
     	  <if test="locationDcoId != null and locationDcoId != ''">
      	   AND PRO.PRO_LOCATION = #{locationDcoId}
     	 </if>
+    	 <if test="searchKeyword != null and searchKeyword != ''">
+           AND PRO.PRO_TITLE LIKE CONCAT('%', #{searchKeyword}, '%')
+         </if>
 	</select>
+	
+	
 
+<!-- ===================================  상세 상품 정보  =====================================  -->
+	<select id = "getContentProduct" resultType="map">
+		SELECT PRO.MEM_NO
+			 , PRO.PRO_NO
+        	 , PRO.PRO_VIEWS
+         	 , PRO.PRO_DATE
+         	 , TDC3.DCO_VALUE AS PRO_CATEGORY
+         	 , TSC1.SCO_VALUE AS LOCATION_SUB
+          	 , TDC1.DCO_VALUE AS LOCATION_VALUE
+         	 , PRO.PRO_PRICE
+         	 , PRO.PRO_STATUS
+         	 , PRO.PRO_TITLE
+         	 , TDC2.DCO_VALUE AS TYPE_VALUE
+         	 , PRO.PRO_CONTENT
+         	 , PRO.PRO_IMG
+    	  FROM PRODUCT PRO 
+    	  JOIN TEST_DETAIL_CODE TDC1 
+        	ON PRO.PRO_LOCATION = TDC1.DCO_ID
+    	  JOIN TEST_SUB_CODE TSC1
+        	ON TDC1.SCO_ID = TSC1.SCO_ID
+    	  JOIN TEST_DETAIL_CODE TDC2 
+        	ON PRO.PRO_TYPE = TDC2.DCO_ID
+          JOIN TEST_DETAIL_CODE TDC3 
+        	ON PRO.PRO_CATEGORY = TDC3.DCO_ID
+         WHERE PRO.PRO_NO = '100'
+	</select>
 
 
 

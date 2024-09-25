@@ -10,9 +10,20 @@
 <link rel="stylesheet" href="/static/css/product/9808ee4030aef597.css">
 <link rel="stylesheet" href="/static/css/product/a4ef56fda630c4e5.css">
 <link rel="stylesheet" href="/static/css/product/listProduct.css">
+<!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pretendard@latest/dist/web/static/pretendard.css"> -->
 
-<link rel="stylesheet"
-	href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600&display=swap">
+<!-- <link rel="stylesheet" -->
+<!-- 	href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600&display=swap"> -->
+
+<!-- 원하는 걸로 변경 -->
+<!-- <link rel="preconnect" href="https://fonts.googleapis.com"> -->
+<!-- <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> -->
+<!-- <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300&display=swap" rel="stylesheet"> -->
+<style>
+/*  *{ */
+/* 	font-family: "Noto Sans KR", sans-serif !important;  */
+/* }  */
+</style>  
 
 <script src="/static/javascript/jquery-3.6.0.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -56,13 +67,8 @@
 							</tr>
 							<tr id="location-filter">
 								<td class="" style="font-weight: bold;text-align: center;width: 118px;"><p>지역</p>
-<!-- 								<td class="price-filter"><input type="text" -->
-<!-- 									class="w-[152px] border rounded border-jnGray-200 py-[10px] px-4 text-sm font-medium" -->
-<!-- 									placeholder="최소 가격" data-idx="0"><span class="mx-[6px]"><svg -->
-<!-- 											xmlns="http://www.w3.org/2000/svg" width="10" height="4" -->
-<!-- 											fill="none" class="inline"> -->
-<!-- 													<path fill="#5A616B" -->
-<!-- 												d="M7.895.628 9.297.62q0 .651-.182 1.205-.182.545-.515.947-.326.401-.788.628-.454.22-1 .22-.636 0-1.129-.25-.484-.258-1.045-.773a3.5 3.5 0 0 0-.652-.507 1.25 1.25 0 0 0-.651-.182.94.94 0 0 0-.584.182 1.14 1.14 0 0 0-.378.5 2 2 0 0 0-.137.757H.796q0-.659.183-1.197.18-.545.507-.931.333-.395.788-.606a2.3 2.3 0 0 1 1-.213q.636 0 1.144.266.516.265 1.046.757.363.349.659.523.295.174.628.174a1 1 0 0 0 .599-.19q.257-.196.401-.537a1.95 1.95 0 0 0 .144-.765"></path></svg></span><input -->
+<!-- 								<td class="price-filter"> -->
+<!-- 												<input -->
 <!-- 									type="text" -->
 <!-- 									class="w-[152px] border rounded border-jnGray-200 py-[10px] px-4 text-sm font-medium" -->
 <!-- 									placeholder="최대 가격" data-idx="1"> -->
@@ -130,7 +136,14 @@
 <!-- 										<button data-routerlink="true" -->
 <!-- 											class="text-sm underline text-jnGray-700 whitespace-nowrap">초기화</button> -->
 <!-- 									</div></td> -->
-<!-- 							</tr> -->
+							</tr>
+							<tr id="search-filter">
+								<td class="" style="font-weight: bold;text-align: center;width: 118px;height:57px;"><p>검색</p>
+								</td>
+<!-- 								<td><input type="text"  -->
+<!-- 									class="w-[300px] border rounded border-jnGray-200 py-[10px] px-4 text-sm font-medium" -->
+<!-- 									placeholder="검색어를 입력하세요" data-idx="0"> -->
+<!-- 								</td> -->
 						</tbody>
 					</table>
 				</div>
@@ -143,7 +156,7 @@
 
 
 
-				<!--  ================================= 정렬 샘플 ========================================  -->
+				<!--  ================================= 정렬 ========================================  -->
 				<div>
 				<ul
 					class="inline-flex sticky z-10 w-full justify-end bg-white lg:top-[204px] xl:top-[220px] pt-7 pb-5 text-end">
@@ -165,7 +178,7 @@
 				
 				
 				
-				<!--  ================================= 상품 목록 샘플 1 ========================================  -->
+				<!--  ================================= 상품 목록 ========================================  -->
 				
 				<ul class="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 min-[1600px]:grid-cols-5 gap-x-3 lg:gap-x-5 xl:gap-x-7 gap-y-3 xl:gap-y-5 2xl:gap-y-8 search-results [&amp;_div]:ps-0">
 				
@@ -210,7 +223,7 @@
 
 
 
-				<!--  ================================= 페이징 샘플 ========================================  -->
+				<!--  ================================= 페이징 ========================================  -->
 
 
 				<div class="bottom-0 py-3 m-auto text-center bg-white lg:mb-2">

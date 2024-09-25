@@ -4,6 +4,7 @@ $(document).ready(function() {
 	let currentCategoryId = ''; // 기본값은 전체 (모든 카테고리)
 	let currentLocationScoId = ''; // 기본값은 전체 (모든 지역)
 	let currentLocationDcoId = ''; // 기본값은 전체 (모든 지역)
+	let currentSearchKeyword = ''; // 기본 검색어는 빈 값
 
 	// 카테고리 데이터를 가져오기 위한 AJAX 요청
 	$.ajax({
@@ -230,6 +231,53 @@ $(document).ready(function() {
 		});
 	}
 
+	// 검색 필터를 추가
+	let searchFilter = $('#search-filter');
+	let searchInput = `
+    <td style="padding-top: 7px;padding-bottom: 7px;height: 24px;">
+        <div class="flex justify-between items-center w-full">
+            <input type="text" 
+                class="w-[300px] border rounded border-jnGray-200 py-[10px] px-4 text-sm font-medium"
+                placeholder="검색어를 입력하세요" id="search-input">
+            <button id="reset-btn" data-routerlink="true" 
+                class="text-sm underline text-jnGray-700 whitespace-nowrap ml-auto">
+                초기화
+            </button>
+        </div>
+    </td>`;
+	searchFilter.append(searchInput);
+
+	// 검색 입력 이벤트 설정
+	$('#search-input').on('input', function() {
+		let searchKeyword = $(this).val(); // 검색어 가져오기
+		currentSearchKeyword = searchKeyword; // 검색어 업데이트
+		loadProducts(1); // 페이지 1에서 다시 로드
+	});
+
+	// 초기화 버튼 클릭 이벤트 설정
+	$('#reset-btn').on('click', function() {
+		// 검색어, 카테고리, 지역을 초기 상태로 설정
+		$('#search-input').val(''); // 검색어 초기화
+		currentSearchKeyword = ''; // 검색어 변수 초기화
+
+		// 카테고리 전체로 설정
+		currentCategoryId = '';
+		$('#category-filter a').removeClass('active');
+		$('#category-filter a[data-id=""]').addClass('active'); // 전체 선택
+
+		// 상위 지역 전체로 설정
+		currentLocationScoId = '';
+		$('#location-filter a').removeClass('active');
+		$('#location-filter a[data-sco=""]').addClass('active'); // 전체 선택
+
+		// 하위 지역 초기화
+		currentLocationDcoId = '';
+		$('#sub-location-filter').remove(); // 하위 지역 목록 제거
+
+		// 전체 상품 목록 다시 로드
+		loadProducts(1); // 첫 페이지부터 다시 로드
+	});
+
 	// 정렬 목록을 가져와서 버튼을 생성
 	$.ajax({
 		url: '/getSortList',
@@ -293,7 +341,7 @@ $(document).ready(function() {
 
 	// 상품 목록을 불러오는 함수
 	function loadProducts(page) {
-		console.log('페이지 로딩:', page, '정렬 기준:', currentSortType, '카테고리 ID:', currentCategoryId, '상위 지역 SCO_ID:', currentLocationScoId, '하위 지역 DCO_ID:', currentLocationDcoId);
+		console.log('페이지 로딩:', page, '정렬 기준:', currentSortType, '카테고리 ID:', currentCategoryId, '상위 지역 SCO_ID:', currentLocationScoId, '하위 지역 DCO_ID:', currentLocationDcoId, '검색어:', currentSearchKeyword);
 		$.ajax({
 			url: '/listProductsSorted',
 			type: 'GET',
@@ -303,7 +351,8 @@ $(document).ready(function() {
 				sortType: currentSortType, // 선택한 정렬 기준을 서버로 전송
 				categoryId: currentCategoryId, // 선택한 카테고리 ID를 서버로 전송
 				locationScoId: currentLocationScoId, // 선택한 상위 지역 SCO_ID 전송
-				locationDcoId: currentLocationDcoId // 선택한 하위 지역 DCO_ID 전송
+				locationDcoId: currentLocationDcoId, // 선택한 하위 지역 DCO_ID 전송
+				searchKeyword: currentSearchKeyword // 검색어 전송
 			},
 			dataType: 'json',
 			success: function(response) {
@@ -341,30 +390,30 @@ $(document).ready(function() {
 
 					// 상품 HTML 생성
 					productListHtml += `
-                <li class="">
-                    <div>
-                        <a class="relative group box-border overflow-hidden flex rounded-md cursor-pointer pe-0 pb-2 lg:pb-3 flex-col items-start transition duration-200 ease-in-out transform bg-white" href="/product/${product.PRO_NO}">
-                            <div class="relative w-full rounded-md overflow-hidden dim pt-[0%] mb-3 md:mb-3.5">
-                                <img src="${imageUrl}" alt="Product Image">
-                            </div>
-                            <div class="w-full overflow-hidden p-2 md:px-2.5 xl:px-4">
-                                <h2 class="line-clamp-2 min-h-[2lh] text-sm md:text-base">${product.PRO_TITLE}</h2>
-                                <div class="font-semibold space-s-2 mt-0.5 text-heading lg:text-lg lg:mt-1.5">
-                                    ${product.PRO_PRICE}원
+                    <li class="">
+                        <div>
+                            <a class="relative group box-border overflow-hidden flex rounded-md cursor-pointer pe-0 pb-2 lg:pb-3 flex-col items-start transition duration-200 ease-in-out transform bg-white" href="/product/${product.PRO_NO}">
+                                <div class="relative w-full rounded-md overflow-hidden dim pt-[0%] mb-3 md:mb-3.5">
+                                    <img src="${imageUrl}" alt="Product Image">
                                 </div>
-                                <div class="my-1 h-6">
-                                    <span class="text-sm text-gray-400">${product.LOCATION_SUB} ${product.LOCATION_VALUE}</span>
-                                    <span class="mx-1 text-sm text-gray-400">|</span>
-                                    <span class="text-sm text-gray-400">${timeAgo}</span>
+                                <div class="w-full overflow-hidden p-2 md:px-2.5 xl:px-4">
+                                    <h2 class="line-clamp-2 min-h-[2lh] text-sm md:text-base">${product.PRO_TITLE}</h2>
+                                    <div class="font-semibold space-s-2 mt-0.5 text-heading lg:text-lg lg:mt-1.5">
+                                        ${product.PRO_PRICE}원
+                                    </div>
+                                    <div class="my-1 h-6">
+                                        <span class="text-sm text-gray-400">${product.LOCATION_SUB} ${product.LOCATION_VALUE}</span>
+                                        <span class="mx-1 text-sm text-gray-400">|</span>
+                                        <span class="text-sm text-gray-400">${timeAgo}</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <div class="text-xs text-gray-400 text-muted">조회수 ${product.PRO_VIEWS}</div>
+                                    </div>
                                 </div>
-                                <div class="flex justify-between">
-                                    <div class="text-xs text-gray-400 text-muted">조회수 ${product.PRO_VIEWS}</div>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                </li>
-            `;
+                            </a>
+                        </div>
+                    </li>
+                `;
 				});
 
 				// 상품 목록 HTML을 삽입

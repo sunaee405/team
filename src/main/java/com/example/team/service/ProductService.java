@@ -99,23 +99,10 @@ public class ProductService {
 		return productMapper.getSortList();
 	}
 
-//	public Map<String, Object> getProductsSorted(int page, int size, String sortType) {
-//		int start = (page - 1) * size;
-//		List<Map<String, Object>> products = productMapper.getProductsSorted(start, size, sortType);
-//		int totalProducts = productMapper.getTotalProducts();
-//		int totalPages = (int) Math.ceil((double) totalProducts / size);
-//
-//		Map<String, Object> result = new HashMap<>();
-//		result.put("products", products);
-//		result.put("totalPages", totalPages);
-//		result.put("currentPage", page);
-//		return result;
-//	}
-	
-	public Map<String, Object> getProductsSorted(int page, int size, String sortType, String categoryId, String locationScoId, String locationDcoId) {
+	public Map<String, Object> getProductsSorted(int page, int size, String sortType, String categoryId, String locationScoId, String locationDcoId, String searchKeyword) {
 	    int start = (page - 1) * size;
-	    List<Map<String, Object>> products = productMapper.getProductsSorted(start, size, sortType, categoryId, locationScoId, locationDcoId);
-	    int totalProducts = productMapper.getTotalProducts(categoryId, locationScoId, locationDcoId); // 카테고리별로 제품 수 조회
+	    List<Map<String, Object>> products = productMapper.getProductsSorted(start, size, sortType, categoryId, locationScoId, locationDcoId, searchKeyword);
+	    int totalProducts = productMapper.getTotalProducts(categoryId, locationScoId, locationDcoId, searchKeyword); // 카테고리별로 제품 수 조회
 	    int totalPages = (int) Math.ceil((double) totalProducts / size);
 
 	    Map<String, Object> result = new HashMap<>();
@@ -123,5 +110,12 @@ public class ProductService {
 	    result.put("totalPages", totalPages);
 	    result.put("currentPage", page);
 	    return result;
+	}
+	
+	
+	// =================================== 상품 상세 정보 ===================================
+	
+	public Map<String, Object> getContentProduct(int proNo) {
+	    return productMapper.getContentProduct(proNo);
 	}
 }
