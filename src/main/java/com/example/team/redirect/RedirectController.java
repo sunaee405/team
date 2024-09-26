@@ -23,4 +23,6 @@ public class RedirectController {
 		
 	    return pageUrl;
 	}
+	
+	
 }

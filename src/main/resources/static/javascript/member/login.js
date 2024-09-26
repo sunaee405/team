@@ -3,6 +3,7 @@ $(document).ready(function() {
 	var isNicknameCheck = false;
 	var isEmailCheck = false;
 
+
 	// 본인인증 사용횟수 제한 때문에 주석쳐둠
 
 	// 로그인 페이지 틀 start
@@ -27,6 +28,7 @@ $(document).ready(function() {
           <button type="button" class="formBtn" id="signInBtn">로그인</button>
           <button type="button" class="formBtn" id="signUpBtn">회원가입</button>
           <button type="button" class="formBtn" id="findIdBtn">아이디,비밀번호찾기</button>
+          <button type="button" class="formBtn" id="naverLoginButton">네이버</button>
         </form>
       </div>
     </div>
@@ -230,11 +232,11 @@ $(document).ready(function() {
 		//			alert('휴대폰 인증 해주세요!');
 		//			return;
 		//		}
-		
-				if (isEmailCheck == false) {
-					alert('이메일 인증 해주세요!');
-					return;
-				}
+
+		if (isEmailCheck == false) {
+			alert('이메일 인증 해주세요!');
+			return;
+		}
 
 		if (isNicknameCheck == false) {
 			alert('닉네임이 유효하지 않습니다.');
@@ -504,10 +506,11 @@ $(document).ready(function() {
 		$.ajax({
 			type: 'POST',
 			url: '/members/checkEmail',
-			data: JSON.stringify({ MEM_EMAIL: email
-								  ,type: type 
-								  ,MEM_ID: id
-								}),
+			data: JSON.stringify({
+				MEM_EMAIL: email
+				, type: type
+				, MEM_ID: id
+			}),
 			contentType: 'application/json',
 			success: function(response) {
 				if (type === 'check') {
@@ -517,7 +520,7 @@ $(document).ready(function() {
 						alert("본인 인증 발송 되었습니다");
 						sendEmail(type, email);
 					}
-				} else  {
+				} else {
 					if (response) {
 						alert("메일 발송 되었습니다");
 						sendEmail(type, email);
@@ -536,8 +539,9 @@ $(document).ready(function() {
 		$.ajax({
 			url: '/members/sendEmail',
 			type: 'POST',
-			data: JSON.stringify({ type: type
-				                  ,MEM_EMAIL: email
+			data: JSON.stringify({
+				type: type
+				, MEM_EMAIL: email
 
 			}),
 			contentType: 'application/json',
@@ -547,7 +551,17 @@ $(document).ready(function() {
 	}
 
 
+	// 네이버 로그인 
+	$('#naverLoginButton').click(function() {
+		
+		const clientId = 'cYuCKft0IZ1AQf3c5RSp';
+		const redirectUri = 'http://localhost:8080/naverLogin';
+		const naverLoginUrl = `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${clientId}&redirect_uri=${redirectUri}&state=random_state_string`;
 
+		// 팝업 창 열기
+//		window.open(naverLoginUrl, 'naverLogin', 'width=600,height=600');
+		location.href = naverLoginUrl;
+	});
 
 
 

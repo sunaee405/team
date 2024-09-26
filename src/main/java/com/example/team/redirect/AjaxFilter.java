@@ -25,6 +25,13 @@ public class AjaxFilter implements Filter {
 		String rHeader = httpRequest.getHeader("X-Requested-With"); // ajax
 		String url = httpRequest.getRequestURI();
 		
+		System.out.println(url);
+		
+		if(url.startsWith("/naverLogin")) {
+			RequestDispatcher dispatcher = httpRequest.getRequestDispatcher("/api" + url);
+			dispatcher.forward(request, response);
+		}
+		
         // 이미지 요청 제외
         if (url.startsWith("/images/")) {
             chain.doFilter(request, response);
@@ -51,7 +58,7 @@ public class AjaxFilter implements Filter {
         }
 
 //         조건에 맞는 URL은 필터링에서 제외
-        if (url.startsWith("/redirect/") || url.equals("/") || url.startsWith("/static/")) {
+        if (url.startsWith("/redirect/") || url.equals("/") || url.startsWith("/static/") ||url.startsWith("/api/")) {
             chain.doFilter(request, response); // 요청을 계속 진행
             return;
         }

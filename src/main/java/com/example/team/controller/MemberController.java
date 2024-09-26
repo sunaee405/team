@@ -6,10 +6,14 @@ import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.example.team.model.MemberEntity;
 import com.example.team.service.MemberService;
 
 import jakarta.servlet.http.HttpSession;
@@ -20,7 +24,7 @@ public class MemberController {
 
 	@Autowired
 	private MemberService memberService;
-
+	
 	@PostMapping("/checkId")
 	public ResponseEntity<Map<String, Integer>> checkIdAndNickname(@RequestBody Map<String, String> data) {
 		String MEM_ID = data.get("id");
@@ -37,8 +41,8 @@ public class MemberController {
 	}
 
 	@PostMapping("/insertUser")
-	public ResponseEntity<Void> insertUser(@RequestBody Map<String, String> data) {
-		memberService.insertUser(data);
+	public ResponseEntity<Void> insertUser(@RequestBody MemberEntity member) {
+		memberService.insertUser(member);
 		return ResponseEntity.ok().build();
 	}
 
@@ -48,9 +52,9 @@ public class MemberController {
 		String MEM_ID = data.get("MEM_ID");
 		String type = data.get("type");
 		String result = "";
-		if("sendPw".equals(type)) {
+		if ("sendPw".equals(type)) {
 			result = memberService.checkPwEmail(MEM_EMAIL, MEM_ID);
-		}else {
+		} else {
 			result = memberService.checkEmail(MEM_EMAIL);
 		}
 		return ResponseEntity.ok(result);
@@ -68,6 +72,9 @@ public class MemberController {
 
 		return ResponseEntity.ok().build();
 	}
+
+	
+	
 
 	private String randomNumber() {
 		Random random = new Random();
