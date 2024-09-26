@@ -30,7 +30,7 @@ public class AjaxFilter implements Filter {
 		String url = httpRequest.getRequestURI();
 
 		System.out.println(url);
-		// 필터링 조건
+		// 필터 예외 조건
 		boolean check = url.startsWith("/api/") || 
 		                url.startsWith("/images/") || 
 		                url.matches(".*\\..+") || 
