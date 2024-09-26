@@ -1,5 +1,6 @@
 package com.example.team.service;
 
+import java.lang.reflect.Method;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -75,6 +76,9 @@ public class ProductService {
 		// 현재 시간을 LocalDateTime으로 설정 (초까지만)
 		LocalDateTime currentDateTime = LocalDateTime.now().withNano(0);
 
+		
+//		Method[] methods = Class.forName("ProductEntity").getMethods();
+		
 		// 엔티티 생성 후 데이터 설정
 		ProductEntity productEntity = new ProductEntity();
 		productEntity.setProTitle(productTitle);
@@ -85,7 +89,7 @@ public class ProductService {
 		productEntity.setProPrice(productPrice);
 		productEntity.setProContent(productDescription);
 		productEntity.setProDate(currentDateTime);
-		productEntity.setProStatus("STS1");
+		productEntity.setProStatus("STD1");
 		productEntity.setProType(typeCode);
 		productEntity.setProNeg(negoCode);
 
@@ -118,4 +122,8 @@ public class ProductService {
 	public Map<String, Object> getContentProduct(int proNo) {
 	    return productMapper.getContentProduct(proNo);
 	}
+	
+	public List<ProductEntity> getProductsByMemNo(Integer memNo) {
+        return productRepository.findByMemNo(memNo);
+    }
 }

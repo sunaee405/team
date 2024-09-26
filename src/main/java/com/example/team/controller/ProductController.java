@@ -81,7 +81,7 @@ public class ProductController {
 	@PostMapping("/insertProduct")
 	@ResponseBody
 	public ResponseEntity<?> insertProduct(@RequestParam("media") MultipartFile[] media, //
-			@RequestParam Map<String, String> params) throws Exception {
+										   @RequestParam Map<String, String> params) throws Exception {
 
 		String productTitle = params.get("productTitle");
 		String categoryCode = params.get("categoryDcoId");
@@ -113,8 +113,8 @@ public class ProductController {
 		// 파일명을 Map에 저장
 		Map<String, Object> productData = new HashMap<>();
 		productData.put("productTitle", productTitle);
-		productData.put("fileNames", String.join(",", savedFileNames));
-		productData.put("categoryCode", categoryCode);// 파일명을 ','로 구분하여 저장
+		productData.put("fileNames", String.join(",", savedFileNames)); // 파일명을 ','로 구분하여 저장
+		productData.put("categoryCode", categoryCode);
 		productData.put("locationCode", locationCode);
 		productData.put("stateCode", stateCode);
 		productData.put("productPrice", productPrice);
@@ -159,5 +159,10 @@ public class ProductController {
         return productService.getContentProduct(proNo);
     }
 	
+	@GetMapping("/getOtherProductByMemNo")
+    @ResponseBody
+    public List<ProductEntity> getOtherProductByMemNo(@RequestParam("memNo") Integer memNo) {
+        return productService.getProductsByMemNo(memNo);
+    }
 	
 }
