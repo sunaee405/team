@@ -27,16 +27,20 @@ public class AjaxFilter implements Filter {
 		
 		System.out.println(url);
 		
-		if(url.startsWith("/naverLogin")) {
-			RequestDispatcher dispatcher = httpRequest.getRequestDispatcher("/api" + url);
-			dispatcher.forward(request, response);
-		}
+		//api
+        if (url.startsWith("/api/")) {
+            chain.doFilter(request, response);
+            return;
+        }
 		
         // 이미지 요청 제외
         if (url.startsWith("/images/")) {
             chain.doFilter(request, response);
             return;
         }
+        
+        
+        
         
         // 주소 요청에 확장자 들어있으면 계속 진행
         if (url.matches(".*\\..+")) {

@@ -555,7 +555,7 @@ $(document).ready(function() {
 	$('#naverLoginButton').click(function() {
 		
 		const clientId = 'cYuCKft0IZ1AQf3c5RSp';
-		const redirectUri = 'http://localhost:8080/naverLogin';
+		const redirectUri = 'http://localhost:8080/api/naverLogin';
 		const naverLoginUrl = `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${clientId}&redirect_uri=${redirectUri}&state=random_state_string`;
 
 		// 팝업 창 열기
