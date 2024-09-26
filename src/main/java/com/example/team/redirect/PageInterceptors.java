@@ -18,19 +18,13 @@ public class PageInterceptors implements WebMvcConfigurer {
 		// static 파일 경로설정
 		registry.addResourceHandler("/static/**")
         		.addResourceLocations("classpath:/static/");
-//		registry.addResourceHandler("/javascript/**")
-//				.addResourceLocations("classpath:/static/javascript/");
 	}
-	
 	
 	@Bean
 	public FilterRegistrationBean<AjaxFilter> requestFilter() {
 		FilterRegistrationBean<AjaxFilter> fiBean = new FilterRegistrationBean<>();
 		fiBean.setFilter(new AjaxFilter());
 		fiBean.addUrlPatterns("/*");
-		
 		return fiBean;
 	}
-	
-	
 }

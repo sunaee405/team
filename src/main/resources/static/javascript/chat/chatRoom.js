@@ -15,6 +15,7 @@ $(function() {
         })
         .catch(error => console.error('Error:', error));
 
+		
 	
 	//$('body').css({'width':width, 'height':height});
 	const urlParams = new URLSearchParams(window.location.search);
@@ -34,7 +35,7 @@ $(function() {
 	        "SELMEMBER": selMember // 판매자 id값
 	    })
 	};
-	
+
 	// 소켓 연결시 ajax에서 유저 정보로 채팅내역 불러오기
 	socket.onopen = () => {
 		fetch(roomUrl, options)
@@ -42,6 +43,15 @@ $(function() {
 	    .then(success => {
 			
 			$(".chat").attr("data-rNum", success[0].CHA_NO);
+			
+			const socketSession = JSON.stringify({
+					"TYPE"	 : "setSession",
+					"CHA_NO" : success[0].CHA_NO,
+				});
+			socket.send(socketSession);
+			
+			
+
 			$(".chat").html(
 						`<div class="message-container">
 						 </div>
@@ -52,9 +62,9 @@ $(function() {
 							<button type="button" class="btn btn-success" style="margin: 5px; width: 18%">전송</button>
 						 </div>`);
 			
-			
+
 			var log = JSON.parse(success[0].CHA_LOG);
-			
+
 			log.forEach(function(data, index) {
 				var currMe = data.USERID == memberNum ? "from-me" : "to-me";
 
@@ -76,17 +86,14 @@ $(function() {
 					
 				$(".message-container").append(text);
 			});
-			const socketSession = JSON.stringify({
-					"TYPE"	 : "setSession",
-					"CHA_NO" : success[0].CHA_NO,
-				});
-			socket.send(socketSession);
+			
+
 	    })
 	    .catch(error => {
 			
 	    });
 	}
-	
+
 });
 
 // 채팅창 엔터누를시 메시지 전송
@@ -105,7 +112,6 @@ $(document).on('click', ".btn-success", function() {
 	
 	const chatRoomNo = $(".chat").attr("data-rNum");
 	const content = $("#inputBox").val();
-	
 	const chatLog = JSON.stringify({
 		"TYPE" 		: "chatMessage",
 		"USERID" 	: memberNum,
@@ -113,7 +119,6 @@ $(document).on('click', ".btn-success", function() {
 		"TIME" 		: new Date(),
         "CHA_NO" 	: chatRoomNo
 	});
-	
 	
 	const url = '/updateChat';
 	// 요청 옵션
@@ -141,7 +146,6 @@ $(document).on('click', ".btn-success", function() {
 	
 	socket.onmessage = msg => {
 		const data = JSON.parse(msg.data);
-		
 		
 		var currMe = data.USERID == memberNum ? "from-me" : "to-me";
 		let time = new Date(data.TIME);

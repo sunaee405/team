@@ -5,7 +5,7 @@
 
 <mapper namespace="com.example.team.Mapper.MyPageMapper">
 
-	<select id="getDetailCode" resultType="map">
+	<select id="getDetailCode" resultType="String">
 		SELECT JSON_OBJECTAGG(DCO_ID, DCO_VALUE)
 		FROM TEST_DETAIL_CODE;
 	</select>
@@ -71,7 +71,7 @@
 		VALUES (
 		    #{CHA_MEM1},
 		    #{CHA_MEM2}
-		);
+		)
 	</insert>
 	
 	<!-- 채팅내역 업데이트 -->

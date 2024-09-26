@@ -13,7 +13,7 @@ import com.example.team.model.ChattingEntity;
 public interface MyPageMapper {
 	
 	//
-	Map<String, Object> getDetailCode();
+	String getDetailCode();
 	
 	// 메인페이지 상품 리스트
 	List<Map<String, Object>> getMainProductList(Map<String, Object> data);
