@@ -45,20 +45,6 @@ public class ProductController {
 //		return "/product/registerProduct";
 //	}
 
-//	@GetMapping("/images/{filename:.+}")
-//    @ResponseBody
-//    public ResponseEntity<Resource> serveFile(@PathVariable String filename) throws MalformedURLException {
-//        Path file = Paths.get("C:/Users/ITWILL/Desktop/upload/").resolve(filename);
-//        Resource resource = new UrlResource(file.toUri());
-//
-//        if (resource.exists() || resource.isReadable()) {
-//            return ResponseEntity.ok()
-//                    .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + resource.getFilename() + "\"")
-//                    .body(resource);
-//        } else {
-//            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-//        }
-//    }
 
 	// =================================== 상품 등록 ===================================
 
@@ -151,15 +137,27 @@ public class ProductController {
 		return productService.getSortList();
 	}
 
-	@GetMapping("/listProductsSortedByViews")
-
-	public ResponseEntity<List<Map<String, Object>>> getProductsSortedByViews(@RequestParam("page") int page,
-																			  @RequestParam("size") int size) {
-		
-		int offset = (page - 1) * size;
-		List<Map<String, Object>> products = productService.getProductsSortedByViews(offset, size);
-
-		return new ResponseEntity<>(products, HttpStatus.OK);
+	@GetMapping("/listProductsSorted")
+	@ResponseBody
+	public Map<String, Object> listProductsSorted(
+	        @RequestParam("page") int page, 
+	        @RequestParam("size") int size, 
+	        @RequestParam(value = "sortType", defaultValue = "date") String sortType,
+	        @RequestParam(value = "categoryId", required = false) String categoryId,
+	        @RequestParam(value = "locationScoId", required = false) String locationScoId,
+	        @RequestParam(value = "locationDcoId", required = false) String locationDcoId,
+	        @RequestParam(value = "searchKeyword", required = false) String searchKeyword) {
+	    
+	    return productService.getProductsSorted(page, size, sortType, categoryId, locationScoId, locationDcoId, searchKeyword);
 	}
-
+	
+	// =================================== 상세 상품 정보 ===================================
+	
+	@GetMapping("getContentProduct")
+	@ResponseBody
+	public Map<String, Object> getContentProduct(@RequestParam("proNo") int proNo) {
+        return productService.getContentProduct(proNo);
+    }
+	
+	
 }

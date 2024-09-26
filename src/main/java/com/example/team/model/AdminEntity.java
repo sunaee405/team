@@ -21,16 +21,17 @@ public class AdminEntity {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long ADM_NO;
+	@Column(name = "ADM_NO")
+	private Long admNo;
 	
-	@Column(nullable = false, unique = true)
-	private String ADM_ID;
+	@Column(name = "ADM_ID", nullable = false, unique = true)
+	private String admId;
 	
-	@Column(nullable = false)
-	private String ADM_PW;
+	@Column(name = "ADM_PW", nullable = false)
+	private String admPw;
 	
-	@Column(nullable = false, unique = true)
-	private String ADM_NAME;
+	@Column(name = "ADM_NAME", nullable = false, unique = true)
+	private String admName;
 	
 
 }

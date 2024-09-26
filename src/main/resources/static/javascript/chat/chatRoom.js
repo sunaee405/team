@@ -31,10 +31,9 @@ $(function() {
 	        'Content-Type': 'application/json' // 요청 데이터 형식
 	    },
 	    body: JSON.stringify({
-	        user1: selMember // 판매자 id값
+	        "SELMEMBER": selMember // 판매자 id값
 	    })
 	};
-	
 	
 	// 소켓 연결시 ajax에서 유저 정보로 채팅내역 불러오기
 	socket.onopen = () => {
@@ -55,6 +54,7 @@ $(function() {
 			
 			
 			var log = JSON.parse(success[0].CHA_LOG);
+			
 			log.forEach(function(data, index) {
 				var currMe = data.USERID == memberNum ? "from-me" : "to-me";
 
@@ -76,7 +76,6 @@ $(function() {
 					
 				$(".message-container").append(text);
 			});
-			
 			const socketSession = JSON.stringify({
 					"TYPE"	 : "setSession",
 					"CHA_NO" : success[0].CHA_NO,
@@ -93,8 +92,8 @@ $(function() {
 // 채팅창 엔터누를시 메시지 전송
 
 $(document).on('keyup', "#inputBox", function(a, b, c, d, e) {
-	debugger;
-	if($(this.val() == null)) return;
+	var str = $(this).val();
+	if(str.trim().length == 0) return;
 	if(a.originalEvent.key === "Enter") {
 		$('.btn-success').trigger('click');
 	}
@@ -143,12 +142,9 @@ $(document).on('click', ".btn-success", function() {
 	socket.onmessage = msg => {
 		const data = JSON.parse(msg.data);
 		
-		debugger;
 		
 		var currMe = data.USERID == memberNum ? "from-me" : "to-me";
 		let time = new Date(data.TIME);
-		
-		debugger;
 		
 		time = String(time.getHours()).padStart(2, '0') + "시" + String(time.getMinutes()).padStart(2, '0') + "분";
 		if(currMe === "from-me") {
@@ -158,7 +154,8 @@ $(document).on('click', ".btn-success", function() {
 			sorttxt =  `<span class="body">${data.TEXT}</span>
 						<span class="time">${time}</span>`;
 		}
-		debugger;
+		
+		
 		
 		var text = `
 			<div class="message ${currMe}">
@@ -166,7 +163,8 @@ $(document).on('click', ".btn-success", function() {
 				${sorttxt}
 			</div>
 			`;
-		debugger;	
+			
+			
 		$(".message-container").append(text);
 	}
 });

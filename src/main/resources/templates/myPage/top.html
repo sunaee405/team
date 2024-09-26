@@ -4,11 +4,27 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 </head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
 <link href="/static/css/main/a5055aa57af99147.css" rel="stylesheet">
 <link href="/static/css/main/4d4e407f2280d50c.css" rel="stylesheet">
+<link href="/static/css/main/c5a395054df1af09.css" rel="stylesheet">
+<link href="/static/css/main/a4ef56fda630c4e5.css" rel="stylesheet">
+<link href="/static/css/main/9808ee4030aef597.css" rel="stylesheet">
+<link href="/static/css/main/e3048584c00a0406.css" rel="stylesheet">
+<!-- 아이콘 -->
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<script src="/static/javascript/chat/chat.js"></script>
+<script src="/static/javascript/main/top.js"></script>
+
+
+
 <body>
-<header id="siteHeader" class="headerThree relative z-20 w-full h-16 sm:h-20 lg:h-36 xl:h-40 max-[480px]:mt-[73px] lg:mt-[60px]">
-<div id="header_items_wrapper" class="px-4 md:px-8 lg:px-0 h-16 sm:h-20 lg:h-36 xl:h-40 w-full transition duration-200 ease-in-out border-b border-jnGray-300 fixed z-20 text-gray-700 bg-white innerSticky body-font">
+
+<header id="siteHeader" class="headerThree relative z-20 w-full h-16 sm:h-20 lg:h-36 xl:h-40 max-[480px]:mt-[73px] lg:mt-[60px]" style="background-color: white; position: sticky; top:0; margin: 0">
+<!-- <img alt="중고나라 검색페이지 이동 이미지" src="/main-web/_next/static/media/app-download-banner.16dfe881.webp" decoding="async" data-nimg="fill" class="object-cover h-full mx-auto" style="position:absolute;height:100%;width:100%;left:0;top:0;right:0;bottom:0;color:transparent"> -->
+<!-- <div style="position:absolute;height:100%;width:100%;left:0;top:0;right:0;bottom:0;color:transparent" class="object-cover h-full mx-auto"></div> -->
+<div id="header_items_wrapper" class="px-4 md:px-8 lg:px-0 h-16 sm:h-20 lg:h-36 xl:h-40 w-full transition duration-200 ease-in-out border-b border-jnGray-300 z-20 text-gray-700 bg-white innerSticky body-font">
 	<div class="h-full lg:h-20 xl:h-24 px-0 lg:px-8 2xl:px-16 max-w-[1024px] min-[1600px]:max-w-[1280px] flex items-center mx-auto box-content justify-between relative before:absolute before:w-screen before:bg-[#F1F1F1] before:bottom-0">
 		<div class="flex flex-1 ml-3 lg:ml-0 lg:max-w-[200px]">
 			<a style="width:200px;height:30px" class="ga4_main_top_logo max-[1023px]:!w-[97px] max-[1023px]:!h-[16px] lg:w-full lg:flex-1 inline-flex focus:outline-none relative" href="/"><span style="box-sizing:border-box;display:block;overflow:hidden;width:initial;height:initial;background:none;opacity:1;border:0;margin:0;padding:0;position:absolute;top:0;left:0;bottom:0;right:0"><img alt="Joonggonara" src="/static/main-web/assets/images/custom-logo.svg" decoding="async" data-nimg="fill" style="position:absolute;top:0;left:0;bottom:0;right:0;box-sizing:border-box;padding:0;border:none;margin:auto;display:block;width:0;height:0;min-width:100%;max-width:100%;min-height:100%;max-height:100%"></span></a>
@@ -66,17 +82,19 @@
 		</div>
 		<div class="hidden lg:flex relative w-[300px]">
 			<ul class="flex w-full text-sm font-medium list-none text-jnGray-900 break-keep">
-				<li class="flex items-center justify-center pr-3"><button class="ga4_main_top_menu flex items-center justify-center">
-				<div class="relative cursor-pointer" id="채팅하기">
-					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" id="채팅하기" size="24"><path stroke="#141313" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20.797 12.2c0 1.639-.438 3.175-1.204 4.5l.46 3.035a.9.9 0 0 1-1.23.968l-2.526-.708a9 9 0 1 1 4.5-7.796" clip-rule="evenodd"></path><path fill="#141313" stroke="#141313" stroke-width="0.15" d="M8.864 12.2a1.075 1.075 0 1 0-2.15 0 1.075 1.075 0 0 0 2.15 0Zm4 0a1.075 1.075 0 1 0-2.15 0 1.075 1.075 0 0 0 2.15 0Zm4 0a1.075 1.075 0 1 0-2.15 0 1.075 1.075 0 0 0 2.15 0Z"></path></svg>
-					<div class="absolute text-xs leading-[18px] -top-2 -right-1 w-[18px] h-[18px] font-semibold rounded-[50%] bg-jngreen text-center" id="채팅하기">
-						0
-					</div>
-				</div>
-				<p id="채팅하기" class="ml-1">
-					채팅하기
-				</p>
-				</button></li>
+				<li class="flex items-center justify-center pr-3">
+					<button class="chatList ga4_main_top_menu flex items-center justify-center">
+						<div class="relative cursor-pointer" id="채팅하기">
+							<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" id="채팅하기" size="24"><path stroke="#141313" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20.797 12.2c0 1.639-.438 3.175-1.204 4.5l.46 3.035a.9.9 0 0 1-1.23.968l-2.526-.708a9 9 0 1 1 4.5-7.796" clip-rule="evenodd"></path><path fill="#141313" stroke="#141313" stroke-width="0.15" d="M8.864 12.2a1.075 1.075 0 1 0-2.15 0 1.075 1.075 0 0 0 2.15 0Zm4 0a1.075 1.075 0 1 0-2.15 0 1.075 1.075 0 0 0 2.15 0Zm4 0a1.075 1.075 0 1 0-2.15 0 1.075 1.075 0 0 0 2.15 0Z"></path></svg>
+							<div class="absolute text-xs leading-[18px] -top-2 -right-1 w-[18px] h-[18px] font-semibold rounded-[50%] bg-jngreen text-center" id="채팅하기">
+								0
+							</div>
+						</div>
+						<p id="채팅하기" class="ml-1">
+							채팅하기
+						</p>
+					</button>
+				</li>
 				<li class="after:contents-[&quot;&quot;] after:absolute after:w-[1px] after:h-4 after:bg-jnGray-300 after:right-0 before:contents-[&quot;&quot;] before:absolute before:w-[1px] before:h-4 before:bg-jnGray-300 before:left-0 ga4_main_top_menu relative flex items-center justify-center px-3"><a class="flex items-center justify-center [&amp;>p]:ml-1" href="/product/form?type=regist"><svg id="판매하기" width="24" height="24" viewbox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M13.6859 20.6926H4.92323C3.88605 20.6926 3.08773 19.8241 3.20716 18.8409L4.49579 8.32142C4.5775 7.63983 5.18096 7.12109 5.89756 7.12109H15.8168C16.5334 7.12109 17.1369 7.6338 17.2186 8.32142L17.91 14.0701" stroke="currentColor" stroke-width="1.5"></path><path d="M8.35938 9.35156V9.5868C8.35938 10.7751 9.47828 11.7462 10.8486 11.7462C12.219 11.7462 13.3379 10.7751 13.3379 9.5868V9.35156" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path><path d="M7.35938 7.72983V6.25112C7.35938 4.34555 8.90414 2.80078 10.8097 2.80078V2.80078C12.7153 2.80078 14.26 4.34555 14.26 6.25112V7.72983" stroke="currentColor" stroke-width="1.5"></path><path d="M17.1179 22.4245C19.3694 22.4245 21.1968 20.5969 21.1968 18.347C21.1968 16.0972 19.3694 14.2695 17.1179 14.2695C14.8665 14.2695 13.0391 16.0972 13.0391 18.347C13.0391 20.5969 14.8665 22.4245 17.1179 22.4245Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path><path d="M17.1406 19.9298V16.7461" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"></path><path d="M15.5312 18.3439H18.7149" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
 				<p id="판매하기">
 					판매하기
@@ -93,12 +111,16 @@
 	<div class="md:px-8 2xl:px-16 lg:flex lg:h-16 items-center min-[1600px]:max-w-[1280px] max-w-[1024px] hidden headerBottom mx-auto box-content">
 		<!--$-->
 		<div class="relative flex-shrink-0 categoryMenu hidden lg:block">
-			<div class="flex items-center justify-center gap-2 px-3.5 xl:px-4 text-sm relative before:absolute before:-bottom-2.5 before:h-2.5 before:w-full before:z-10 font-semibold text-white transition-colors rounded-md cursor-pointer h-11 bg-heading hover:bg-black">
-				<svg stroke="currentColor" fill="currentColor" stroke-width="0" viewbox="0 0 20 20" class="text-xl" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"></path></svg>카테고리
-			</div>
-			<div class="absolute invisible bg-white opacity-0 subMenu shadow-header start-0">
-			</div>
-		</div>
+    <div class="flex items-center justify-center gap-2 px-3.5 xl:px-4 text-sm relative before:absolute before:-bottom-2.5 before:h-2.5 before:w-full before:z-10 font-semibold text-white transition-colors rounded-md cursor-pointer h-11 bg-heading hover:bg-black">
+    	<svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 20 20" class="text-xl" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">
+            <path fill-rule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"></path>
+        </svg>카테고리
+    </div>
+    <div class="absolute invisible bg-white opacity-0 subMenu shadow-header start-0">
+        <ul id="categoryList" class="py-5 text-sm text-body max-h-[480px] overflow-y-scroll">
+        </ul>
+    </div>
+</div>
 		<!--/$-->
 		<!--$-->
 		<nav class="headerMenu flex w-full relative hidden lg:flex ps-3.5 xl:ps-5">
