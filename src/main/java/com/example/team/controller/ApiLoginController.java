@@ -31,7 +31,8 @@ public class ApiLoginController {
 	private String clientSecret;
 
 	private static final String NAVER_LOGOUT_API_URL = "https://nid.naver.com/oauth2.0/token";
-
+	
+	@GetMapping(value = "/api/naverLogin")
 	public String naverLogin(@RequestParam("code") String code, @RequestParam("state") String state,
 			HttpSession session) {
 		String accessToken = memberService.getNaverAccessToken(code, state);

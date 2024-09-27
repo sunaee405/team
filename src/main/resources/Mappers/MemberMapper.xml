@@ -5,44 +5,69 @@
 
 <mapper namespace="com.example.team.Mapper.MemberMapper">
 
-	 <select id="checkEmail" resultType="String">
-        SELECT MEM_ID 
-        FROM MEMBERS
-        WHERE MEM_EMAIL = #{MEM_EMAIL}
-    </select>
-	
-	<insert id="insertUser" >
-        INSERT INTO MEMBERS (
-            MEM_ID,
-            MEM_PW,
-            MEM_NICK,
-            MEM_BIRTH,
-            MEM_EMAIL,
-            MEM_GENDER,
-            MEM_NAME,
-            MEM_TEL,
-            MEM_SNS,
-            MEM_STATUS
-        ) 
-        VALUES (
-            #{MEM_ID},
-            #{MEM_PW},
-            #{MEM_NICK},
-            #{MEM_BIRTH},
-            #{MEM_EMAIL},
-            #{MEM_GENDER},
-            #{MEM_NAME},
-            #{MEM_TEL},
-            #{MEM_SNS},
-            #{MEM_STATUS}
-        )
-    </insert>
-	
+	<select id="checkEmail" resultType="String">
+		SELECT MEM_ID
+		FROM MEMBERS
+		WHERE MEM_EMAIL = #{MEM_EMAIL}
+	</select>
+
+	<insert id="insertUser">
+		INSERT INTO MEMBERS (
+		MEM_ID,
+		MEM_PW,
+		MEM_NICK,
+		MEM_BIRTH,
+		MEM_EMAIL,
+		MEM_GENDER,
+		MEM_NAME,
+		MEM_TEL,
+		MEM_SNS,
+		MEM_STATUS
+		)
+		VALUES (
+		#{MEM_ID},
+		#{MEM_PW},
+		#{MEM_NICK},
+		#{MEM_BIRTH},
+		#{MEM_EMAIL},
+		#{MEM_GENDER},
+		#{MEM_NAME},
+		#{MEM_TEL},
+		#{MEM_SNS},
+		#{MEM_STATUS}
+		)
+	</insert>
+
 	<select id="checkLogin" resultType="map">
-        SELECT MEM_ID
-        FROM MEMBERS
-        WHERE MEM_ID = #{MEM_ID} AND MEM_PW = #{MEM_PW}
-    </select>
-	
+		SELECT MEM_ID
+		FROM MEMBERS
+		WHERE MEM_ID = #{MEM_ID} AND MEM_PW = #{MEM_PW}
+	</select>
+
+	<insert id="naverInsertUser">
+		INSERT INTO MEMBERS (MEM_ID
+							, MEM_NICK
+							, MEM_GENDER
+							, MEM_EMAIL
+							, MEM_TEL
+							, MEM_NAME
+							, MEM_BIRTH
+							, MEM_SNS
+							, MEM_STATUS
+							, MEM_PW)
+		VALUES (  #{MEM_ID}
+				, #{MEM_NICK}
+				, #{MEM_GENDER}
+				, #{MEM_EMAIL}
+				, #{MEM_TEL}
+				, #{MEM_NAME}
+				, #{MEM_BIRTH}
+				, #{MEM_SNS}
+				, #{MEM_STATUS}
+				, #{MEM_PW})
+	</insert>
+
+
+
 
 </mapper>

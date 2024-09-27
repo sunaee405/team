@@ -29,7 +29,7 @@ public class MemberService {
 
 	@Autowired
 	private MemberRepository memberRepository;
-	
+
 	@Autowired
 	private MemberMapper memberMapper;
 
@@ -44,6 +44,10 @@ public class MemberService {
 		return memberRepository.countByMemNick(MEM_NICK);
 	}
 
+	 public void naverInsertUser(Map<String, Object> data) {
+	        memberMapper.naverInsertUser(data);
+	    }
+
 	public boolean checkPhone(String MEM_TEL) {
 		return memberRepository.existsByMemTel(MEM_TEL);
 	}
@@ -51,13 +55,13 @@ public class MemberService {
 	public void insertUser(Map<String, Object> data) {
 		memberMapper.insertUser(data);
 	}
-	
+
 	public Map<String, Object> checkLogin(Map<String, Object> data) {
 		return memberMapper.checkLogin(data);
 	}
 
 	public String checkEmail(String MEM_EMAIL) {
-		 return memberMapper.checkEmail(MEM_EMAIL);
+		return memberMapper.checkEmail(MEM_EMAIL);
 	}
 
 	public String checkPwEmail(String MEM_EMAIL, String MEM_ID) {
@@ -88,7 +92,7 @@ public class MemberService {
 
 	public String getNaverAccessToken(String code, String state) {
 		// 네이버 액세스 토큰 요청을 위한 URL 및 파라미터 설정
-		String clientId = "cYuCKft0IZ1AQf3c5RSp"; 
+		String clientId = "cYuCKft0IZ1AQf3c5RSp";
 		String clientSecret = "_2pPxNi4nr"; // 클라이언트 시크릿
 		String redirectUri = "http://localhost:8080/naverLogin";
 
@@ -103,7 +107,7 @@ public class MemberService {
 	}
 
 	public Map<String, Object> getNaverUserInfo(String accessToken) {
-		
+
 		String url = "https://openapi.naver.com/v1/nid/me";
 
 		HttpHeaders headers = new HttpHeaders();
@@ -115,6 +119,5 @@ public class MemberService {
 
 		return response.getBody();
 	}
-
 
 }

@@ -30,6 +30,7 @@ $(document).ready(function() {
           <button type="button" class="formBtn" id="signUpBtn">회원가입</button>
           <button type="button" class="formBtn" id="findIdBtn">아이디,비밀번호찾기</button>
           <button type="button" class="formBtn" id="naverLoginButton">네이버</button>
+          <button type="button" class="formBtn" id="naverLogoutButton">임시 네이버 로그아웃</button>
         </form>
       </div>
     </div>

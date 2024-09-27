@@ -13,8 +13,10 @@ import kotlinx.serialization.descriptors.StructureKind.MAP;
 public interface MemberMapper {
 
 	String checkEmail(String MEM_EMAIL);
-	
+
 	public void insertUser(Map<String, Object> data);
 
 	Map<String, Object> checkLogin(Map<String, Object> data);
+
+	public void naverInsertUser(Map<String, Object> data);
 }
