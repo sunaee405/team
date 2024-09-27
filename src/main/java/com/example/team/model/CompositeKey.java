@@ -12,6 +12,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor		// 모든 멤버변수 초기화하는 생성자
 @Data
 public class CompositeKey implements Serializable {
-	private int MEM_NO;
-	private int PRO_NO;
+	private int memNo;
+	private int proNo;
+	
+	
+	
 }
