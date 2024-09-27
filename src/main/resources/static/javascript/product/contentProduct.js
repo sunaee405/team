@@ -1,6 +1,8 @@
 $(document).ready(function() {
 	// 상품 번호 설정
-	const proNo = 100; // 실제 상품 번호로 변경
+//	const proNo = 100; // 실제 상품 번호로 변경
+	const urlParams = new URLSearchParams(window.location.search);
+    const proNo = urlParams.get('proNo'); // URL의 proNo 파라미터 가져오기
 
 	// AJAX 요청으로 상품 데이터 가져오기
 	$.ajax({
@@ -40,7 +42,7 @@ $(document).ready(function() {
 			});
 
 			// 프로 카테고리 값을 <li> 태그로 생성하여 <ol> 안에 삽입
-			const category = response.PRO_CATEGORY; // 카테고리 값 가져오기
+			const category = response.PRO_CATEGORY_C; // 카테고리 값 가져오기
 			const categoryListItem = `
                 <li class="flex-shrink-0 px-0 mt-0 text-sm break-all transition duration-200 ease-in text-body first:ps-0 last:pe-0 hover:text-heading">
                     카테고리 > ${category}
@@ -214,7 +216,134 @@ $(document).ready(function() {
 				}
 			});
 
+
+			// 세 번째 AJAX 요청: PRO_CATEGORY로 같은 카테고리의 랜덤 상품 3개 가져오기
+			const proCategory = response.PRO_CATEGORY;
+
+			$.ajax({
+				url: '/getOtherProductByProCategroy', // MEM_NO로 다른 상품 가져오는 API 엔드포인트
+				type: 'GET',
+				data: { proCategory: proCategory }, // MEM_NO를 전달
+				success: function(products) {
+					let otherProductHtml2 = '';
+
+					// products 배열을 무작위로 섞은 후, 앞에서부터 3개만 선택
+					const randomProducts = products.sort(() => 0.5 - Math.random()).slice(0, 3);
+
+					randomProducts.forEach(function(product) {
+						const images = product.pro_img ? product.pro_img.split(',') : [];
+						const imageUrl = images.length > 0 ? '/images/' + images[0] : '/images/default.png';
+						const productUrl = '/productDetail?proNo=' + product.pro_no;
+
+						otherProductHtml2 += `
+            				<li class="flex py-3 h-[160px] overflow-hidden">
+                				<a href="${productUrl}" rel="sponsored noreferrer" target="_blank" class="mr-3 flex justify-center items-start min-w-[120px] relative">
+                    				<img src="${imageUrl}" width="120" height="120" decoding="async" data-nimg="1" class="transition duration-150 ease-linear transform rounded-md cursor-pointer hover:scale-105" style="color: transparent;">
+                				</a>
+                				<div class="flex flex-col justify-start gap-1 py-1 break-all">
+                    				<h3>${product.pro_title}</h3>
+                    				<div class="flex gap-1 items-center">
+                        				<strong class="text-black">${product.pro_price + '원'}</strong>
+                    				</div>
+                				</div>
+            				</li>
+        				`;
+					});
+
+					// #otherProductByMemNo UL 태그 안에 상품 목록 추가
+					$('#otherProductByCategory').html(otherProductHtml2);
+				},
+				error: function(error) {
+					console.error('MEM_NO에 해당하는 랜덤 상품 정보를 가져오는 중 오류 발생:', error);
+				}
+			});
+
+			let likedHtml = '';
+
+			likedHtml += ` <label for="likedCheckInput" class="relative cursor-pointer">
+        				   	<svg id="likeIcon" width="32" height="32" viewBox="0 0 32 32" fill="none"
+             					xmlns="http://www.w3.org/2000/svg" class="pointer-events-none w-8 h-8">
+            			   		<path d="M5.94197 17.9925L15.2564 26.334C15.3282 26.3983 15.3641 26.4305 15.3975 26.4557C15.7541 26.7249 16.2459 26.7249 16.6025 26.4557C16.6359 26.4305 16.6718 26.3983 16.7436 26.3341L26.058 17.9925C28.8244 15.5151 29.1565 11.3015 26.8124 8.42125L26.5675 8.12029C23.8495 4.78056 18.5906 5.35863 16.663 9.20902C16.3896 9.75505 15.6104 9.75505 15.337 9.20902C13.4094 5.35863 8.1505 4.78056 5.43249 8.12028L5.18755 8.42125C2.84352 11.3015 3.17564 15.5151 5.94197 17.9925Z"
+                  					stroke-width="1.5" stroke="#9CA3AF" fill="transparent">
+                  		   		</path>
+        				   	</svg>
+    					   </label>
+    					   <input id="likedCheckInput" type="checkbox" class="a11yHidden" style="display: none;">
+        				`;
+			$('#likedCheckDiv').html(likedHtml);
+
+
+			// 필요한 변수 설정
+			//			const memNo = response.MEM_NO; // 세선에 memNo으로 변경
+			const proNo = response.PRO_NO; // 상품 번호
+
+			// 찜 상태 초기 설정을 위해 서버에 요청
+			$.ajax({
+				url: '/checkLikedStatus',
+				type: 'GET',
+				data: { memNo: memNo, proNo: proNo },
+				success: function(isLiked) {
+					// isLiked가 true이면 찜 상태로 설정
+					if (isLiked) {
+						$('#likedCheckInput').prop('checked', true);
+						$('#likeIcon path').attr('stroke', '#dc2626').attr('fill', '#dc2626');
+					}
+				},
+				error: function(error) {
+					console.error('찜 상태를 확인하는 중 오류 발생:', error);
+				}
+			});
+
+			let isProcessing = false; // 요청 중복 방지 변수
+
+			$('#likedCheckDiv').on('click', function() {
+				if (isProcessing) return; // 요청이 진행 중이면 중복 요청 방지
+				isProcessing = true;
+
+				const isChecked = $('#likedCheckInput').is(':checked');
+
+				if (!isChecked) {
+					// 찜 추가 (체크됨)
+					$('#likeIcon path').attr('stroke', '#dc2626').attr('fill', '#dc2626');
+
+					// AJAX 요청으로 찜 추가
+					$.ajax({
+						url: '/insertLiked',
+						type: 'POST',
+						data: { memNo: memNo, proNo: proNo },
+						success: function(response) {
+							console.log('찜 추가 성공:', response);
+							$('#likedCheckInput').prop('checked', true); // 체크 상태 변경
+							isProcessing = false; // 요청 완료 후 중복 방지 해제
+						},
+						error: function(error) {
+							console.error('찜 추가 중 오류 발생:', error);
+							isProcessing = false; // 에러 시 중복 방지 해제
+						}
+					});
+				} else {
+					// 찜 삭제 (체크 해제됨)
+					$('#likeIcon path').attr('stroke', '#9CA3AF').attr('fill', 'transparent');
+
+					// AJAX 요청으로 찜 삭제
+					$.ajax({
+						url: '/deleteLiked',
+						type: 'POST',
+						data: { memNo: memNo, proNo: proNo },
+						success: function(response) {
+							console.log('찜 삭제 성공:', response);
+							$('#likedCheckInput').prop('checked', false); // 체크 상태 변경
+							isProcessing = false; // 요청 완료 후 중복 방지 해제
+						},
+						error: function(error) {
+							console.error('찜 삭제 중 오류 발생:', error);
+							isProcessing = false; // 에러 시 중복 방지 해제
+						}
+					});
+				}
+			});
 		},
+
 
 		error: function(error) {
 			console.error('상품 상세 정보를 가져오는 중 오류 발생:', error);
