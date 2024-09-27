@@ -12,6 +12,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import com.example.team.Mapper.MemberMapper;
 import com.example.team.model.MemberEntity;
 import com.example.team.persistence.MemberRepository;
 
@@ -28,6 +29,9 @@ public class MemberService {
 
 	@Autowired
 	private MemberRepository memberRepository;
+	
+	@Autowired
+	private MemberMapper memberMapper;
 
 	@Autowired
 	private JavaMailSender mailSender;
@@ -44,12 +48,16 @@ public class MemberService {
 		return memberRepository.existsByMemTel(MEM_TEL);
 	}
 
-	public void insertUser(MemberEntity member) {
-		memberRepository.save(member);
+	public void insertUser(Map<String, Object> data) {
+		memberMapper.insertUser(data);
+	}
+	
+	public Map<String, Object> checkLogin(Map<String, Object> data) {
+		return memberMapper.checkLogin(data);
 	}
 
 	public String checkEmail(String MEM_EMAIL) {
-		return memberRepository.findMemIdByMemEmail(MEM_EMAIL);
+		 return memberMapper.checkEmail(MEM_EMAIL);
 	}
 
 	public String checkPwEmail(String MEM_EMAIL, String MEM_ID) {
@@ -107,5 +115,6 @@ public class MemberService {
 
 		return response.getBody();
 	}
+
 
 }

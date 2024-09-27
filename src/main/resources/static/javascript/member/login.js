@@ -2,6 +2,7 @@ $(document).ready(function() {
 	var isPhoneCheck = false;
 	var isNicknameCheck = false;
 	var isEmailCheck = false;
+	var emailNumber ='';
 
 
 	// 본인인증 사용횟수 제한 때문에 주석쳐둠
@@ -23,8 +24,8 @@ $(document).ready(function() {
               <a href="#"><i class="fa fa-linkedin" aria-hidden="true"></i></a>
             </div>
           </div>
-          <input type="text" placeholder="ID">
-          <input type="password" placeholder="Password">
+          <input type="text" id= loginId placeholder="ID">
+          <input type="password" id = loginPw placeholder="Password">
           <button type="button" class="formBtn" id="signInBtn">로그인</button>
           <button type="button" class="formBtn" id="signUpBtn">회원가입</button>
           <button type="button" class="formBtn" id="findIdBtn">아이디,비밀번호찾기</button>
@@ -72,10 +73,10 @@ $(document).ready(function() {
 			
             <div class="radioGroup">
               <label>
-                <input type="radio" name="gender" value="male"/> 남
+                <input type="radio" name="gender" value="M"/> 남
               </label>
               <label>
-                <input type="radio" name="gender" value="female"/> 여
+                <input type="radio" name="gender" value="F"/> 여
               </label>
             </div>
             <button type="button" class="formBtn" id="signUpSubmit">가입하기</button>
@@ -386,11 +387,38 @@ $(document).ready(function() {
 	//	});
 
 
+	// 로그인 버튼 클릭 함수 
+	$(document).on("click", "#signInBtn", function() {
+		var id = $('#loginId').val();
+		var pw = $('#loginPw').val();
+		debugger;
+		$.ajax({
+			type: 'POST',
+			url: '/members/login',
+			contentType: 'application/json',
+			data: JSON.stringify({ MEM_ID: id, MEM_PW: pw }),
+			success: function(response) {
+				if (response.success) {
+					window.location.href = '/myPage/main'; // 성공 시 페이지 이동
+				} else {
+					$('#loginMessage').text('일치하는 아이디, 비밀번호가 없습니다.');
+				}
+			},
+			error: function() {
+				$('#loginMessage').text('서버 오류가 발생했습니다.');
+			}
+		});
+
+	});
+
+
+
+
+
 	//이메일 인증 확인 버튼 클릭 이벤트 start
 	$(document).on("click", "#checkEmailButton", function() {
 		let enterNumber = $('#checkEmail').val();
-		let emailNumber = sessionStorage.getItem('emailNumber');
-		if (!emailNumber) {
+		if (emailNumber == '') {
 			alert('먼저 본인인증을 진행해 주세요!');
 			return;
 		}
@@ -423,6 +451,7 @@ $(document).ready(function() {
 		var gender = $("input[name='gender']:checked").val();
 		var sns = 'F';
 		var status = 'F';
+		debugger;
 
 		$.ajax({
 			url: '/members/insertUser',
@@ -441,6 +470,7 @@ $(document).ready(function() {
 			}),
 			contentType: 'application/json',
 			success: function(response) {
+				debugger;
 				alert('회원가입이 완료되었습니다!');
 				resetForm();
 				showSignIn();
@@ -546,6 +576,7 @@ $(document).ready(function() {
 			}),
 			contentType: 'application/json',
 			success: function(response) {
+				emailNumber = response.emailNumber;
 			}
 		});
 	}
@@ -553,17 +584,22 @@ $(document).ready(function() {
 
 	// 네이버 로그인 
 	$('#naverLoginButton').click(function() {
-		
+
 		const clientId = 'cYuCKft0IZ1AQf3c5RSp';
 		const redirectUri = 'http://localhost:8080/api/naverLogin';
 		const naverLoginUrl = `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${clientId}&redirect_uri=${redirectUri}&state=random_state_string`;
 
 		// 팝업 창 열기
-//		window.open(naverLoginUrl, 'naverLogin', 'width=600,height=600');
 		location.href = naverLoginUrl;
 	});
 
 
+	// 써야하는분 location.href = `/api/logout`; 여기로 요청하면 자동 로그아웃 됩니다. 
+	$('#naverLogoutButton').click(function() {
+
+
+		location.href = `/api/logout`;
+	});
 
 
 

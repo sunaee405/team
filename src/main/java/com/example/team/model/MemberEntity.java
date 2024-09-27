@@ -29,25 +29,25 @@ public class MemberEntity {
 	@Column(name = "MEM_NO")
 	private Long memNo;		// 회원번호
 	
-	@Column(nullable = false, unique = true ,name = "MEM_ID")
+	@Column(name = "MEM_ID")
 	private String memId;		// 아이디
 	
-	@Column(nullable = false ,name = "MEM_PW")
+	@Column( name = "MEM_PW")
 	private String memPw;		// 비밀번호
 
-	@Column(nullable = false ,name = "MEM_NAME")
+	@Column(name = "MEM_NAME")
 	private String memName;	// 회원이름
 		
-	@Column(nullable = false, unique = true ,name = "MEM_NICK")
+	@Column(name = "MEM_NICK")
 	private String memNick;	// 닉네임
 	
-	@Column(nullable = false ,name = "MEM_GENDER")
+	@Column(name = "MEM_GENDER")
 	private String  memGender;	// 성별
 	
-	@Column(nullable = false, unique = true ,name = "MEM_TEL")
+	@Column(name = "MEM_TEL")
 	private String memTel;		// 전화번호
 	
-	@Column(nullable = false )
+	@Column()
 //	@ColumnDefault(value = )
 	private LocalDateTime MEM_INPUT;	// 가입시간
 	
@@ -59,10 +59,10 @@ public class MemberEntity {
 	
 	private String MEM_SNS;		// SNS로그인(연동?) 유무
 	
-	@Column(nullable = false ,name = "MEM_BIRTH")
+	@Column(name = "MEM_BIRTH")
 	private String  memBirth;	// 생일
 	
-	@Column(unique = true ,name = "MEM_EMAIL")
+	@Column(name = "MEM_EMAIL")
 	private String  memEmail;	// 이메일
 	
 	

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.team.model.MemberEntity;
+import com.example.team.persistence.MemberRepository;
 import com.example.team.service.MemberService;
 
 import jakarta.servlet.http.HttpSession;
@@ -23,8 +24,11 @@ import jakarta.servlet.http.HttpSession;
 public class MemberController {
 
 	@Autowired
+	private MemberRepository memberRepository;
+
+	@Autowired
 	private MemberService memberService;
-	
+
 	@PostMapping("/checkId")
 	public ResponseEntity<Map<String, Integer>> checkIdAndNickname(@RequestBody Map<String, String> data) {
 		String MEM_ID = data.get("id");
@@ -40,9 +44,26 @@ public class MemberController {
 		return ResponseEntity.ok(result);
 	}
 
+	@PostMapping("/login")
+	public Map<String, Object> login(@RequestBody Map<String, Object> data, HttpSession session) {
+		Map<String, Object> response = new HashMap<>();
+		Map<String, Object> checkLogin = memberService.checkLogin(data);
+		if (checkLogin != null) {
+
+			session.setAttribute("MEM_ID", checkLogin.get("MEM_ID"));
+			response.put("success", true);
+
+		} else {
+
+			response.put("success", false);
+		}
+
+		return response;
+	}
+
 	@PostMapping("/insertUser")
-	public ResponseEntity<Void> insertUser(@RequestBody MemberEntity member) {
-		memberService.insertUser(member);
+	public ResponseEntity<Void> insertUser(@RequestBody Map<String, Object> data ) {
+		memberService.insertUser(data);
 		return ResponseEntity.ok().build();
 	}
 
@@ -61,7 +82,7 @@ public class MemberController {
 	}
 
 	@PostMapping("/sendEmail")
-	public ResponseEntity<String> sendEmail(@RequestBody Map<String, String> data, HttpSession session) {
+	public ResponseEntity<Map<String, String>> sendEmail(@RequestBody Map<String, String> data, HttpSession session) {
 		String MEM_EMAIL = data.get("MEM_EMAIL");
 		String type = data.get("type");
 		String randomNumber = randomNumber();
@@ -69,12 +90,12 @@ public class MemberController {
 		memberService.sendEmail(MEM_EMAIL, type, randomNumber);
 
 		session.setAttribute("emailNumber", randomNumber);
-
-		return ResponseEntity.ok().build();
+		
+		Map<String, String> response = new HashMap<>();
+		response.put("emailNumber", randomNumber);
+		System.out.println("response:"+response);
+		return  ResponseEntity.ok(response);
 	}
-
-	
-	
 
 	private String randomNumber() {
 		Random random = new Random();
