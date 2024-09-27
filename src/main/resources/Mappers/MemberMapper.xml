@@ -3,12 +3,46 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.example.mapper.MemberMapper">
+<mapper namespace="com.example.team.Mapper.MemberMapper">
 
-    <select id="checkId" resultType="map">
-        SELECT MEM_ID,MEM_NICK
+	 <select id="checkEmail" resultType="String">
+        SELECT MEM_ID 
         FROM MEMBERS
+        WHERE MEM_EMAIL = #{MEM_EMAIL}
     </select>
-
+	
+	<insert id="insertUser" >
+        INSERT INTO MEMBERS (
+            MEM_ID,
+            MEM_PW,
+            MEM_NICK,
+            MEM_BIRTH,
+            MEM_EMAIL,
+            MEM_GENDER,
+            MEM_NAME,
+            MEM_TEL,
+            MEM_SNS,
+            MEM_STATUS
+        ) 
+        VALUES (
+            #{MEM_ID},
+            #{MEM_PW},
+            #{MEM_NICK},
+            #{MEM_BIRTH},
+            #{MEM_EMAIL},
+            #{MEM_GENDER},
+            #{MEM_NAME},
+            #{MEM_TEL},
+            #{MEM_SNS},
+            #{MEM_STATUS}
+        )
+    </insert>
+	
+	<select id="checkLogin" resultType="map">
+        SELECT MEM_ID
+        FROM MEMBERS
+        WHERE MEM_ID = #{MEM_ID} AND MEM_PW = #{MEM_PW}
+    </select>
+	
 
 </mapper>

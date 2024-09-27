@@ -5,7 +5,7 @@
 
 <mapper namespace="com.example.team.Mapper.MyPageMapper">
 
-	<select id="getDetailCode" resultType="map">
+	<select id="getDetailCode" resultType="String">
 		SELECT JSON_OBJECTAGG(DCO_ID, DCO_VALUE)
 		FROM TEST_DETAIL_CODE;
 	</select>
@@ -67,11 +67,12 @@
 
 	<!-- 채팅룸 생성 -->
 	<insert id="insertChatRoom">
-		INSERT INTO CHATTING (CHA_MEM1, CHA_MEM2) 
+		INSERT INTO CHATTING (CHA_MEM1, CHA_MEM2, CHA_LOG) 
 		VALUES (
 		    #{CHA_MEM1},
-		    #{CHA_MEM2}
-		);
+		    #{CHA_MEM2},
+		    JSON_ARRAY()
+		)
 	</insert>
 	
 	<!-- 채팅내역 업데이트 -->

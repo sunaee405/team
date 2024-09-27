@@ -184,20 +184,34 @@
 	
 
 <!-- ===================================  상세 상품 정보  =====================================  -->
+
+	<update id="updateProViews">
+    	UPDATE PRODUCT
+    	   SET PRO_VIEWS = PRO_VIEWS + 1
+    	 WHERE PRO_NO = #{proNo}
+	</update>
+	
 	<select id = "getContentProduct" resultType="map">
 		SELECT PRO.MEM_NO
 			 , PRO.PRO_NO
         	 , PRO.PRO_VIEWS
          	 , PRO.PRO_DATE
-         	 , TDC3.DCO_VALUE AS PRO_CATEGORY
-         	 , TSC1.SCO_VALUE AS LOCATION_SUB
-          	 , TDC1.DCO_VALUE AS LOCATION_VALUE
          	 , PRO.PRO_PRICE
-         	 , PRO.PRO_STATUS
          	 , PRO.PRO_TITLE
-         	 , TDC2.DCO_VALUE AS TYPE_VALUE
          	 , PRO.PRO_CONTENT
          	 , PRO.PRO_IMG
+         	 , PRO.PRO_CATEGORY
+         	 , TSC1.SCO_VALUE AS LOCATION_SUB
+          	 , TDC1.DCO_VALUE AS LOCATION_VALUE
+          	 , TSC2.SCO_VALUE AS TYPE_VALUE_SUB
+          	 , TDC2.DCO_VALUE AS TYPE_VALUE
+          	 , TDC3.DCO_VALUE AS PRO_CATEGORY_C
+         	 , TSC4.SCO_VALUE AS PRO_STATUS_SUB
+         	 , TDC4.DCO_VALUE AS PRO_STATUS
+         	 , TSC5.SCO_VALUE AS PRO_NEG_SUB
+         	 , TDC5.DCO_VALUE AS PRO_NEG
+         	 , TSC6.SCO_VALUE AS PRO_STATE_SUB
+         	 , TDC6.DCO_VALUE AS PRO_STATE
     	  FROM PRODUCT PRO 
     	  JOIN TEST_DETAIL_CODE TDC1 
         	ON PRO.PRO_LOCATION = TDC1.DCO_ID
@@ -205,10 +219,26 @@
         	ON TDC1.SCO_ID = TSC1.SCO_ID
     	  JOIN TEST_DETAIL_CODE TDC2 
         	ON PRO.PRO_TYPE = TDC2.DCO_ID
+          JOIN TEST_SUB_CODE TSC2
+        	ON TDC2.SCO_ID = TSC2.SCO_ID
           JOIN TEST_DETAIL_CODE TDC3 
         	ON PRO.PRO_CATEGORY = TDC3.DCO_ID
-         WHERE PRO.PRO_NO = '100'
+          JOIN TEST_DETAIL_CODE TDC4 
+        	ON PRO.PRO_STATUS = TDC4.DCO_ID
+          JOIN TEST_SUB_CODE TSC4
+        	ON TDC4.SCO_ID = TSC4.SCO_ID
+          JOIN TEST_DETAIL_CODE TDC5
+        	ON PRO.PRO_NEG = TDC5.DCO_ID
+          JOIN TEST_SUB_CODE TSC5
+        	ON TDC5.SCO_ID = TSC5.SCO_ID
+          JOIN TEST_DETAIL_CODE TDC6
+        	ON PRO.PRO_STATE = TDC6.DCO_ID
+          JOIN TEST_SUB_CODE TSC6
+        	ON TDC6.SCO_ID = TSC6.SCO_ID
+         WHERE PRO.PRO_NO = #{proNo}
 	</select>
+	
+	
 
 
 

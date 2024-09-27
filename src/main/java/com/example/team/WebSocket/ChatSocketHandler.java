@@ -41,16 +41,17 @@ public class ChatSocketHandler extends TextWebSocketHandler {
 	    
 	    if(type.equals("setSession")) {
 	    	chatSession.computeIfAbsent(chaNo, t -> new ArrayList()).add(session);
-	    	System.out.println("chat setSession");
 	    	
 	    } else if(type.equals("chatMessage")) {
 	    	
 	    	System.out.println("chat chatMessage");
 	    	
+	    	System.out.println(chaNo);
 	    	// 채팅방 번호로 해당 키값의 채팅에 등록된 모든 세션을 리스트로
 	    	List<WebSocketSession> chatRooms = chatSession.get(chaNo);
+	    	
 	    	for(WebSocketSession cr : chatRooms) {
-	    		if(!cr.isOpen()) return;
+	    		if(chatRooms != null && !cr.isOpen()) return;
 	    		cr.sendMessage(message);
 	    	}
 	    } 

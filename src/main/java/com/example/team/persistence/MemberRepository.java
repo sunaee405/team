@@ -1,30 +1,28 @@
 package com.example.team.persistence;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import com.example.team.model.MemberEntity;
 
+import jakarta.transaction.Transactional;
+
 @Repository
-public interface MemberRepository extends JpaRepository<MemberEntity, Long> {
+public interface MemberRepository extends JpaRepository<MemberEntity, String> {
 
-	@Query("SELECT COUNT(m) FROM MemberEntity m WHERE m.MEM_ID = ?1")
-	long countById(String MEM_ID);
+	long countByMemId(String MemId);
 
-	@Query("SELECT COUNT(m) FROM MemberEntity m WHERE m.MEM_NICK = ?1")
-	long countByNickname(String MEM_NICK);
+	long countByMemNick(String MemNick);
 
-	@Query("SELECT COUNT(m) > 0 FROM MemberEntity m WHERE m.MEM_TEL = ?1")
-	boolean checkPhone(String phone);
+	boolean existsByMemTel(String MemTel);
 
-	@Query("SELECT m.MEM_ID FROM MemberEntity m WHERE m.MEM_EMAIL = ?1")
-	String checkEmail(String MEM_EMAIL);
-	
-	@Query("SELECT m.MEM_ID FROM MemberEntity m WHERE m.MEM_EMAIL = ?1 AND m.MEM_ID = ?2")
-	String checkPwEmail(String MEM_EMAIL, String MEM_ID);
-	
-	@Query("SELECT m.MEM_PW FROM MemberEntity m WHERE m.MEM_EMAIL = ?1")
-	String checkPwEmail(String MEM_EMAIL);
-	
+	String findMemIdByMemEmail(String MemEmail);
+
+	String findMemPwByMemEmailAndMemId(String MemEmail, String MemId);
+
+	String findMemPwByMemEmail(String MemEmail);
+
+
 }

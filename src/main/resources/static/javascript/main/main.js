@@ -1,52 +1,53 @@
 const TypeList = ["Price", "Popular", "Latest"];
-let dcCode;
 
 $(function() {
-	getDetailCode();
+//	getDetailCode();
     getMainProductList();
     
 //    debugger;
 });
 
-function getDetailCode() {
-	
-	
-	$.ajax({
-	    url: "/getDetailCode",
-	    method: 'GET',
-	    dataType: 'json',
-	    success: (data) => {
-	        debugger; // 성공 시 실행될 코드
-	    },
-	    error: (error) => {
-	        debugger; // 에러 발생 시 실행될 코드
-	    }
-	}); 
-		
-//    fetch('/getDetailCode', {
-//        method: 'GET',
-//        headers: {
-//            'X-Requested-With': 'XMLHttpRequest',
-//            'Content-Type': 'application/json'
-//        }
-//    })
-//    .then(response => {
-//		debugger;
-//        if (!response.ok) {
-//            throw new Error('Network response was not ok');
-//            
-//        }
-//        return response.json();
-//    })
-//    .then(data => {
-//		debugger;
-//        alert(data);
-//    })
-//    .catch(error => {
-//		debugger;
-//        console.error('Error:', error);
-//    });
-}
+//function getDetailCode() {
+//	
+//	
+//	$.ajax({
+//	    url: "/getDetailCode",
+//	    method: 'GET',
+//	    dataType: 'json',
+//	    success: (data) => {
+//	        debugger; // 성공 시 실행될 코드
+//	    },
+//	    error: (error) => {
+//	        debugger; // 에러 발생 시 실행될 코드
+//	    }
+//	}); 
+//		
+//		
+//		
+////    fetch('/getDetailCode', {
+////        method: 'GET',
+////        headers: {
+////            'X-Requested-With': 'XMLHttpRequest',
+////            'Content-Type': 'application/json'
+////        }
+////    })
+////    .then(response => {
+////		debugger;
+////        if (!response.ok) {
+////            throw new Error('Network response was not ok');
+////            
+////        }
+////        return response.json();
+////    })
+////    .then(data => {
+////		debugger;
+////        alert(data);
+////    })
+////    .catch(error => {
+////		debugger;
+////        console.error('Error:', error);
+////    });
+//}
 
 
 
@@ -105,6 +106,7 @@ $(document).on('click', '.bannerButton', function() {
 async function getMainProductList() {
     // TypeList 랜덤으로 배열하는 함수 호출
     const randomType = shuffleArray(TypeList);
+    
 
     for(const Type of randomType) {
         try {
@@ -115,7 +117,6 @@ async function getMainProductList() {
                     'Content-Type': 'application/json' // 요청 데이터 형식
                 }
             });
-            
             
             if (!response.ok) {
                 const errorText = await response.text();
@@ -128,24 +129,22 @@ async function getMainProductList() {
             productSection(Type);
             
             
-            
-            
-            
             result.forEach(function(productMap) {
 				// 각 상품 영역 찍어주는 함수
                 forProductList(Type, productMap);
             });
             
 		    const filterLink = $(`.${Type}Section`).find('.productLink') // 현재 섹션 내의 모든 .productLink 요소 선택
-													  .filter(function(index) {
+												   .filter(function(index) {
 													    // 인덱스가 6보다 크면 리턴
 													    return index >= 6;
 													  })
 													  .map(function(index, data) {
 													    return data; //필터된 요소를 반환
-													  })
+													  }) // 반환된 요소를 숨기기
 													  .css('display', 'none');
 														  
+            
             var swiperLength = result.length % 6 == 0 ? result.length / 6 : (result.length / 6) + 1;
             
             
@@ -159,6 +158,7 @@ async function getMainProductList() {
             if (error.message === 'emptyList') {
                 console.log('상품목록 없음');
             } else {
+				debugger;
                 console.error('에러 발생:', error);
             }
         };
@@ -166,22 +166,22 @@ async function getMainProductList() {
 };
 
 
-function getDetailCode() {
-	fetch('/getDetailCode', {
-	    method: 'GET',
-		    headers: {
-		        'X-Requested-With': 'XMLHttpRequest', // 필터에서 ajax 요청으로 인식하도록 헤더 설정
-		        'Content-Type': 'application/json' // 요청 데이터 형식
-		    }
-		})
-	.then(response => response.json())
-	.then(data => {
-		return new Map(Object.entries(data));
-	})
-	.catch(Error => {
-		
-	});
-}
+//function getDetailCode() {
+//	fetch('/getDetailCode', {
+//	    method: 'GET',
+//		    headers: {
+//		        'X-Requested-With': 'XMLHttpRequest', // 필터에서 ajax 요청으로 인식하도록 헤더 설정
+//		        'Content-Type': 'application/json' // 요청 데이터 형식
+//		    }
+//		})
+//	.then(response => response.json())
+//	.then(data => {
+//		return new Map(Object.entries(data));
+//	})
+//	.catch(Error => {
+//		
+//	});
+//}
 
 
 
@@ -193,6 +193,26 @@ function getDetailCode() {
 
 // 각 상품 영역 찍어주는 함수
 function forProductList(Type, data) {
+	// 등록일과 현재 시각 초단위로 얼마나 차이나는지	
+	const time = Math.floor((new Date() - new Date(data.PRO_DATE)) / 1000);
+
+	const timeList = [
+	    { dateTime: '일', value: 3600 * 24 },
+	    { dateTime: '시간', value: 3600 },
+	    { dateTime: '분', value: 60 },
+	    { dateTime: '초', value: 1 }
+	];
+	
+	let timeText;
+	// 자바 스크립트의 향상된 for문
+	for(const timeVlaue of timeList) {
+		let timeDiff = Math.floor(time / timeVlaue.value);
+		if(timeDiff > 0) {
+			timeText = timeDiff + " " + timeVlaue.dateTime; 
+			break;
+		}
+	}
+	
 	
 	let productList =
 		`<a class="productLink relative group box-border overflow-hidden flex rounded-md cursor-pointer pe-0 pb-2 lg:pb-3 flex-col items-start transition duration-200 ease-in-out transform bg-white ga4_main_latest_product">
@@ -202,10 +222,10 @@ function forProductList(Type, data) {
 			<div class="w-full overflow-hidden p-2 md:px-2.5 xl:px-4">
 				<h2 class="line-clamp-2 min-h-[2lh] text-sm md:text-base">${data.PRO_TITLE}</h2>
 				<div class="font-semibold space-s-2 mt-0.5 text-heading lg:text-lg lg:mt-1.5">
-					200,000원
+					${data.PRO_PRICE}원
 				</div>
 				<div class="my-1 h-6">
-					<span class="text-sm text-gray-400">송포동</span><span class="mx-1 text-sm text-gray-400">|</span><span class="text-sm text-gray-400">2초 전</span>
+					<span class="text-sm text-gray-400">${data.PRO_LOCATION}</span><span class="mx-1 text-sm text-gray-400">|</span><span class="text-sm text-gray-400">${timeText} 전</span>
 				</div>
 				<div class="flex items-center [&amp*:not(:last-child)]:mr-1.5">
 		<!--		<svg width="30" height="17" viewbox="0 0 30 17" fill="none" xmlns="http://www.w3.org/2000/svg"><rect y="-0.00012207" width="30" height="16.2857" rx="2.25" fill="#0DCC5A"></rect><path d="M11.6626 6.31356V6.28956C11.6626 4.57356 10.4506 3.38556 8.44665 3.38556H5.01465V11.7856H6.86265V9.26556H8.26665C10.1506 9.26556 11.6626 8.25756 11.6626 6.31356ZM9.79065 6.34956C9.79065 7.06956 9.25065 7.62156 8.32665 7.62156H6.86265V5.05356H8.29065C9.21465 5.05356 9.79065 5.49756 9.79065 6.32556V6.34956Z" fill="white"></path><path d="M18.2531 11.7856V8.05356C18.2531 6.31356 17.3771 5.28156 15.3851 5.28156C14.2931 5.28156 13.5971 5.48556 12.8891 5.79756L13.3451 7.18956C13.9331 6.97356 14.4251 6.84156 15.1211 6.84156C16.0331 6.84156 16.5011 7.26156 16.5011 8.01756V8.12556C16.0451 7.96956 15.5771 7.86156 14.9291 7.86156C13.4051 7.86156 12.3371 8.50956 12.3371 9.91356V9.93756C12.3371 11.2096 13.3331 11.9056 14.5451 11.9056C15.4331 11.9056 16.0451 11.5816 16.4891 11.0896V11.7856H18.2531ZM16.5251 9.51756C16.5251 10.1776 15.9491 10.6456 15.0971 10.6456C14.5091 10.6456 14.1011 10.3576 14.1011 9.86556V9.84156C14.1011 9.26556 14.5811 8.95356 15.3611 8.95356C15.8051 8.95356 16.2131 9.04956 16.5251 9.19356V9.51756Z" fill="white"></path><path d="M25.7083 5.35356H23.8123L22.4083 9.73356L20.9443 5.35356H19.0123L21.5323 11.8096C21.3763 12.1336 21.2083 12.2296 20.8963 12.2296C20.6563 12.2296 20.3563 12.1216 20.1163 11.9776L19.5043 13.2976C19.9723 13.5736 20.4643 13.7416 21.1243 13.7416C22.2163 13.7416 22.7443 13.2496 23.2363 11.9416L25.7083 5.35356Z" fill="white"></path></svg> -->

@@ -35,9 +35,9 @@ public class SmsApiController {
 
 	@PostMapping("/send-message")
 	public String sendMessage(@RequestBody Map<String, String> requestData, HttpSession session) {
-		String phone = requestData.get("phone");
+		String MEM_TEL = requestData.get("phone");
 
-		if (memberService.checkPhone(phone)) {
+		if (memberService.checkPhone(MEM_TEL)) {
 			throw new ResponseStatusException(HttpStatus.CONFLICT, "이미 등록된 전화번호입니다.");
 		}
 
@@ -45,7 +45,7 @@ public class SmsApiController {
 
 		Message message = new Message();
 		message.setFrom("01030738895");
-		message.setTo(phone);
+		message.setTo(MEM_TEL);
 		message.setText("본인인증 메시지입니다. 인증번호: [" + randomNumber + "]");
 		
 		this.messageService.sendOne(new SingleMessageSendingRequest(message));

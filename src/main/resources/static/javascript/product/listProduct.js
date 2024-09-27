@@ -392,7 +392,7 @@ $(document).ready(function() {
 					productListHtml += `
                     <li class="">
                         <div>
-                            <a class="relative group box-border overflow-hidden flex rounded-md cursor-pointer pe-0 pb-2 lg:pb-3 flex-col items-start transition duration-200 ease-in-out transform bg-white" href="/product/${product.PRO_NO}">
+                            <a class="relative group box-border overflow-hidden flex rounded-md cursor-pointer pe-0 pb-2 lg:pb-3 flex-col items-start transition duration-200 ease-in-out transform bg-white" href="/product/contentProduct?proNo=${product.PRO_NO}">
                                 <div class="relative w-full rounded-md overflow-hidden dim pt-[0%] mb-3 md:mb-3.5">
                                     <img src="${imageUrl}" alt="Product Image">
                                 </div>
