@@ -1,14 +1,21 @@
 package com.example.team.controller;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Arrays;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.util.Base64;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
+import javax.imageio.IIOImage;
+import javax.imageio.ImageIO;
+import javax.imageio.ImageWriteParam;
+import javax.imageio.ImageWriter;
+import javax.imageio.stream.ImageOutputStream;
+
+import org.apache.tomcat.util.http.fileupload.ByteArrayOutputStream;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,12 +24,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.example.team.model.ChattingEntity;
 import com.example.team.service.MyPageService;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import jakarta.servlet.http.HttpSession;
@@ -34,6 +40,51 @@ public class MyPageController {
 	private MyPageService myPageService;
 	
 	private ObjectMapper objectMapper = new ObjectMapper();
+	
+	
+	@PostMapping("/insertBanner")
+	public ResponseEntity<?> insertBanner(@RequestParam("file") MultipartFile file) {
+	    System.out.println("배너업로드");
+
+	    try (ByteArrayOutputStream baos = new ByteArrayOutputStream();) {
+	        // 클라이언트에서 업로드된 파일을 BufferedImage로 변환
+	        BufferedImage bufferedImage = ImageIO.read(file.getInputStream());
+	        
+	        // PNG 형식으로 변환하기 위한 ImageWriter 설정
+            Iterator<ImageWriter> writers = ImageIO.getImageWritersByFormatName("png");
+            ImageWriter writer = writers.next();
+            // 이미지 읽기
+            try (ImageOutputStream ios = ImageIO.createImageOutputStream(baos)) {
+                writer.setOutput(ios);
+
+                // 이미지 파일 무손실 압축
+                ImageWriteParam param = writer.getDefaultWriteParam();
+                param.setCompressionMode(ImageWriteParam.MODE_EXPLICIT); // 압축 설정
+                param.setCompressionQuality(1.0f); // 압축 비율
+
+                // 변환한 이미지 저장
+                writer.write(null, new IIOImage(bufferedImage, null, null), param);
+                
+                Map<String, Object> data = new HashMap<String, Object>();
+                data.put("file", baos.toByteArray());
+                myPageService.insertBanner(data);
+                
+//                System.out.println(baos.toByteArray());
+//                
+//                String base64Image = "data:image/png;base64,"+Base64.getEncoder().encodeToString(baos.toByteArray());
+//                
+//                return ResponseEntity.ok().body(base64Image);
+            } finally {
+            	// 닫기
+                writer.dispose();
+            }
+            
+	    } catch (IOException e) {
+	    	e.printStackTrace();
+	    }
+	    return null;
+	}
+	
 	
 	
 	// 공통코드 불러오기

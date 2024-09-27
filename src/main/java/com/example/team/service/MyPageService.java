@@ -62,4 +62,12 @@ public class MyPageService {
 	}
 
 
+
+	// 배너저장
+	public void insertBanner(Map<String, Object> data) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
 }
