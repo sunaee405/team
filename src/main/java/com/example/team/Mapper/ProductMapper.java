@@ -14,6 +14,8 @@ import com.example.team.model.ProductEntity;
 @Mapper
 @Repository
 public interface ProductMapper {
+	
+	void updateProViews(int proNo);
 
 	List<Map<String, Object>> getProductCategory();
 
@@ -44,6 +46,8 @@ public interface ProductMapper {
 	
 
 	Map<String, Object> getContentProduct(int proNo);
+
+	
 	
 	
 

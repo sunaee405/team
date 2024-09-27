@@ -423,6 +423,7 @@ $(document).ready(function() {
 			contentType: false,  // multipart/form-data 자동 처리
 			success: function(response) {
 				alert('판매등록을 완료했습니다!');
+				window.location.href = response.redirectUrl;
 			},
 			error: function(xhr, status, error) {
 				console.error('Error occurred:', error);

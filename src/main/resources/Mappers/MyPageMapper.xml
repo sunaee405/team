@@ -67,10 +67,11 @@
 
 	<!-- 채팅룸 생성 -->
 	<insert id="insertChatRoom">
-		INSERT INTO CHATTING (CHA_MEM1, CHA_MEM2) 
+		INSERT INTO CHATTING (CHA_MEM1, CHA_MEM2, CHA_LOG) 
 		VALUES (
 		    #{CHA_MEM1},
-		    #{CHA_MEM2}
+		    #{CHA_MEM2},
+		    JSON_ARRAY()
 		)
 	</insert>
 	

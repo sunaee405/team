@@ -12,7 +12,7 @@ import com.example.team.model.ChattingEntity;
 @Repository
 public interface MyPageMapper {
 	
-	//
+	// 코드 호출
 	String getDetailCode();
 	
 	// 메인페이지 상품 리스트

@@ -20,12 +20,15 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.example.team.Mapper.ProductMapper;
+import com.example.team.model.LikeEntity;
 import com.example.team.model.ProductEntity;
+import com.example.team.persistence.LikedRepository;
 import com.example.team.persistence.ProductRepository;
 import com.mysql.cj.log.Log;
 
 import ch.qos.logback.classic.util.LogbackMDCAdapterSimple;
 import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -34,6 +37,9 @@ public class ProductService {
 
 	@Autowired
 	ProductRepository productRepository;
+	
+	@Autowired
+	LikedRepository likedRepository;
 
 	@Autowired
 	ProductMapper productMapper;
@@ -62,16 +68,16 @@ public class ProductService {
 		return productMapper.getProductNego();
 	}
 
-	public void insertProduct(Map<String, Object> productData) {
-		String productTitle = (String) productData.get("productTitle");
-		String fileNames = (String) productData.get("fileNames");
-		String categoryCode = (String) productData.get("categoryCode");
-		String locationCode = (String) productData.get("locationCode");
-		String stateCode = (String) productData.get("stateCode");
-		String productPrice = (String) productData.get("productPrice");
-		String productDescription = (String) productData.get("productDescription");
-		String typeCode = (String) productData.get("typeCode");
-		String negoCode = (String) productData.get("negoCode");
+	public void insertProduct(Map<String, String> params) {
+		String productTitle = (String) params.get("productTitle");
+		String fileNames = (String) params.get("fileNames");
+		String categoryCode = (String) params.get("categoryDcoId");
+		String locationCode = (String) params.get("locationDcoId");
+		String stateCode = (String) params.get("stateDcoId");
+		String productPrice = (String) params.get("productPrice");
+		String productDescription = (String) params.get("productDescription");
+		String typeCode = (String) params.get("typeDcoId");
+		String negoCode = (String) params.get("negoDcoId");
 
 		// 현재 시간을 LocalDateTime으로 설정 (초까지만)
 		LocalDateTime currentDateTime = LocalDateTime.now().withNano(0);
@@ -119,11 +125,51 @@ public class ProductService {
 	
 	// =================================== 상품 상세 정보 ===================================
 	
+	@Transactional
+	public void updateProViews(int proNo) {
+		productMapper.updateProViews(proNo);
+	}
+	
 	public Map<String, Object> getContentProduct(int proNo) {
 	    return productMapper.getContentProduct(proNo);
 	}
 	
-	public List<ProductEntity> getProductsByMemNo(Integer memNo) {
+	public List<ProductEntity> getProductByMemNo(Integer memNo) {
         return productRepository.findByMemNo(memNo);
     }
+	
+	public List<ProductEntity> getProductByProCategory(String proCategory) {
+        return productRepository.findByProCategory(proCategory);
+    }
+
+	public void insertLiked(Map<String, String> params) {
+		
+		int memNo = Integer.parseInt(params.get("memNo"));
+		int proNo = Integer.parseInt(params.get("proNo"));
+		
+        // 이미 찜했는지 확인
+        if (!likedRepository.existsByMemNoAndProNo(memNo, proNo)) {
+            LikeEntity likeEntity = new LikeEntity();
+            likeEntity.setMemNo(memNo);
+            likeEntity.setProNo(proNo);
+
+            // 찜 저장
+            likedRepository.save(likeEntity);
+        }
+	}
+	
+	@Transactional  // 트랜잭션을 보장
+	public void deleteLiked(Map<String, String> params) {
+        int memNo = Integer.parseInt(params.get("memNo"));
+        int proNo = Integer.parseInt(params.get("proNo"));
+
+        // 찜 삭제
+        likedRepository.deleteByMemNoAndProNo(memNo, proNo);
+    }
+	
+	public boolean isLiked(int memNo, int proNo) {
+	    return likedRepository.existsByMemNoAndProNo(memNo, proNo);
+	}
+	
+	
 }

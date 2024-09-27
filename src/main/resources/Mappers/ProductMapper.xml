@@ -184,6 +184,13 @@
 	
 
 <!-- ===================================  상세 상품 정보  =====================================  -->
+
+	<update id="updateProViews">
+    	UPDATE PRODUCT
+    	   SET PRO_VIEWS = PRO_VIEWS + 1
+    	 WHERE PRO_NO = #{proNo}
+	</update>
+	
 	<select id = "getContentProduct" resultType="map">
 		SELECT PRO.MEM_NO
 			 , PRO.PRO_NO
@@ -193,11 +200,12 @@
          	 , PRO.PRO_TITLE
          	 , PRO.PRO_CONTENT
          	 , PRO.PRO_IMG
+         	 , PRO.PRO_CATEGORY
          	 , TSC1.SCO_VALUE AS LOCATION_SUB
           	 , TDC1.DCO_VALUE AS LOCATION_VALUE
           	 , TSC2.SCO_VALUE AS TYPE_VALUE_SUB
           	 , TDC2.DCO_VALUE AS TYPE_VALUE
-          	 , TDC3.DCO_VALUE AS PRO_CATEGORY
+          	 , TDC3.DCO_VALUE AS PRO_CATEGORY_C
          	 , TSC4.SCO_VALUE AS PRO_STATUS_SUB
          	 , TDC4.DCO_VALUE AS PRO_STATUS
          	 , TSC5.SCO_VALUE AS PRO_NEG_SUB
@@ -227,8 +235,10 @@
         	ON PRO.PRO_STATE = TDC6.DCO_ID
           JOIN TEST_SUB_CODE TSC6
         	ON TDC6.SCO_ID = TSC6.SCO_ID
-         WHERE PRO.PRO_NO = '100'
+         WHERE PRO.PRO_NO = #{proNo}
 	</select>
+	
+	
 
 
 
