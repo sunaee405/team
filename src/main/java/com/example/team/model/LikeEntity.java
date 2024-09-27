@@ -41,7 +41,7 @@ public class LikeEntity {
 	
 	@PostLoad
 	private void post() {
-		this.MEM_NO = id.getMEM_NO();
-		this.PRO_NO = id.getPRO_NO();
+		this.MEM_NO = id.getMemNo();
+		this.PRO_NO = id.getProNo();
 	}
 }
