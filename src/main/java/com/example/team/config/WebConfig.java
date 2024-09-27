@@ -8,6 +8,8 @@ import org.thymeleaf.spring6.templateresolver.SpringResourceTemplateResolver;
 import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ITemplateResolver;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 
@@ -16,6 +18,7 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addResourceHandler("/images/**")
                 .addResourceLocations("file:///C:/Users/ITWILL/Desktop/upload/"); // 실제 이미지가 저장된 경로
     }
+    
     
 //    @Bean
 //    public ITemplateResolver yourTemplateResolver() {

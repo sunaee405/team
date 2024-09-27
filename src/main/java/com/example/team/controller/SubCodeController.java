@@ -1,0 +1,64 @@
+package com.example.team.controller;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.example.team.model.MainCodeEntity;
+import com.example.team.model.SubCodeEntity;
+import com.example.team.persistence.MainCodeRepository;
+import com.example.team.service.MainCodeService;
+import com.example.team.service.SubCodeService;
+
+@RestController
+@RequestMapping("/admin/subcodes")
+public class SubCodeController {
+	
+	@Autowired
+    private SubCodeService subCodeService;
+	@Autowired
+    private MainCodeRepository mainCodeRepository;
+
+    @GetMapping
+    public List<SubCodeEntity> getAllMainCodes() {
+    	
+        return subCodeService.findAll();
+    }
+
+//    @GetMapping("/{ID}")
+//    public MainCodeEntity getMainCode(@PathVariable Long ID) {
+//        return mainCodeService.findById(ID); // 조회
+//    }
+    
+    @PostMapping
+    public void insertSubCode(@RequestBody List<SubCodeEntity> subCodes) {
+    	subCodeService.save(subCodes); 
+    }
+
+    @PutMapping
+    public List<SubCodeEntity> updateSubCodes(@RequestBody List<SubCodeEntity> subCodes) {
+    	System.out.println("Received subCodes: " + subCodes);
+    	List<SubCodeEntity> updatedCodes = new ArrayList<>();
+        for (SubCodeEntity subCode : subCodes) {
+            updatedCodes.add(subCodeService.update(subCode.getID(), subCode)); // 각 메인코드 업데이트
+        }
+        return updatedCodes; // 업데이트된 데이터 반환
+    }
+
+    @DeleteMapping
+    public void deleteSubCodes(@RequestBody List<Long> ids) {
+    	for (Long id : ids) {
+            subCodeService.delete(id); // 각 ID로 삭제 메서드 호출
+        }
+    }
+}
