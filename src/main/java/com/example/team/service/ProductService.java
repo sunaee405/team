@@ -23,6 +23,7 @@ import com.example.team.Mapper.ProductMapper;
 import com.example.team.model.LikeEntity;
 import com.example.team.model.ProductEntity;
 import com.example.team.persistence.LikedRepository;
+import com.example.team.persistence.MemberRepository;
 import com.example.team.persistence.ProductRepository;
 import com.mysql.cj.log.Log;
 
@@ -40,6 +41,9 @@ public class ProductService {
 	
 	@Autowired
 	LikedRepository likedRepository;
+	
+	@Autowired
+	MemberRepository memberRepository;
 
 	@Autowired
 	ProductMapper productMapper;
@@ -69,6 +73,8 @@ public class ProductService {
 	}
 
 	public void insertProduct(Map<String, String> params) {
+		
+		int memNo = Integer.parseInt(params.get("memNo"));
 		String productTitle = (String) params.get("productTitle");
 		String fileNames = (String) params.get("fileNames");
 		String categoryCode = (String) params.get("categoryDcoId");
@@ -87,6 +93,7 @@ public class ProductService {
 		
 		// 엔티티 생성 후 데이터 설정
 		ProductEntity productEntity = new ProductEntity();
+		productEntity.setMemNo(memNo);
 		productEntity.setProTitle(productTitle);
 		productEntity.setProImg(fileNames); // 파일명들을 ,로 구분하여 저장
 		productEntity.setProCategory(categoryCode);
@@ -95,7 +102,6 @@ public class ProductService {
 		productEntity.setProPrice(productPrice);
 		productEntity.setProContent(productDescription);
 		productEntity.setProDate(currentDateTime);
-		productEntity.setProStatus("STD1");
 		productEntity.setProType(typeCode);
 		productEntity.setProNeg(negoCode);
 
@@ -170,6 +176,10 @@ public class ProductService {
 	public boolean isLiked(int memNo, int proNo) {
 	    return likedRepository.existsByMemNoAndProNo(memNo, proNo);
 	}
+
+	public Integer getMemNoByMemId(String memId) {
+        return productMapper.getMemNoByMemId(memId);
+    }
 	
 	
 }

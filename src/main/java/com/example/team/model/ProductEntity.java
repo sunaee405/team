@@ -3,6 +3,8 @@ package com.example.team.model;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
+import org.hibernate.annotations.ColumnDefault;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -57,8 +59,9 @@ public class ProductEntity {
     @Column(name = "PRO_CONTENT", columnDefinition = "LONGTEXT")  // DB에서 PRO_CONTENT 컬럼에 매핑
     private String proContent;
     
+    @ColumnDefault("'STD1'") // default
     @Column(name = "PRO_STATUS", length = 50)  // DB에서 PRO_STATUS 컬럼에 매핑
-    private String proStatus;
+    private String proStatus = "STD1";
     
     @Column(name = "PRO_VIEWS")  // DB에서 PRO_VIEWS 컬럼에 매핑
     private int proViews;

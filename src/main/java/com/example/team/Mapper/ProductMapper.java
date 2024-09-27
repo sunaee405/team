@@ -47,6 +47,8 @@ public interface ProductMapper {
 
 	Map<String, Object> getContentProduct(int proNo);
 
+	Integer getMemNoByMemId(String memId);
+
 	
 	
 	

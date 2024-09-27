@@ -191,11 +191,11 @@ $(document).ready(function() {
 					randomProducts.forEach(function(product) {
 						const images = product.pro_img ? product.pro_img.split(',') : [];
 						const imageUrl = images.length > 0 ? '/images/' + images[0] : '/images/default.png';
-						const productUrl = '/productDetail?proNo=' + product.pro_no;
+						const productUrl = '/product/contentProduct?proNo=' + product.pro_no;
 
 						otherProductHtml += `
             				<li class="flex py-3 h-[160px] overflow-hidden">
-                				<a href="${productUrl}" rel="sponsored noreferrer" target="_blank" class="mr-3 flex justify-center items-start min-w-[120px] relative">
+                				<a href="${productUrl}" rel="sponsored noreferrer" class="mr-3 flex justify-center items-start min-w-[120px] relative">
                     				<img src="${imageUrl}" width="120" height="120" decoding="async" data-nimg="1" class="transition duration-150 ease-linear transform rounded-md cursor-pointer hover:scale-105" style="color: transparent;">
                 				</a>
                 				<div class="flex flex-col justify-start gap-1 py-1 break-all">
@@ -233,11 +233,11 @@ $(document).ready(function() {
 					randomProducts.forEach(function(product) {
 						const images = product.pro_img ? product.pro_img.split(',') : [];
 						const imageUrl = images.length > 0 ? '/images/' + images[0] : '/images/default.png';
-						const productUrl = '/productDetail?proNo=' + product.pro_no;
+						const productUrl = '/product/contentProduct?proNo=' + product.pro_no;
 
 						otherProductHtml2 += `
             				<li class="flex py-3 h-[160px] overflow-hidden">
-                				<a href="${productUrl}" rel="sponsored noreferrer" target="_blank" class="mr-3 flex justify-center items-start min-w-[120px] relative">
+                				<a href="${productUrl}" rel="sponsored noreferrer" class="mr-3 flex justify-center items-start min-w-[120px] relative">
                     				<img src="${imageUrl}" width="120" height="120" decoding="async" data-nimg="1" class="transition duration-150 ease-linear transform rounded-md cursor-pointer hover:scale-105" style="color: transparent;">
                 				</a>
                 				<div class="flex flex-col justify-start gap-1 py-1 break-all">

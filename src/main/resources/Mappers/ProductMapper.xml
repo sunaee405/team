@@ -238,6 +238,11 @@
          WHERE PRO.PRO_NO = #{proNo}
 	</select>
 	
+	<select id="getMemNoByMemId" resultType="Integer">
+    	SELECT MEM_NO
+    	  FROM MEMBERS
+    	 WHERE MEM_ID = #{memId}
+	</select>
 	
 
 

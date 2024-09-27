@@ -1,4 +1,5 @@
 $(document).ready(function() {
+	
 	const uploadButton = document.getElementById('imageUploadButton');
 	const imageInput = document.getElementById('imageInput');
 	const imageList = document.getElementById('imageList');
@@ -6,7 +7,6 @@ $(document).ready(function() {
 	let currentImageCount = 0;
 	const maxImages = 5;
 	let selectedFiles = []; // 여러 개의 파일을 저장할 배열
-
 
 	// 이미지 갯수 업데이트 함수
 	function updateImageCountDisplay() {
@@ -63,7 +63,8 @@ $(document).ready(function() {
                         <svg width="20px" height="20px" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M10 18C14.4183 18 18 14.4183 18 10C18 5.58172 14.4183 2 10 2C5.58172 2 2 5.58172 2 10C2 14.4183 5.58172 18 10 18Z" fill="white"></path>
                             <path d="M17.5 10C17.5 14.1421 14.1421 17.5 10 17.5V18.5C14.6944 18.5 18.5 14.6944 18.5 10H17.5ZM10 17.5C5.85786 17.5 2.5 14.1421 2.5 10H1.5C1.5 14.6944 5.30558 18.5 10 18.5V17.5ZM2.5 10C2.5 5.85786 5.85786 2.5 10 2.5V1.5C5.30558 1.5 1.5 5.30558 1.5 10H2.5ZM10 2.5C14.1421 2.5 17.5 5.85786 17.5 10H18.5C18.5 5.30558 14.6944 1.5 10 1.5V2.5Z" fill="#DADEE5"></path>
-                            <path d="M7 7L13 13M13 7L7 13" stroke="#363C45" stroke-linecap="round"></path>`;
+                            <path d="M7 7L13 13M13 7L7 13" stroke="#363C45" stroke-linecap="round"></path>
+                        </svg>`;
 
 					// 삭제 버튼 클릭 이벤트
 					deleteButton.addEventListener('click', function() {
@@ -193,49 +194,42 @@ $(document).ready(function() {
 		}
 	});
 
-
+	// 상품 상태 버튼 생성
 	$.ajax({
-		url: '/getProductState',  // 상품 상태 데이터를 가져오는 엔드포인트
+		url: '/getProductState',
 		type: 'GET',
 		success: function(data) {
 			var productStateDiv = document.getElementById('productState_depth');
-			productStateDiv.innerHTML = '';  // 기존 버튼을 초기화
+			productStateDiv.innerHTML = '';
 
-			// 상품 상태 값들을 가져와서 버튼을 생성
 			data.forEach(function(item, index) {
 				var button = document.createElement('button');
 				button.type = 'button';
-				button.classList.add('h-10', 'w-[80px]', 'rounded-md', 'border', 'border-solid', 'font-semibold', 'text-base', 'mb-2');  // 기본 비선택 상태
-				button.textContent = item["DCO_VALUE"];  // 버튼 텍스트는 DCO_VALUE로 설정
+				button.classList.add('h-10', 'w-[80px]', 'rounded-md', 'border', 'border-solid', 'font-semibold', 'text-base', 'mb-2');
+				button.textContent = item["DCO_VALUE"];
 
-				// 버튼의 data-* 속성에 DCO_ID, SCO_ID, MCO_ID 저장
 				button.setAttribute('data-stateid', item["DCO_ID"]);
 				button.setAttribute('data-scoid', item["SCO_ID"]);
 				button.setAttribute('data-mcoid', item["MCO_ID"]);
 
-				// 첫 번째 버튼이 초기 선택 상태로 설정되도록 함
 				if (index === 0) {
 					button.classList.add('text-white', 'bg-jngreen', 'border-jngreen');
-					button.classList.add('selected');  // 초기 선택된 상태로 설정
+					button.classList.add('selected');
 				} else {
 					button.classList.add('text-jnblack', 'bg-white', 'border-jnblack');
 				}
 
-				// 버튼 클릭 이벤트
 				button.addEventListener('click', function() {
-					// 이전에 선택된 버튼의 스타일을 기본 상태로 변경
 					var selectedButton = document.querySelector('#productState_depth .selected');
 					if (selectedButton) {
 						selectedButton.classList.remove('selected', 'text-white', 'bg-jngreen', 'border-jngreen');
 						selectedButton.classList.add('text-jnblack', 'bg-white', 'border-jnblack');
 					}
 
-					// 현재 클릭된 버튼을 선택 상태로 설정
 					this.classList.add('selected', 'text-white', 'bg-jngreen', 'border-jngreen');
 					this.classList.remove('text-jnblack', 'bg-white', 'border-jnblack');
 				});
 
-				// 생성한 버튼을 div 안에 추가
 				productStateDiv.appendChild(button);
 			});
 		},
@@ -244,47 +238,40 @@ $(document).ready(function() {
 		}
 	});
 
+	// 판매 타입 버튼 생성
 	$.ajax({
-		url: '/getProductType',  // 판매 타입 데이터를 가져오는 엔드포인트
+		url: '/getProductType',
 		type: 'GET',
 		success: function(data) {
-			console.log("Received data: ", data);  // 데이터가 제대로 들어오는지 확인
 			var productTypeDiv = document.getElementById('productType_depth');
-			productTypeDiv.innerHTML = '';  // 기존 버튼을 초기화
+			productTypeDiv.innerHTML = '';
 
-			// 판매 타입 값들을 가져와서 버튼을 생성
 			data.forEach(function(item, index) {
 				var button = document.createElement('button');
 				button.type = 'button';
-				button.classList.add('h-10', 'w-[80px]', 'rounded-md', 'border', 'border-solid', 'font-semibold', 'text-base', 'mb-2');  // 기본 비선택 상태
-				button.textContent = item["DCO_VALUE"];  // 버튼 텍스트는 DCO_VALUE로 설정
+				button.classList.add('h-10', 'w-[80px]', 'rounded-md', 'border', 'border-solid', 'font-semibold', 'text-base', 'mb-2');
+				button.textContent = item["DCO_VALUE"];
 
-				// 버튼의 data-* 속성에 DCO_ID 저장
 				button.setAttribute('data-typeid', item["DCO_ID"]);
 
-				// 첫 번째 버튼이 초기 선택 상태로 설정되도록 함
 				if (index === 0) {
 					button.classList.add('text-white', 'bg-jngreen', 'border-jngreen');
-					button.classList.add('selected');  // 초기 선택된 상태로 설정
+					button.classList.add('selected');
 				} else {
 					button.classList.add('text-jnblack', 'bg-white', 'border-jnblack');
 				}
 
-				// 버튼 클릭 이벤트
 				button.addEventListener('click', function() {
-					// 이전에 선택된 버튼의 스타일을 기본 상태로 변경
 					var selectedButton = document.querySelector('#productType_depth .selected');
 					if (selectedButton) {
 						selectedButton.classList.remove('selected', 'text-white', 'bg-jngreen', 'border-jngreen');
 						selectedButton.classList.add('text-jnblack', 'bg-white', 'border-jnblack');
 					}
 
-					// 현재 클릭된 버튼을 선택 상태로 설정
 					this.classList.add('selected', 'text-white', 'bg-jngreen', 'border-jngreen');
 					this.classList.remove('text-jnblack', 'bg-white', 'border-jnblack');
 				});
 
-				// 생성한 버튼을 div 안에 추가
 				productTypeDiv.appendChild(button);
 			});
 		},
@@ -293,47 +280,40 @@ $(document).ready(function() {
 		}
 	});
 
+	// 네고 여부 버튼 생성
 	$.ajax({
-		url: '/getProductNego',  // 네고 여부 데이터를 가져오는 엔드포인트
+		url: '/getProductNego',
 		type: 'GET',
 		success: function(data) {
-			console.log("Received data for nego: ", data);  // 데이터가 제대로 들어오는지 확인
 			var productNegoDiv = document.getElementById('productNego_depth');
-			productNegoDiv.innerHTML = '';  // 기존 버튼을 초기화
+			productNegoDiv.innerHTML = '';
 
-			// 네고 여부 값들을 가져와서 버튼을 생성
 			data.forEach(function(item, index) {
 				var button = document.createElement('button');
 				button.type = 'button';
-				button.classList.add('h-10', 'w-[80px]', 'rounded-md', 'border', 'border-solid', 'font-semibold', 'text-base', 'mb-2');  // 기본 비선택 상태
-				button.textContent = item["DCO_VALUE"];  // 버튼 텍스트는 DCO_VALUE로 설정
+				button.classList.add('h-10', 'w-[80px]', 'rounded-md', 'border', 'border-solid', 'font-semibold', 'text-base', 'mb-2');
+				button.textContent = item["DCO_VALUE"];
 
-				// 버튼의 data-* 속성에 DCO_ID 저장
 				button.setAttribute('data-negoid', item["DCO_ID"]);
 
-				// 첫 번째 버튼이 초기 선택 상태로 설정되도록 함
 				if (index === 0) {
 					button.classList.add('text-white', 'bg-jngreen', 'border-jngreen');
-					button.classList.add('selected');  // 초기 선택된 상태로 설정
+					button.classList.add('selected');
 				} else {
 					button.classList.add('text-jnblack', 'bg-white', 'border-jnblack');
 				}
 
-				// 버튼 클릭 이벤트
 				button.addEventListener('click', function() {
-					// 이전에 선택된 버튼의 스타일을 기본 상태로 변경
 					var selectedButton = document.querySelector('#productNego_depth .selected');
 					if (selectedButton) {
 						selectedButton.classList.remove('selected', 'text-white', 'bg-jngreen', 'border-jngreen');
 						selectedButton.classList.add('text-jnblack', 'bg-white', 'border-jnblack');
 					}
 
-					// 현재 클릭된 버튼을 선택 상태로 설정
 					this.classList.add('selected', 'text-white', 'bg-jngreen', 'border-jngreen');
 					this.classList.remove('text-jnblack', 'bg-white', 'border-jnblack');
 				});
 
-				// 생성한 버튼을 div 안에 추가
 				productNegoDiv.appendChild(button);
 			});
 		},
@@ -342,18 +322,16 @@ $(document).ready(function() {
 		}
 	});
 
-	// textarea와 charCount 요소를 가져옵니다.
+	// 상품 설명 글자 수 표시
 	const productDescription = document.getElementById('productDescription');
 	const charCount = document.getElementById('charCount');
 
-	// textarea의 input 이벤트에 대해 리스너를 추가합니다.
 	productDescription.addEventListener('input', function() {
-		// 글자 수를 계산하고 span에 업데이트합니다.
 		const currentLength = productDescription.value.length;
 		charCount.textContent = `${currentLength}/1000`;
 	});
 
-	// 폼 제출 시 이미지 파일도 함께 전송
+	// 폼 제출 시
 	document.getElementById('insertProductForm').addEventListener('submit', function(e) {
 		e.preventDefault();
 
@@ -364,40 +342,28 @@ $(document).ready(function() {
 			formData.append('media', file);
 		});
 
-		// 선택된 카테고리의 MCO_ID, SCO_ID, DCO_ID 가져오기
+		// 선택된 카테고리의 DCO_ID 가져오기
 		const categorySelect = document.getElementById('categoryList');
 		const selectedCategoryOption = categorySelect.options[categorySelect.selectedIndex];
-		const categoryDcoId = selectedCategoryOption.value; // DCO_ID (예: 'PCD1')
-		//		const categoryScoId = selectedCategoryOption.getAttribute('data-scoid'); // SCO_ID (예: 'PRS')
-		//		const categoryMcoId = selectedCategoryOption.getAttribute('data-mcoid'); // MCO_ID (예: 'MAM')
+		const categoryDcoId = selectedCategoryOption.value;
 
 		// 카테고리 값 FormData에 추가
 		formData.append('categoryDcoId', categoryDcoId);
-		//		formData.append('categoryScoId', categoryScoId);
-		//		formData.append('categoryMcoId', categoryMcoId);
 
-		// 선택된 지역의 MCO_ID, SCO_ID, DCO_ID 가져오기
+		// 선택된 지역의 DCO_ID 가져오기
 		const locationSelect = document.getElementById('locationList2');
 		const selectedLocationOption = locationSelect.options[locationSelect.selectedIndex];
-		const locationDcoId = selectedLocationOption.value; // DCO_ID (예: 'LOD1')
-		//		const locationScoId = selectedLocationOption.getAttribute('data-scoid'); // SCO_ID (예: 'LOS')
-		//		const locationMcoId = selectedLocationOption.getAttribute('data-mcoid'); // MCO_ID (예: 'LOM')
+		const locationDcoId = selectedLocationOption.value;
 
 		// 지역 값 FormData에 추가
 		formData.append('locationDcoId', locationDcoId);
-		//		formData.append('locationScoId', locationScoId);
-		//		formData.append('locationMcoId', locationMcoId);
 
-		// 선택된 상품 상태의 DCO_ID, SCO_ID, MCO_ID 가져오기
+		// 선택된 상품 상태의 DCO_ID 가져오기
 		const selectedStateButton = document.querySelector('#productState_depth .selected');
 		const selectedStateDcoId = selectedStateButton.getAttribute('data-stateid');
-		//		const selectedStateScoId = selectedStateButton.getAttribute('data-scoid');
-		//		const selectedStateMcoId = selectedStateButton.getAttribute('data-mcoid');
 
 		// 선택된 상품 상태 값 FormData에 추가
-		formData.append('stateDcoId', selectedStateDcoId);  // 선택된 상품 상태의 DCO_ID
-		//		formData.append('stateScoId', selectedStateScoId);  // 선택된 상품 상태의 SCO_ID
-		//		formData.append('stateMcoId', selectedStateMcoId);  // 선택된 상품 상태의 MCO_ID
+		formData.append('stateDcoId', selectedStateDcoId);
 
 		// 선택된 판매 타입의 DCO_ID 가져오기
 		const selectedTypeButton = document.querySelector('#productType_depth .selected');
@@ -407,28 +373,38 @@ $(document).ready(function() {
 		// 선택된 네고 여부의 DCO_ID 가져오기
 		const selectedNegoButton = document.querySelector('#productNego_depth .selected');
 		const selectedNegoDcoId = selectedNegoButton.getAttribute('data-negoid');
-		formData.append('negoDcoId', selectedNegoDcoId);  // 네고 여부의 DCO_ID 추가
+		formData.append('negoDcoId', selectedNegoDcoId);
 
-		// FormData의 내용을 콘솔에 출력 (디버깅용)
-		for (var pair of formData.entries()) {
-			console.log(pair[0] + ', ' + pair[1]);
-		}
-
-		// AJAX 요청
+		// 세션에서 MEM_NO를 가져오기 위한 AJAX 호출
 		$.ajax({
-			url: '/insertProduct',
-			type: 'POST',
-			data: formData,
-			processData: false,  // 파일 처리
-			contentType: false,  // multipart/form-data 자동 처리
-			success: function(response) {
-				alert('판매등록을 완료했습니다!');
-				window.location.href = response.redirectUrl;
+			url: '/getMemNoByMemId',
+			type: 'GET',
+			success: function(memNo) {
+				if (memNo === null) {
+					alert('회원 정보를 찾을 수 없습니다.');
+					return;
+				}
+				console.log('MEM_NO:', memNo);
+				// MEM_NO를 formData에 추가
+				formData.append('memNo', memNo);
+
+				// insertProduct AJAX 요청 보내기
+				$.ajax({
+					url: '/insertProduct',
+					type: 'POST',
+					data: formData,
+					processData: false,  // 파일 처리
+					contentType: false,  // multipart/form-data 자동 처리
+					success: function(response) {
+						alert('판매등록을 완료했습니다!');
+						window.location.href = response.redirectUrl;  // 필요에 따라 활성화
+					},
+					error: function(xhr, status, error) {
+						console.error('Error occurred:', error);
+						alert('판매등록에 실패했습니다.');
+					}
+				});
 			},
-			error: function(xhr, status, error) {
-				console.error('Error occurred:', error);
-				alert('판매등록에 실패했습니다.');
-			}
 		});
 	});
 });

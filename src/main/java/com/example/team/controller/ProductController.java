@@ -30,6 +30,7 @@ import com.example.team.service.ProductService;
 
 import jakarta.inject.Inject;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -47,6 +48,28 @@ public class ProductController {
 
 
 	// =================================== 상품 등록 ===================================
+	
+	@GetMapping("/getMemNoByMemId")
+	@ResponseBody
+	public ResponseEntity<Integer> getMemNoByMemId(HttpSession session) {
+	    String memId = (String) session.getAttribute("MEM_ID");
+	    System.out.println("memId from session: " + memId);
+
+	    if (memId == null) {
+	        System.out.println("memId is null. User is not logged in.");
+	        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+	    }
+
+	    Integer memNo = productService.getMemNoByMemId(memId);
+	    System.out.println("memNo from DB: " + memNo);
+
+	    if (memNo == null) {
+	        System.out.println("No memNo found for memId: " + memId);
+	        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+	    }
+
+	    return ResponseEntity.ok(memNo);
+	}
 
 	@GetMapping("/getProductCategory")
 	@ResponseBody
@@ -78,62 +101,15 @@ public class ProductController {
 		return productService.getProductNego();
 	}
 
-//	@PostMapping("/insertProduct")
-//	@ResponseBody
-//	public ResponseEntity<?> insertProduct(@RequestParam("media") MultipartFile[] media, //
-//										   @RequestParam Map<String, String> params) throws Exception {
-//
-//		String productTitle = params.get("productTitle");
-//		String categoryCode = params.get("categoryDcoId");
-//		String locationCode = params.get("locationDcoId");
-//		String stateCode = params.get("stateDcoId");
-//		String typeCode = params.get("typeDcoId");
-//		String negoCode = params.get("negoDcoId");
-//		String productPrice = params.get("productPrice");
-//		String productDescription = params.get("productDescription");
-//
-//		// 파일 저장 경로 설정
-//
-//		// 집
-//// 		String desktopPath = "C:\\Users\\Anibal\\Desktop\\upload";
-//
-//		// 학원
-//		String desktopPath = "C:\\Users\\ITWILL\\Desktop\\upload";
-//		List<String> savedFileNames = new ArrayList<>();
-//
-//		for (MultipartFile file : media) { // media 배열로 파일 처리
-//			UUID uuid = UUID.randomUUID();
-//			String fileName = uuid.toString() + "_" + file.getOriginalFilename();
-//			FileCopyUtils.copy(file.getBytes(), new File(desktopPath, fileName));
-//			savedFileNames.add(fileName);
-//		}
-//
-//		// 카테고리 값을 MCO_ID + SCO_ID + DCO_ID 형태로 변환
-//
-//		// 파일명을 Map에 저장
-//		Map<String, Object> productData = new HashMap<>();
-//		productData.put("productTitle", productTitle);
-//		productData.put("fileNames", String.join(",", savedFileNames)); // 파일명을 ','로 구분하여 저장
-//		productData.put("categoryCode", categoryCode);
-//		productData.put("locationCode", locationCode);
-//		productData.put("stateCode", stateCode);
-//		productData.put("productPrice", productPrice);
-//		productData.put("productDescription", productDescription);
-//		productData.put("typeCode", typeCode);
-//		productData.put("negoCode", negoCode);
-//
-//		// 서비스 호출
-//		productService.insertProduct(productData);
-//
-//		return ResponseEntity.ok().body("Product successfully saved!");
-//
-//	}
 	
 	@PostMapping("/insertProduct")
 	@ResponseBody
 	public ResponseEntity<?> insertProduct(@RequestParam("media") MultipartFile[] media,
 	                                       @RequestParam Map<String, String> params) throws Exception {
-
+		
+		// 집
+//		String desktopPath = "C:\\Users\\Anibal\\Desktop\\upload";
+		
 	    // 파일 저장 경로 설정
 	    String desktopPath = "C:\\Users\\ITWILL\\Desktop\\upload";
 	    List<String> savedFileNames = new ArrayList<>();
