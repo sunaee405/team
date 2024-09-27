@@ -1,5 +1,6 @@
 package com.example.team.controller;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +32,6 @@ public class ApiLoginController {
 
 	private static final String NAVER_LOGOUT_API_URL = "https://nid.naver.com/oauth2.0/token";
 
-	@GetMapping(value = "/api/naverLogin")
 	public String naverLogin(@RequestParam("code") String code, @RequestParam("state") String state,
 			HttpSession session) {
 		String accessToken = memberService.getNaverAccessToken(code, state);
@@ -44,30 +44,28 @@ public class ApiLoginController {
 		String memId = (String) response.get("id");
 		long checkMemId = memberService.checkId(memId);
 
-		MemberEntity member = new MemberEntity();
+		Map<String, Object> data = new HashMap<>();
 
 		if (checkMemId == 0) {
+			data.put("MEM_ID", memId);
+			data.put("MEM_NICK", "@Naver" + (String) response.get("nickname"));
+			data.put("MEM_GENDER", (String) response.get("gender"));
+			data.put("MEM_EMAIL", (String) response.get("email"));
+			data.put("MEM_TEL", ((String) response.get("mobile")).replace("-", ""));
+			data.put("MEM_NAME", (String) response.get("name"));
 
-			member.setMemId(memId);
-			member.setMemNick("@Naver" + (String) response.get("nickname"));
-			member.setMemGender((String) response.get("gender"));
-			member.setMemEmail((String) response.get("email"));
-			member.setMemTel(((String) response.get("mobile")).replace("-", ""));
-			member.setMemName((String) response.get("name"));
 			String birthYear = (String) response.get("birthyear");
 			String birthDay = (String) response.get("birthday");
-			member.setMemBirth(birthYear.substring(2) + birthDay.replace("-", ""));
-			member.setMEM_SNS("T");
-			member.setMEM_STATUS("F");
-			member.setMemPw("");
+			data.put("MEM_BIRTH", birthYear.substring(2) + birthDay.replace("-", ""));
+			data.put("MEM_SNS", "T");
+			data.put("MEM_STATUS", "F");
+			data.put("MEM_PW", ""); 
 
-			memberService.insertUser(member);
-
+			memberService.naverInsertUser(data);
 		}
 
 		session.setAttribute("MEM_ID", memId);
 
-		// 리디렉션할 URL을 반환
 		return "member/login"; // 리디렉션할 URL을 문자열로 반환
 	}
 
