@@ -6,6 +6,16 @@ $(document).ready(function() {
 	const maxImages = 5; // 최대 이미지 개수
 	let currentImageCount = 0; // 현재 이미지 수
 
+	// 이미지 갯수 업데이트 함수
+	function updateImageCountDisplay() {
+		$('#imageCount').text(`${currentImageCount}/${maxImages}`);
+	}
+
+	// 이미지 업로드 버튼 클릭 이벤트 추가
+	$('#imageUploadButton').on('click', function() {
+		$('#imageInput').click(); // 파일 선택 창 열기
+	});
+
 	// 상품 데이터를 가져오기 위한 AJAX 호출
 	$.ajax({
 		url: '/getContentProduct',
@@ -26,11 +36,6 @@ $(document).ready(function() {
 
 			existingImages = images; // 기존 이미지 저장
 			currentImageCount = images.length; // 현재 이미지 수는 불러온 이미지 수
-
-			// 이미지 갯수 업데이트 함수
-			function updateImageCountDisplay() {
-				$('#imageCount').text(`${currentImageCount}/${maxImages}`);
-			}
 
 			// 초기 이미지 개수 표시
 			updateImageCountDisplay();
@@ -71,6 +76,9 @@ $(document).ready(function() {
 				liElement.appendChild(deleteButton);
 				imageList.appendChild(liElement);
 			});
+
+			// 이미지 갯수 업데이트 함수 호출
+			updateImageCountDisplay();
 
 			// 카테고리 데이터를 가져와서 셀렉트 박스에 추가
 			$.ajax({
@@ -125,22 +133,18 @@ $(document).ready(function() {
 					selectElement1.id = 'locationList1';
 					selectElement1.classList.add('flex', 'flex-col', 'border-solid', 'border-jnGray-300');
 
+					// 기본 옵션 추가
 					var defaultOption1 = document.createElement('option');
 					defaultOption1.value = '';
 					defaultOption1.textContent = '지역 선택';
-					defaultOption1.disabled = true;  // 기본 옵션을 비활성화하여 목록에 표시되지 않게 함
+					defaultOption1.disabled = true;
+					defaultOption1.selected = true; // 기본 옵션을 선택 상태로 설정
 					selectElement1.appendChild(defaultOption1);
 
 					// 하위 지역 선택
 					var selectElement2 = document.createElement('select');
 					selectElement2.id = 'locationList2';
 					selectElement2.classList.add('flex', 'flex-col', 'border-solid', 'border-jnGray-300');
-
-					var defaultOption2 = document.createElement('option');
-					defaultOption2.value = '';
-					defaultOption2.textContent = '세부 지역 선택';
-					defaultOption2.disabled = true;  // 기본 옵션을 비활성화하여 목록에 표시되지 않게 함
-					selectElement2.appendChild(defaultOption2);
 
 					var scoMap = new Map();
 					data.forEach(function(item) {
@@ -158,27 +162,60 @@ $(document).ready(function() {
 						scoMap.get(item["SCO_ID"]).push({ DCO_ID: item["DCO_ID"], DCO_VALUE: item["DCO_VALUE"], MCO_ID: item["MCO_ID"] });
 					});
 
-					// 하위 지역 추가
-					scoMap.forEach((dcoList, scoId) => {
+					// 상위 지역 선택 박스를 페이지에 추가
+					locationDiv1.appendChild(selectElement1);
+
+					// 하위 지역 선택 박스를 페이지에 추가
+					locationDiv2.appendChild(selectElement2);
+
+					// 하위 지역 목록 업데이트 함수
+					function updateLowerRegions(selectedUpperRegionId) {
+						// 하위 지역 선택 박스 초기화
+						selectElement2.innerHTML = '';
+
+						// 기본 옵션 추가
+						var defaultOption2 = document.createElement('option');
+						defaultOption2.value = '';
+						defaultOption2.textContent = '세부 지역 선택';
+						defaultOption2.disabled = true;
+						defaultOption2.selected = true; // 기본 옵션을 선택 상태로 설정
+						selectElement2.appendChild(defaultOption2);
+
+						if (!selectedUpperRegionId) {
+							// 상위 지역이 선택되지 않은 경우 하위 지역 목록을 표시하지 않음
+							return;
+						}
+
+						// 선택된 상위 지역에 해당하는 하위 지역 목록 가져오기
+						var dcoList = scoMap.get(selectedUpperRegionId) || [];
+
 						dcoList.forEach(function(dcoItem) {
 							var option2 = document.createElement('option');
 							option2.value = dcoItem["DCO_ID"];
 							option2.textContent = dcoItem["DCO_VALUE"];
-							option2.setAttribute('data-scoid', scoId);
+							option2.setAttribute('data-scoid', selectedUpperRegionId);
 							if (dcoItem["DCO_VALUE"] === productLocationValue) {
 								option2.selected = true;  // 불러온 하위 지역과 일치하는 항목을 선택
 							}
 							selectElement2.appendChild(option2);
 						});
+					}
+
+					// 상위 지역 선택 시 이벤트 처리
+					selectElement1.addEventListener('change', function() {
+						var selectedUpperRegionId = this.value;
+						updateLowerRegions(selectedUpperRegionId);
 					});
 
-					locationDiv1.appendChild(selectElement1);
-					locationDiv2.appendChild(selectElement2);
+					// 페이지 로드 시 초기 하위 지역 목록 업데이트
+					var initialSelectedUpperRegionId = selectElement1.value || null;
+					updateLowerRegions(initialSelectedUpperRegionId);
 				},
 				error: function(xhr, status, error) {
 					console.error('Error occurred:', error);
 				}
 			});
+
 
 			// 상품 상태 버튼 생성 및 기본 값 설정
 			$.ajax({
@@ -378,6 +415,8 @@ $(document).ready(function() {
 			}
 
 			selectedFiles.push(file); // 배열에 파일 추가
+			currentImageCount++; // 이미지 갯수 증가
+			updateImageCountDisplay(); // 이미지 갯수 업데이트
 
 			const reader = new FileReader();
 			reader.onload = function(e) {
@@ -415,10 +454,6 @@ $(document).ready(function() {
 				liElement.appendChild(imgElement);
 				liElement.appendChild(deleteButton);
 				$('#imageList').append(liElement);
-
-				// 이미지 갯수 업데이트
-				currentImageCount++;
-				updateImageCountDisplay();
 			};
 			reader.readAsDataURL(file);
 		});
@@ -456,22 +491,22 @@ $(document).ready(function() {
 		const selectedStatusButton = document.querySelector('#productStatus_depth .selected');
 		formData.append('statusDcoId', selectedStatusButton.getAttribute('data-statusid'));
 
-		// 기존 이미지 파일 목록 추가
-		existingImages.forEach(image => {
-			if (!deletedFiles.includes(image)) {
-				formData.append('existingImages', image);
-			}
-		});
+		// 기존 이미지 파일 목록을 콤마로 구분된 문자열로 변환하여 추가
+		let remainingImagesArray = existingImages.filter(image => !deletedFiles.includes(image));
+		formData.append('remainingImages', remainingImagesArray.join(','));
 
-		// 삭제된 이미지 목록 추가
-		deletedFiles.forEach(file => {
-			formData.append('deletedFiles', file);
-		});
+		// 삭제된 이미지 목록도 동일하게 처리
+		formData.append('deletedImages', deletedFiles.join(','));
 
-		// 새로 추가된 이미지 파일 추가
-		selectedFiles.forEach(file => {
-			formData.append('newImages', file);
-		});
+		// 새로 추가된 이미지 파일 추가 (키 이름을 'media'로 유지)
+		if (selectedFiles.length > 0) {
+			selectedFiles.forEach(file => {
+				formData.append('media', file);
+			});
+		} else {
+			// 이미지를 업로드하지 않더라도 빈 Blob을 전송하여 'media' 파라미터를 포함시킴
+			formData.append('media', new Blob());
+		}
 
 		// 수정 요청을 AJAX로 전송
 		$.ajax({
@@ -482,7 +517,7 @@ $(document).ready(function() {
 			contentType: false,
 			success: function(response) {
 				alert('상품 수정이 완료되었습니다.');
-				window.location.href = '/product/contentProduct?proNo=' + proNo;
+				window.location.href = response.redirectUrl;
 			},
 			error: function(error) {
 				console.error('상품 수정 중 오류 발생:', error);

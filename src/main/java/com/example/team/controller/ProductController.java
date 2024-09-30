@@ -5,10 +5,12 @@ import java.net.MalformedURLException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -211,37 +213,47 @@ public class ProductController {
 
 	@PostMapping("/updateProduct")
 	@ResponseBody
-	public ResponseEntity<?> updateProduct(@RequestParam("media") MultipartFile[] media,
-										   @RequestParam Map<String, String> params) throws Exception {
-		
-		// 집
-//		String desktopPath = "C:\\Users\\Anibal\\Desktop\\upload";
+	public ResponseEntity<?> updateProduct(@RequestParam(value = "media", required = false) MultipartFile[] media,
+			@RequestParam Map<String, String> params) throws Exception {
 
 		String desktopPath = "C:\\Users\\ITWILL\\Desktop\\upload";
 		List<String> savedFileNames = new ArrayList<>();
 
 		// 새로 업로드된 파일 처리
-		for (MultipartFile file : media) {
-			if (!file.isEmpty()) {
-				UUID uuid = UUID.randomUUID();
-				String fileName = uuid.toString() + "_" + file.getOriginalFilename();
-				FileCopyUtils.copy(file.getBytes(), new File(desktopPath, fileName));
-				savedFileNames.add(fileName);
+		if (media != null) {
+			for (MultipartFile file : media) {
+				if (!file.isEmpty()) {
+					UUID uuid = UUID.randomUUID();
+					String fileName = uuid.toString() + "_" + file.getOriginalFilename();
+					FileCopyUtils.copy(file.getBytes(), new File(desktopPath, fileName));
+					savedFileNames.add(fileName);
+				}
 			}
 		}
 
 		// 기존에 남겨진 이미지와 새 이미지 합치기
-		String remainingImages = params.get("remainingImages");
-		String allImages = remainingImages != null ? remainingImages + "," + String.join(",", savedFileNames)
-				: String.join(",", savedFileNames);
+		String remainingImagesParam = params.get("remainingImages");
+		List<String> remainingImagesList = new ArrayList<>();
+
+		if (remainingImagesParam != null && !remainingImagesParam.isEmpty()) {
+			String[] remainingImagesArray = remainingImagesParam.split(",");
+			remainingImagesList = Arrays.stream(remainingImagesArray).filter(s -> !s.isEmpty())
+					.collect(Collectors.toList());
+		}
+
+		remainingImagesList.addAll(savedFileNames); // 새로 업로드된 이미지 추가
+		String allImages = String.join(",", remainingImagesList);
 
 		// 삭제된 이미지 파일 처리
-		String[] deletedImages = params.get("deletedImages").split(",");
-		for (String image : deletedImages) {
-			if (!image.isEmpty()) {
-				File fileToDelete = new File(desktopPath, image);
-				if (fileToDelete.exists()) {
-					fileToDelete.delete(); // 파일 삭제
+		String deletedImagesParam = params.get("deletedImages");
+		if (deletedImagesParam != null && !deletedImagesParam.isEmpty()) {
+			String[] deletedImagesArray = deletedImagesParam.split(",");
+			for (String image : deletedImagesArray) {
+				if (!image.isEmpty()) {
+					File fileToDelete = new File(desktopPath, image);
+					if (fileToDelete.exists()) {
+						fileToDelete.delete(); // 파일 삭제
+					}
 				}
 			}
 		}

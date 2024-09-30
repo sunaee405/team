@@ -201,13 +201,13 @@ $(document).ready(function() {
 
 					// products 배열을 무작위로 섞은 후, 앞에서부터 3개만 선택
 					const randomProducts = products.sort(() => 0.5 - Math.random()).slice(0, 3);
-					console.log(memNo);
 
 					randomProducts.forEach(function(product) {
 						const images = product.pro_img ? product.pro_img.split(',') : [];
 						const imageUrl = images.length > 0 ? '/images/' + images[0] : '/images/default.png';
 						const productUrl = '/product/contentProduct?proNo=' + product.pro_no;
-
+						
+						// 숨겨둔 memNo
 						otherProductHtml += `
             				<li class="flex py-3 h-[160px] overflow-hidden">
                 				<a href="${productUrl}" rel="sponsored noreferrer" class="mr-3 flex justify-center items-start min-w-[120px] relative">
@@ -220,7 +220,7 @@ $(document).ready(function() {
                     				</div>
                 				</div>
             				</li>
-            				<input type="hidden" id="" name="" value="memNo">
+            				<input type="hidden" id="" name="" value="memNo"> 
         				`;
 					});
 
