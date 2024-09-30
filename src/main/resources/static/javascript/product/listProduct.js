@@ -407,7 +407,9 @@ $(document).ready(function() {
                                         <span class="text-sm text-gray-400">${timeAgo}</span>
                                     </div>
                                     <div class="flex justify-between">
+                                    	<span class="text-sm text-gray-400">${product.PRO_STATUS}</span>
                                         <div class="text-xs text-gray-400 text-muted">조회수 ${product.PRO_VIEWS}</div>
+                                        
                                     </div>
                                 </div>
                             </a>
