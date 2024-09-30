@@ -26,6 +26,8 @@ public interface ProductMapper {
 	List<Map<String, Object>> getProductType();
 
 	List<Map<String, Object>> getProductNego();
+	
+	List<Map<String, Object>> getProductStatus();
 
 	List<Map<String, Object>> getSortList();
 
@@ -48,6 +50,8 @@ public interface ProductMapper {
 	Map<String, Object> getContentProduct(int proNo);
 
 	Integer getMemNoByMemId(String memId);
+
+	
 
 	
 	

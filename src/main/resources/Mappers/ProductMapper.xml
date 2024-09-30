@@ -84,6 +84,20 @@
 		   AND TDC.DCO_ID LIKE 'NED%'
 	</select>
 	
+	<select id="getProductStatus" resultType="map">
+		SELECT TDC.DCO_ID
+			 , TDC.DCO_VALUE
+			 , TSC.SCO_ID
+			 , TMC.MCO_ID
+		  FROM TEST_DETAIL_CODE TDC
+		  JOIN TEST_SUB_CODE TSC 
+		    ON TDC.SCO_ID = TSC.SCO_ID
+		  JOIN TEST_MAIN_CODE TMC 
+		    ON TSC.MCO_ID = TMC.MCO_ID
+		 WHERE TMC.MCO_ID = 'PRM'
+		   AND TSC.SCO_ID LIKE 'STS'
+		   AND TDC.DCO_ID LIKE 'STD%'
+	</select>
 	
 	
 <!-- ===================================  상품 목록  =====================================  -->
@@ -111,7 +125,8 @@
          	 , TSC1.SCO_VALUE AS LOCATION_SUB
           	 , TDC1.DCO_VALUE AS LOCATION_VALUE
          	 , PRO.PRO_PRICE
-         	 , PRO.PRO_STATUS
+         	 , TDC4.DCO_VALUE AS PRO_STATUS
+<!--          	 , PRO.PRO_STATUS -->
          	 , PRO.PRO_TITLE
          	 , TDC2.DCO_VALUE AS TYPE_VALUE
          	 , PRO.PRO_IMG
@@ -124,6 +139,8 @@
         	ON PRO.PRO_TYPE = TDC2.DCO_ID
           JOIN TEST_DETAIL_CODE TDC3 
         	ON PRO.PRO_CATEGORY = TDC3.DCO_ID
+          JOIN TEST_DETAIL_CODE TDC4
+        	ON PRO.PRO_STATUS = TDC4.DCO_ID
          WHERE 1=1
            <if test="categoryId != null and categoryId != ''">
            AND PRO.PRO_CATEGORY = #{categoryId}
@@ -201,6 +218,11 @@
          	 , PRO.PRO_CONTENT
          	 , PRO.PRO_IMG
          	 , PRO.PRO_CATEGORY
+         	 , PRO.PRO_TYPE
+         	 , PRO.PRO_STATUS AS PRO_STATUS_VALUE
+         	 , PRO.PRO_NEG AS PRO_NEG_VALUE
+         	 , PRO.PRO_STATE AS PRO_STATE_VALUE
+         	 , PRO.PRO_STATUS AS PRO_STATUS_CODE
          	 , TSC1.SCO_VALUE AS LOCATION_SUB
           	 , TDC1.DCO_VALUE AS LOCATION_VALUE
           	 , TSC2.SCO_VALUE AS TYPE_VALUE_SUB

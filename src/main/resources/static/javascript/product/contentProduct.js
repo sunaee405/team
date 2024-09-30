@@ -1,8 +1,9 @@
 $(document).ready(function() {
 	// 상품 번호 설정
-//	const proNo = 100; // 실제 상품 번호로 변경
+	//	const proNo = 100; // 실제 상품 번호로 변경
 	const urlParams = new URLSearchParams(window.location.search);
-    const proNo = urlParams.get('proNo'); // URL의 proNo 파라미터 가져오기
+	const proNo = urlParams.get('proNo'); // URL의 proNo 파라미터 가져오기
+
 
 	// AJAX 요청으로 상품 데이터 가져오기
 	$.ajax({
@@ -119,7 +120,7 @@ $(document).ready(function() {
 
 			// 제품상태 값 가져오기
 			const stateSub = response.PRO_STATE_SUB // PRO_STATE_SUB값
-			const stateValue = response.PRO_STATE // PRO_STATE_SUB값
+			const stateValue = response.PRO_STATE // PRO_STATE값
 
 			// 거래방식 값 가져오기
 			const typeSub = response.TYPE_VALUE_SUB // PRO_TYPE_SUB 값
@@ -128,6 +129,11 @@ $(document).ready(function() {
 			// 네고여부 값 가져오기
 			const negSub = response.PRO_NEG_SUB // PRO_NEG_SUB 값
 			const negValue = response.PRO_NEG // PRO_NEG 값
+
+			// 판매상태 값 가져오기
+			const statusSub = response.PRO_STATUS_SUB // PRO_STATUS_SUB 값
+			const statuseValue = response.PRO_STATUS // PRO_STATUS 값
+
 
 			const etc2Info = `
             	<li class="flex flex-col flex-1 basis-[25%] px-3 sm:px-4 relative after:absolute [&amp;:not(:first-child)]:after:content-['']  after:bg-gray-300 after:h-[20px] [&amp;:not(:first-child)]:after:w-[1px] after:left-0 justify-center items-center">
@@ -154,6 +160,14 @@ $(document).ready(function() {
 								${negValue}
 							</button>
 				</li>
+				<li class="flex flex-col flex-1 basis-[25%] px-3 sm:px-4 relative after:absolute [&amp;:not(:first-child)]:after:content-['']  after:bg-gray-300 after:h-[20px] [&amp;:not(:first-child)]:after:w-[1px] after:left-0 justify-center items-center">
+						<span class="text-xs font-normal text-jnGray-600 break-keep">
+							${statusSub}
+						</span>
+							<button disabled="" class="block text-sm font-semibold text-jnblack mt-1 ">
+								${statuseValue}
+							</button>
+				</li>
 			`;
 
 			$('#product_etc2').append(etc2Info);
@@ -175,11 +189,11 @@ $(document).ready(function() {
 			`;
 			$('#product_content').append(contentElement);
 
-			// 두 번째 AJAX 요청: MEM_NO로 랜덤 상품 3개 가져오기
-			const memNo = response.MEM_NO; // 첫 번째 응답에서 MEM_NO 값 추출
+			// 두 번째 AJAX 요청: (상품등록자의) MEM_NO로 랜덤 상품 3개 가져오기
+			const memNo = response.MEM_NO; // 첫 번째 응답에서 (상품등록자의) MEM_NO 값 추출
 
 			$.ajax({
-				url: '/getOtherProductByMemNo', // MEM_NO로 다른 상품 가져오는 API 엔드포인트
+				url: '/getOtherProductByMemNo', // 상품 등록한 MEM_NO로 다른 상품 가져오는 API 엔드포인트
 				type: 'GET',
 				data: { memNo: memNo }, // MEM_NO를 전달
 				success: function(products) {
@@ -187,6 +201,7 @@ $(document).ready(function() {
 
 					// products 배열을 무작위로 섞은 후, 앞에서부터 3개만 선택
 					const randomProducts = products.sort(() => 0.5 - Math.random()).slice(0, 3);
+					console.log(memNo);
 
 					randomProducts.forEach(function(product) {
 						const images = product.pro_img ? product.pro_img.split(',') : [];
@@ -205,6 +220,7 @@ $(document).ready(function() {
                     				</div>
                 				</div>
             				</li>
+            				<input type="hidden" id="" name="" value="memNo">
         				`;
 					});
 
@@ -258,98 +274,131 @@ $(document).ready(function() {
 				}
 			});
 
-			let likedHtml = '';
-
-			likedHtml += ` <label for="likedCheckInput" class="relative cursor-pointer">
-        				   	<svg id="likeIcon" width="32" height="32" viewBox="0 0 32 32" fill="none"
-             					xmlns="http://www.w3.org/2000/svg" class="pointer-events-none w-8 h-8">
-            			   		<path d="M5.94197 17.9925L15.2564 26.334C15.3282 26.3983 15.3641 26.4305 15.3975 26.4557C15.7541 26.7249 16.2459 26.7249 16.6025 26.4557C16.6359 26.4305 16.6718 26.3983 16.7436 26.3341L26.058 17.9925C28.8244 15.5151 29.1565 11.3015 26.8124 8.42125L26.5675 8.12029C23.8495 4.78056 18.5906 5.35863 16.663 9.20902C16.3896 9.75505 15.6104 9.75505 15.337 9.20902C13.4094 5.35863 8.1505 4.78056 5.43249 8.12028L5.18755 8.42125C2.84352 11.3015 3.17564 15.5151 5.94197 17.9925Z"
-                  					stroke-width="1.5" stroke="#9CA3AF" fill="transparent">
-                  		   		</path>
-        				   	</svg>
-    					   </label>
-    					   <input id="likedCheckInput" type="checkbox" class="a11yHidden" style="display: none;">
-        				`;
-			$('#likedCheckDiv').html(likedHtml);
-
-
-			// 필요한 변수 설정
-			//			const memNo = response.MEM_NO; // 세선에 memNo으로 변경
-			const proNo = response.PRO_NO; // 상품 번호
-
-			// 찜 상태 초기 설정을 위해 서버에 요청
+			// 세션에서 현재 로그인한 사용자의 memNo 가져오기
 			$.ajax({
-				url: '/checkLikedStatus',
+				url: '/getMemNoByMemId',
 				type: 'GET',
-				data: { memNo: memNo, proNo: proNo },
-				success: function(isLiked) {
-					// isLiked가 true이면 찜 상태로 설정
-					if (isLiked) {
-						$('#likedCheckInput').prop('checked', true);
-						$('#likeIcon path').attr('stroke', '#dc2626').attr('fill', '#dc2626');
+				success: function(sessionMemNo) {
+					const sellerMemNo = response.MEM_NO;
+
+					// 상품 등록자와 현재 로그인한 사용자가 같은 경우
+					if (sessionMemNo === sellerMemNo) {
+						let buttonsHtml2 = `
+                        <button data-variant="slim"
+							class="text-[13px] md:text-sm leading-4 inline-flex items-center cursor-pointer transition ease-in-out duration-300 font-semibold font-body text-center justify-center placeholder-white focus-visible:outline-none focus:outline-none rounded-md h-11 md:h-12 px-5 py-2 transform-none normal-case hover:shadow-cart ga4_product_detail_bottom w-full bg-white hover:bg-white/90 text-jnblack hover:text-jnblack border-[1px] border-jnblack"
+							id="modifyButton">수정하기</button>
+						<button data-variant="slim"
+							class="text-[13px] md:text-sm leading-4 inline-flex items-center cursor-pointer transition ease-in-out duration-300 font-semibold font-body text-center justify-center border-0 border-transparent placeholder-white focus-visible:outline-none focus:outline-none rounded-md h-11 md:h-12 px-5 text-white py-2 transform-none normal-case hover:text-white hover:shadow-cart w-full ga4_product_detail_bottom bg-jnblack hover:bg-jnblack/90"
+							id="deleteButton">삭제하기</button>
+                        `;
+						$('#sellCheckDiv').append(buttonsHtml2);
+
+						// '수정하기' 버튼 클릭 시 상품 수정 페이지로 이동
+						$('#modifyButton').on('click', function() {
+							const modifyUrl = `/product/modifyProduct?proNo=${proNo}`; // 상품 번호를 URL 파라미터로 전달
+							window.location.href = modifyUrl; // 수정 페이지로 리다이렉트
+						});
+					} else {
+						// 상품 등록자와 현재 사용자가 다른 경우
+						let buttonsHtml = `
+						<button data-variant="slim"
+							class="text-[13px] md:text-sm leading-4 inline-flex items-center cursor-pointer transition ease-in-out duration-300 font-semibold font-body text-center justify-center placeholder-white focus-visible:outline-none focus:outline-none rounded-md h-11 md:h-12 px-5 py-2 transform-none normal-case hover:shadow-cart ga4_product_detail_bottom w-full bg-white hover:bg-white/90 text-jnblack hover:text-jnblack border-[1px] border-jnblack">채팅하기</button>
+						<button data-variant="slim"
+							class="text-[13px] md:text-sm leading-4 inline-flex items-center cursor-pointer transition ease-in-out duration-300 font-semibold font-body text-center justify-center border-0 border-transparent placeholder-white focus-visible:outline-none focus:outline-none rounded-md h-11 md:h-12 px-5 text-white py-2 transform-none normal-case hover:text-white hover:shadow-cart w-full ga4_product_detail_bottom bg-jnblack hover:bg-jnblack/90">구매하기</button>
+                        `;
+						$('#sellCheckDiv').append(buttonsHtml);
 					}
+
+					// 상품 상태에 따라 sellCheckDiv 보이기/숨기기
+					const proStatusCode = response.PRO_STATUS_CODE;
+					if (proStatusCode === 'STD2' && sessionMemNo !== sellerMemNo) {
+						$('#sellCheckDiv').hide(); // STD2이면서 등록자와 사용자가 다르면 숨김
+					} else {
+						$('#sellCheckDiv').show(); // STD1이거나 등록자와 사용자가 같으면 보임
+					}
+
+					// likedCheckDiv에 찜 버튼 생성
+					let likedHtml = `
+                        <label for="likedCheckInput" class="relative cursor-pointer">
+                            <svg id="likeIcon" width="32" height="32" viewBox="0 0 32 32" fill="none"
+                                xmlns="http://www.w3.org/2000/svg" class="pointer-events-none w-8 h-8">
+                                <path d="M5.94197 17.9925L15.2564 26.334C15.3282 26.3983 15.3641 26.4305 15.3975 26.4557C15.7541 26.7249 16.2459 26.7249 16.6025 26.4557C16.6359 26.4305 16.6718 26.3983 16.7436 26.3341L26.058 17.9925C28.8244 15.5151 29.1565 11.3015 26.8124 8.42125L26.5675 8.12029C23.8495 4.78056 18.5906 5.35863 16.663 9.20902C16.3896 9.75505 15.6104 9.75505 15.337 9.20902C13.4094 5.35863 8.1505 4.78056 5.43249 8.12028L5.18755 8.42125C2.84352 11.3015 3.17564 15.5151 5.94197 17.9925Z"
+                                    stroke-width="1.5" stroke="#9CA3AF" fill="transparent">
+                                </path>
+                            </svg>
+                        </label>
+                        <input id="likedCheckInput" type="checkbox" class="a11yHidden" style="display: none;">
+                    `;
+					$('#likedCheckDiv').html(likedHtml);
+
+					// 찜 상태 확인
+					$.ajax({
+						url: '/checkLikedStatus',
+						type: 'GET',
+						data: { memNo: sessionMemNo, proNo: proNo },
+						success: function(isLiked) {
+							if (isLiked) {
+								$('#likedCheckInput').prop('checked', true);
+								$('#likeIcon path').attr('stroke', '#dc2626').attr('fill', '#dc2626');
+							}
+						},
+						error: function(error) {
+							console.error('찜 상태 확인 중 오류 발생:', error);
+						}
+					});
+
+					// 찜 추가/삭제 처리
+					let isProcessing = false;
+					$('#likedCheckDiv').on('click', function() {
+						if (isProcessing) return;
+						isProcessing = true;
+
+						const isChecked = $('#likedCheckInput').is(':checked');
+
+						if (!isChecked) {
+							$('#likeIcon path').attr('stroke', '#dc2626').attr('fill', '#dc2626');
+
+							$.ajax({
+								url: '/insertLiked',
+								type: 'POST',
+								data: { memNo: sessionMemNo, proNo: proNo },
+								success: function(response) {
+									$('#likedCheckInput').prop('checked', true);
+									isProcessing = false;
+								},
+								error: function(error) {
+									console.error('찜 추가 중 오류 발생:', error);
+									isProcessing = false;
+								}
+							});
+						} else {
+							$('#likeIcon path').attr('stroke', '#9CA3AF').attr('fill', 'transparent');
+
+							$.ajax({
+								url: '/deleteLiked',
+								type: 'POST',
+								data: { memNo: sessionMemNo, proNo: proNo },
+								success: function(response) {
+									$('#likedCheckInput').prop('checked', false);
+									isProcessing = false;
+								},
+								error: function(error) {
+									console.error('찜 삭제 중 오류 발생:', error);
+									isProcessing = false;
+								}
+							});
+						}
+					});
 				},
-				error: function(error) {
-					console.error('찜 상태를 확인하는 중 오류 발생:', error);
-				}
-			});
-
-			let isProcessing = false; // 요청 중복 방지 변수
-
-			$('#likedCheckDiv').on('click', function() {
-				if (isProcessing) return; // 요청이 진행 중이면 중복 요청 방지
-				isProcessing = true;
-
-				const isChecked = $('#likedCheckInput').is(':checked');
-
-				if (!isChecked) {
-					// 찜 추가 (체크됨)
-					$('#likeIcon path').attr('stroke', '#dc2626').attr('fill', '#dc2626');
-
-					// AJAX 요청으로 찜 추가
-					$.ajax({
-						url: '/insertLiked',
-						type: 'POST',
-						data: { memNo: memNo, proNo: proNo },
-						success: function(response) {
-							console.log('찜 추가 성공:', response);
-							$('#likedCheckInput').prop('checked', true); // 체크 상태 변경
-							isProcessing = false; // 요청 완료 후 중복 방지 해제
-						},
-						error: function(error) {
-							console.error('찜 추가 중 오류 발생:', error);
-							isProcessing = false; // 에러 시 중복 방지 해제
-						}
-					});
-				} else {
-					// 찜 삭제 (체크 해제됨)
-					$('#likeIcon path').attr('stroke', '#9CA3AF').attr('fill', 'transparent');
-
-					// AJAX 요청으로 찜 삭제
-					$.ajax({
-						url: '/deleteLiked',
-						type: 'POST',
-						data: { memNo: memNo, proNo: proNo },
-						success: function(response) {
-							console.log('찜 삭제 성공:', response);
-							$('#likedCheckInput').prop('checked', false); // 체크 상태 변경
-							isProcessing = false; // 요청 완료 후 중복 방지 해제
-						},
-						error: function(error) {
-							console.error('찜 삭제 중 오류 발생:', error);
-							isProcessing = false; // 에러 시 중복 방지 해제
-						}
-					});
-				}
+				//				error: function(error) {
+				//					console.error('세션에서 memNo를 가져오는 중 오류 발생:', error);
+				//					alert('로그인 상태를 확인할 수 없습니다.');
+				//					window.location.href = '/member/login'; // 로그인 페이지로 리다이렉트
+				//				}
 			});
 		},
-
-
 		error: function(error) {
-			console.error('상품 상세 정보를 가져오는 중 오류 발생:', error);
-		},
+			console.error('상품 데이터를 가져오는 중 오류 발생:', error);
+		}
 	});
-
-
-
 });

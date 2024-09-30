@@ -71,6 +71,10 @@ public class ProductService {
 	public List<Map<String, Object>> getProductNego() {
 		return productMapper.getProductNego();
 	}
+	
+	public List<Map<String, Object>> getProductStatus() {
+		return productMapper.getProductStatus();
+	}
 
 	public void insertProduct(Map<String, String> params) {
 		
@@ -180,6 +184,29 @@ public class ProductService {
 	public Integer getMemNoByMemId(String memId) {
         return productMapper.getMemNoByMemId(memId);
     }
+	
+	
+	// =================================== 상품 정보 수정 ===================================
+	
+	
+	
+	public void updateProduct(Map<String, String> params) {
+	    int proNo = Integer.parseInt(params.get("proNo"));
+	    ProductEntity productEntity = productRepository.findById(proNo).orElseThrow(() -> new IllegalArgumentException("상품을 찾을 수 없습니다."));
+
+	    productEntity.setProTitle(params.get("productTitle"));
+	    productEntity.setProImg(params.get("fileNames")); // 수정된 이미지 정보 저장
+	    productEntity.setProCategory(params.get("categoryDcoId"));
+	    productEntity.setProLocation(params.get("locationDcoId"));
+	    productEntity.setProState(params.get("stateDcoId"));
+	    productEntity.setProPrice(params.get("productPrice"));
+	    productEntity.setProContent(params.get("productDescription"));
+	    productEntity.setProType(params.get("typeDcoId"));
+	    productEntity.setProNeg(params.get("negoDcoId"));
+
+	    productRepository.save(productEntity); // 수정 내용 저장
+	}
+
 	
 	
 }
