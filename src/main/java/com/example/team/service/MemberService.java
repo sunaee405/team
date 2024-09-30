@@ -133,7 +133,7 @@ public class MemberService {
 		MemberEntity existingMember = memberRepository.findById(memNoStr)
             .orElseThrow(() -> new RuntimeException("ID not found: " + memNo)); // 예외 처리
 
-        // 기존 엔티티의 필드를 새 값으로 업데이트
+        // 기존 엔티티의 필드를 새 값으로 업데이트 
 		existingMember.setMemName(member.getMemName());
 		existingMember.setMemPw(member.getMemPw());
         
