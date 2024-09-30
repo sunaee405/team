@@ -139,7 +139,7 @@ public class MemberService {
         
         // 변경된 엔티티를 데이터베이스에 저장
         memberRepository.save(existingMember);
-
+ 
     }
 	
 	public MemberEntity findById(Long memNo) {
