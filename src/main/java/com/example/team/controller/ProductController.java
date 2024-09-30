@@ -161,8 +161,7 @@ public class ProductController {
 				searchKeyword);
 	}
 
-	// =================================== 상세 상품 정보
-	// ===================================
+	// =================================== 상세 상품 정보 ===================================
 
 	@GetMapping("getContentProduct")
 	@ResponseBody
@@ -208,8 +207,7 @@ public class ProductController {
 		return ResponseEntity.ok().body(isLiked);
 	}
 
-	// =================================== 상품 정보 수정
-	// ===================================
+	// =================================== 상품 정보 수정 ===================================
 
 	@PostMapping("/updateProduct")
 	@ResponseBody
