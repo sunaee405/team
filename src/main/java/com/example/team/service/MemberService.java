@@ -142,6 +142,12 @@ public class MemberService {
 
     }
 	
+	public MemberEntity findById(Long memNo) {
+		String memNoStr = convertMemNoToString(memNo);
+	    return memberRepository.findById(memNoStr)
+	        .orElseThrow(() -> new RuntimeException("Member not found with id: " + memNo));
+	}
+	
 	// 채현 MemberRepository에서 string 타입으로 되어있어서 만듦..
 	// 추가 메서드: Long을 String으로 변환하는 메서드
     private String convertMemNoToString(Long memNo) {

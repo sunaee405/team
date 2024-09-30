@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -28,10 +29,10 @@ public class AdminController {
         return memberService.findAll();
     }
 
-//    @GetMapping("/{ID}")
-//    public MainCodeEntity getMainCode(@PathVariable Long ID) {
-//        return mainCodeService.findById(ID); // 조회
-//    }
+    @GetMapping("members/{memNo}")
+    public MemberEntity getMainCode(@PathVariable("memNo") Long memNo) {
+        return memberService.findById(memNo); // 조회
+    }
     
 //    @PostMapping("members")
 //    public void insertdetailCode(@RequestBody List<MemberEntity> members) {

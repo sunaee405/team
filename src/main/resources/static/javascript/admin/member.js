@@ -168,6 +168,29 @@ $(document).ready(function() {
     	console.log('after change:', ev);
     })
     
+    // 클릭 이벤트 핸들러
+	grid.on('click', (ev) => {
+	    const { rowKey, columnName } = ev;
+	    if (columnName === 'mem_id') { // mem_id 열이 클릭된 경우
+	        const memNo = grid.getValue(rowKey, 'mem_no');
+	        
+	        // AJAX 요청 보내기
+	        $.ajax({
+	            type: 'GET',
+	            url: `/admin/members/${memNo}`, // 상세 정보 API 엔드포인트
+	            success: function(data) {
+					
+	                // 상세 정보 페이지로 이동
+	                window.location.href = `/member-detail/${memNo}`; // 상세 페이지 URL
+	            },
+	            error: function(error) {
+	                console.error('Error fetching member details:', error);
+	                alert('회원 정보를 가져오는 데 실패했습니다.');
+	            }
+	        });
+	    }
+	});
+    
   	// 저장 버튼 클릭 이벤트 처리
     $('#saveButton').click(function() {
         const currentData = grid.getData();
