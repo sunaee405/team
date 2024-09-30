@@ -1,5 +1,6 @@
 package com.example.team.service;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -13,6 +14,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import com.example.team.Mapper.MemberMapper;
+import com.example.team.model.DetailCodeEntity;
+import com.example.team.model.MainCodeEntity;
 import com.example.team.model.MemberEntity;
 import com.example.team.persistence.MemberRepository;
 
@@ -119,5 +122,30 @@ public class MemberService {
 
 		return response.getBody();
 	}
+	
+	public List<MemberEntity> findAll() { //채현 admin member모든 정보 가져오는 메서드
+        return memberRepository.findAll();
+    }
+	
+	public void update(Long memNo, MemberEntity member) { //채현 admin member update메서드
+		String memNoStr = convertMemNoToString(memNo);
+		// 데이터베이스에서 기존 엔티티 찾기
+		MemberEntity existingMember = memberRepository.findById(memNoStr)
+            .orElseThrow(() -> new RuntimeException("ID not found: " + memNo)); // 예외 처리
+
+        // 기존 엔티티의 필드를 새 값으로 업데이트
+		existingMember.setMemName(member.getMemName());
+		existingMember.setMemPw(member.getMemPw());
+        
+        // 변경된 엔티티를 데이터베이스에 저장
+        memberRepository.save(existingMember);
+
+    }
+	
+	// 채현 MemberRepository에서 string 타입으로 되어있어서 만듦..
+	// 추가 메서드: Long을 String으로 변환하는 메서드
+    private String convertMemNoToString(Long memNo) {
+        return memNo != null ? String.valueOf(memNo) : null;
+    }
 
 }
