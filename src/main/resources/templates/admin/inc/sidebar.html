@@ -20,7 +20,10 @@
 
     <!-- Custom styles for this template-->
     <link href="/static/bootstrap/css/sb-admin-2.min.css" rel="stylesheet">
-
+    
+    <script src="/static/javascript/jquery-3.6.0.js"></script> <!-- jQuery 파일 -->
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script> <!-- Bootstrap JS 파일 -->
+</head>
 </head>
 
 <body>
@@ -100,32 +103,26 @@
             <!-- Nav Item - Pages Collapse Menu -->
 <!--             회원 -->
             <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages"
-                    aria-expanded="true" aria-controls="collapsePages">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMember"
+                    aria-expanded="false" aria-controls="collapseMember">
                     <i class="fas fa-fw fa-folder"></i>
                     <span>회원 관리</span>
                 </a>
-                <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+                <div id="collapseMember" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">MEMBER:</h6>
-<!--                         <a class="collapse-item" href="login.html">Login</a> -->
                         <a class="collapse-item" href="list">회원목록</a>
-<!--                         <a class="collapse-item" href="forgot-password.html">Forgot Password</a> -->
-<!--                         <div class="collapse-divider"></div> -->
-<!--                         <h6 class="collapse-header">Other Pages:</h6> -->
-<!--                         <a class="collapse-item" href="404.html">404 Page</a> -->
-<!--                         <a class="collapse-item" href="blank.html">Blank Page</a> -->
                     </div>
                 </div>
             </li>
 <!--            	물품 -->
             <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages"
-                    aria-expanded="true" aria-controls="collapsePages">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseProduct"
+                    aria-expanded="false" aria-controls="collapseProduct">
                     <i class="fas fa-fw fa-folder"></i>
                     <span>물품 관리</span>
                 </a>
-                <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+                <div id="collapseProduct" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">PRODUCT:</h6>
                         <a class="collapse-item" href="login.html">Login</a>
@@ -140,12 +137,12 @@
             
             <!--            	신고 -->
             <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages"
-                    aria-expanded="true" aria-controls="collapsePages">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseReport"
+                    aria-expanded="false" aria-controls="collapseReport">
                     <i class="fas fa-fw fa-folder"></i>
                     <span>신고 관리</span>
                 </a>
-                <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+                <div id="collapseReport" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">REPORT:</h6>
                         <a class="collapse-item" href="login.html">Login</a>
@@ -160,12 +157,12 @@
             
             <!--            	고객센터 -->
             <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages"
-                    aria-expanded="true" aria-controls="collapsePages">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseCustomerService"
+                    aria-expanded="false" aria-controls="collapseCustomerService">
                     <i class="fas fa-fw fa-folder"></i>
                     <span>고객센터</span>
                 </a>
-                <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+                <div id="collapseCustomerService" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">INQUIRY:</h6>
                         <a class="collapse-item" href="login.html">Login</a>
@@ -180,20 +177,17 @@
             
             <!--            	공통코드 -->
             <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages"
-                    aria-expanded="true" aria-controls="collapsePages">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseCommonCode"
+                    aria-expanded="false" aria-controls="collapseCommonCode">
                     <i class="fas fa-fw fa-folder"></i>
                     <span>공통코드</span>
                 </a>
-                <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+                <div id="collapseCommonCode" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">CODE:</h6>
-                        <a class="collapse-item" href="../code/mainCrud">공통코드</a>
-<!--                         <a class="collapse-item" href="register.html">Register</a> -->
-<!--                         <a class="collapse-item" href="forgot-password.html">Forgot Password</a> -->
-<!--                         <div class="collapse-divider"></div> -->
-<!--                         <h6 class="collapse-header">Other Pages:</h6> -->
-<!--                         <a class="collapse-item" href="blank.html">Blank Page</a> -->
+                        <a class="collapse-item" href="../code/mainCrud">메인코드</a>
+                        <a class="collapse-item" href="../code/subCrud">서브코드</a>
+                        <a class="collapse-item" href="../code/detailCrud">디테일코드</a>
                     </div>
                 </div>
             </li>
@@ -230,5 +224,27 @@
         </ul>
         <!-- End of Sidebar -->
 </body>
+<script type="text/javascript">
+$(document).ready(function(){
+
+	$('.nav-link').click(function() {
+	    const target = $(this).data('target');
+	    const isCollapsed = $(this).hasClass('collapsed');
+
+	    // aria-expanded 속성을 토글
+	    $(this).attr('aria-expanded', !isCollapsed);
+
+	    // collapsed 클래스를 토글
+	    $(this).toggleClass('collapsed');
+
+	    // collapse 상태에 따라 보이기 또는 숨기기
+	    if (isCollapsed) {
+	        $(target).collapse('show'); // 열기
+	    } else {
+	        $(target).collapse('hide'); // 닫기
+	    }
+	});
+});
+</script>
 
 </html>

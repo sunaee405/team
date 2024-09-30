@@ -14,24 +14,26 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.team.model.MainCodeEntity;
+import com.example.team.model.DetailCodeEntity;
 import com.example.team.model.SubCodeEntity;
 import com.example.team.persistence.MainCodeRepository;
-import com.example.team.service.MainCodeService;
+import com.example.team.persistence.SubCodeRepository;
+import com.example.team.service.DetailCodeService;
 import com.example.team.service.SubCodeService;
 
 @RestController
-@RequestMapping("/admin/subcodes")
-public class SubCodeController {
+@RequestMapping("/admin/detailcodes")
+public class DetailCodeController {
 	
 	@Autowired
-    private SubCodeService subCodeService;
+    private DetailCodeService detailCodeService;
 	@Autowired
-    private MainCodeRepository mainCodeRepository;
+    private SubCodeRepository subCodeRepository;
 
     @GetMapping
-    public List<SubCodeEntity> getAllSubCodes() {
-        return subCodeService.findAll();
+    public List<DetailCodeEntity> getAllDetailCodes() {
+    	System.out.println(detailCodeService.findAll());
+        return detailCodeService.findAll();
     }
 
 //    @GetMapping("/{ID}")
@@ -40,24 +42,24 @@ public class SubCodeController {
 //    }
     
     @PostMapping
-    public void insertSubCode(@RequestBody List<SubCodeEntity> subCodes) {
-    	subCodeService.save(subCodes); 
+    public void insertdetailCode(@RequestBody List<DetailCodeEntity> detailCodes) {
+    	detailCodeService.save(detailCodes); 
     }
 
     @PutMapping
-    public List<SubCodeEntity> updateSubCodes(@RequestBody List<SubCodeEntity> subCodes) {
-    	System.out.println("Received subCodes: " + subCodes);
-    	List<SubCodeEntity> updatedCodes = new ArrayList<>();
-        for (SubCodeEntity subCode : subCodes) {
-            updatedCodes.add(subCodeService.update(subCode.getID(), subCode)); // 각 메인코드 업데이트
+    public List<DetailCodeEntity> updateDetailCodes(@RequestBody List<DetailCodeEntity> detailCodes) {
+    	System.out.println("Received subCodes: " + detailCodes);
+    	List<DetailCodeEntity> updatedCodes = new ArrayList<>();
+        for (DetailCodeEntity detailCode : detailCodes) {
+            updatedCodes.add(detailCodeService.update(detailCode.getID(), detailCode)); // 각 디테일코드 업데이트
         }
         return updatedCodes; // 업데이트된 데이터 반환
     }
 
     @DeleteMapping
-    public void deleteSubCodes(@RequestBody List<Long> ids) {
+    public void deleteDetailCodes(@RequestBody List<Long> ids) {
     	for (Long id : ids) {
-            subCodeService.delete(id); // 각 ID로 삭제 메서드 호출
+            detailCodeService.delete(id); // 각 ID로 삭제 메서드 호출
         }
     }
 }

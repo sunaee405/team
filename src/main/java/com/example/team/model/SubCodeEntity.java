@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -28,7 +29,7 @@ public class SubCodeEntity {
 	@JsonProperty("ID") // JSON직렬화 시 대문자 유지
     private Long ID; // 고유 ID
 	
-	@Column(length = 10)
+	@Column(length = 10, unique = true)
 	@JsonProperty("SCO_ID") // JSON 직렬화 시 대문자 유지
 	private String SCO_ID; //서브공통코드 ID //PRS
 	
@@ -36,7 +37,7 @@ public class SubCodeEntity {
 	@JsonProperty("SCO_VALUE") // JSON 직렬화 시 대문자 유지
 	private String SCO_VALUE; //서브공통코드 VALUE //상품목록
 	
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "MCO_ID", referencedColumnName = "MCO_ID") // 외래 키 컬럼명
 	@JsonProperty("mainCode") // JSON 직렬화 시 이름을 지정
     private MainCodeEntity mainCode; // 메인 코드와의 관계 MainCodeEntity의 ID를 참조

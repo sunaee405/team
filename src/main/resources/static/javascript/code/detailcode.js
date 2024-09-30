@@ -1,5 +1,10 @@
 $(document).ready(function() {
+	
+	let selectOptions = []; // 전역 변수로 선언하여 모든 함수에서 접근 가능하게 함
+	let subList = [];
+	
 	// 초기 데이터 가져오기 (페이지 로드 시)
+	//mainCode();
 	fetchData();
 	// 텍스트 수정기능
 	class CustomTextEditor {
@@ -30,6 +35,7 @@ $(document).ready(function() {
 	        this.el.select();
 	      }
     }
+    
 	
     const grid = new tui.Grid({
       el: document.getElementById('grid'),
@@ -42,9 +48,20 @@ $(document).ready(function() {
    	        name: 'ID',
    	        hidden: true  // 숨기기 설정
    	    },
+   	    {
+          header: '서브 공통 코드',
+          name: 'SCO_ID',
+          formatter: 'listItemText',
+          editor: {
+            type: 'select',
+            options: {
+              listItems: selectOptions, //동적으로 설정
+            }
+          }
+        },
         {
-          header: '메인 공통 코드 ID',
-          name: 'MCO_ID',
+          header: '디테일 공통 코드 ID',
+          name: 'DCO_ID',
           editor: {
             type: CustomTextEditor,//사용자 정의 편집기
             options: {
@@ -54,8 +71,8 @@ $(document).ready(function() {
           }
         },
         {
-          header: '메인 공통 코드 값',
-          name: 'MCO_VALUE',
+          header: '디테일 공통 코드 값',
+          name: 'DCO_VALUE',
           editor: {
             type: CustomTextEditor,
             options: {
@@ -82,16 +99,6 @@ $(document).ready(function() {
 	    // ID 가 있는 배열 (DB)
 	    // 필터링된 ID를 저장할 배열
 	    
-//	    const filteredIds = []; 
-//	    for(let i = 0; i < currentData.length; i++){
-//			if (currentData[i].ID !== null) {
-//        		filteredIds.push(currentData[i].ID); // ID가 null이 아닐 경우 배열에 추가
-//    		}
-//		}
-	    // ID null 배열
-//	    grid.removeRows(checkedRows);
-	    
-//	    return;
 	    
 	    if (checkedRows.length === 0) {
 	        alert('삭제할 행을 선택해 주세요.');
@@ -103,7 +110,7 @@ $(document).ready(function() {
 	        // AJAX 요청으로 서버에 DELETE
 	        $.ajax({
 	            type: 'DELETE',
-	            url: '/admin/maincodes', // 삭제 요청을 보낼 API 엔드포인트
+	            url: '/admin/detailcodes', // 삭제 요청을 보낼 API 엔드포인트
 	            contentType: 'application/json',
 	            data: JSON.stringify(filteredIds), // 체크된 행의 ID 배열 전송
 	            success: function(response) {
@@ -135,11 +142,10 @@ $(document).ready(function() {
 
 		// 중복 체크
 		for(let i = 0; i < dbData.length; i++){
-			if (dbData[i].MCO_ID == ev.changes[0].nextValue) {
-	            alert(`"${dbData[i].MCO_ID}"는 이미 존재합니다. 다른 ID를 사용하세요.`);
+			if (dbData[i].DCO_ID == ev.changes[0].nextValue) {
+	            alert(`"${dbData[i].DCO_ID}"는 이미 존재합니다. 다른 ID를 사용하세요.`);
 	            ev.changes[0].nextValue = "";
 	            grid.el.onfocus = true;
-	            debugger;
 	            return;
         	}
 		}
@@ -154,45 +160,15 @@ $(document).ready(function() {
     	console.log('after change:', ev);
     })
     
-    grid.on('click', ev => {
-//	    if (ev.columnName === 'MCO_ID') {
-//	        alert('메인 공통 코드 ID는 수정할 수 없습니다.');
-//	        ev.stop(); // 편집 중단
-//	    }
-	});
-	
-	
-	// 편집 가능 여부 설정
-//	grid.on('beforeEditStart', ev => {
-//	    console.log('before edit start:', ev);
-//	    
-//	    // MCO_ID 열의 수정 여부 체크
-//	    if (ev.columnName === 'MCO_ID') {
-//	        const isNewRow = ev.rowKey === 'create'; // 새로 추가된 행인지 확인
-//	
-//	        if (!isNewRow) {
-//	            // 기존 행인 경우 수정 불가
-//	            alert('메인 공통 코드 ID는 수정할 수 없습니다.');
-//	            ev.stop(); // 편집 중단
-//	        }
-//	    }
-//	});
-	
-    
-    
-//    grid.resetData(gridData);
-    
-
-    
     // 행 추가 버튼 클릭 이벤트 처리
     $('#addRowButton').click(function() {
         const currentData = grid.getData();
         // 새 행 추가
-        grid.appendRow({ ID: null, MCO_ID: '', MCO_VALUE: '' });
+        grid.appendRow({ ID: null, SCO_ID: '', DCO_ID: '', DCO_VALUE: '' });
         // 편집 모드로 전환    
         requestAnimationFrame(() => {
             const indexToEdit = grid.getData().length - 1;
-            grid.setEditing(indexToEdit, 'MCO_ID');
+            grid.setEditing(indexToEdit, 'SCO_ID');
         });
     });
     
@@ -201,28 +177,42 @@ $(document).ready(function() {
     $('#saveButton').click(function() {
         const currentData = grid.getData();
         
-		const dataToInsert = []; // INSERT할 데이터
-		const existingMCO_IDs = currentData.map(row => row.MCO_ID); // 기존 MCO_ID 배열
+		//const dataToInsert = []; // INSERT할 데이터
+		
+		const existingMCO_IDs = currentData.map(row => row.SCO_ID); // 기존 SCO_ID 배열
 		//아이디가 null이 아니면 update
 		const updatedData = currentData.filter((row, index) => row.ID !== null);
 		//아이디가 null인것은 저장
 		const newData = currentData.filter((row, index) => row.ID === null);
 		
+		const dataToInsert = newData.map(row => ({
+			ID: null,
+		    DCO_ID: row.DCO_ID,
+		    DCO_VALUE: row.DCO_VALUE,
+		    subCode: { ID: row.SCO_ID } // subCode 객체에 SCO_ID 포함
+		}));
+		
 		// 필드 체크
 		for (let i = 0; i < newData.length; i++) {
 	        const row = newData[i];
-	        if (row.MCO_ID === '' || row.MCO_VALUE === '') {
+	        if (row.SCO_ID === '' || row.DCO_ID === '' || row.DCO_VALUE === '') {
 	            alert('모든 필드를 채워야 저장할 수 있습니다. 비어 있는 행이 있습니다.');
 	            return;
 	        }
+	        for(let j = 0; j < subList.length; j++){
+				if(newData[i].SCO_ID === subList[j].SCO_ID){
+				dataToInsert[i].subCode.ID = subList[j].ID;
+				break; // 변환이 완료되면 더 이상 반복할 필요 없음
+				}
+			}
 	        
-	        dataToInsert.push(row); // 모든 필드가 채워진 행을 추가
 	    }
+	    
 		
         // AJAX 요청으로 서버에 INSERT
         $.ajax({
             type: 'POST',
-            url: '/admin/maincodes',
+            url: '/admin/detailcodes',
             contentType: 'application/json',
             data: JSON.stringify(dataToInsert),// ID를 제외한 데이터 전송
             success: function(response) {
@@ -237,30 +227,38 @@ $(document).ready(function() {
         });
         
         
+        const updateList = updatedData.map(row => ({
+			ID: row.ID,
+		    DCO_ID: row.DCO_ID,
+		    DCO_VALUE: row.DCO_VALUE,
+		    subCode: { ID: row.SCO_ID } // subCode 객체에 SCO_ID 포함
+		}));
+        
+        
         
 		// 수정할 데이터에 대한 중복 체크
 	    for (let i = 0; i < updatedData.length; i++) {
 	        const row = updatedData[i];
-	        if (row.MCO_ID === '' || row.MCO_VALUE === '') {
+	        if (row.SCO_ID === '' || row.DCO_ID === '' || row.DCO_VALUE === '') {
 	            alert('모든 필드를 채워야 저장할 수 있습니다. 비어 있는 행이 있습니다.');
 	            return;
-	        }
-	        
-	        // 중복 체크
-//	        if (existingMCO_IDs.includes(modifiedMCO_ID) && modifiedMCO_ID !== row.originalMCO_ID) {
-//	            alert(`MCO_ID "${row.MCO_ID}"는 이미 존재합니다. 다른 ID를 사용하세요.`);
-//	            debugger;
-//	            return;
-//	        }
+	        }for(let j = 0; j < subList.length; j++){
+				if(updatedData[i].SCO_ID === subList[j].SCO_ID){
+				updateList[i].subCode.ID = subList[j].ID;
+				break; // 변환이 완료되면 더 이상 반복할 필요 없음
+				}
+				
+			}
 
 	    }
+   
         
         // AJAX 요청으로 서버에 업데이트
 	    $.ajax({
 	        type: 'PUT',
-	        url: '/admin/maincodes', // 데이터 업데이트를 위한 API 엔드포인트
+	        url: '/admin/detailcodes', // 데이터 업데이트를 위한 API 엔드포인트
 	        contentType: 'application/json',
-	        data: JSON.stringify(updatedData), // 수정된 데이터 전송
+	        data: JSON.stringify(updateList), // 수정된 데이터 전송
 	
 	        success: function(response) {
 	            console.log('업데이트 성공:', response);
@@ -271,7 +269,7 @@ $(document).ready(function() {
 	            console.error('업데이트 오류:', error);
 	            alert('업데이트 실패! 오류: ' + error);
 	        }
-	     });	
+	     });
     });
     
     
@@ -279,20 +277,32 @@ $(document).ready(function() {
     
     // DB에서 데이터 가져와서 화면에 뿌리기
 	function fetchData() {
+		
+		const listItems = [];// MCO_ID를 저장할 배열 초기화
+		// 로컬 스토리지에서 데이터 읽기
+	    subList = JSON.parse(localStorage.getItem('subList'));
+	    for(let i = 0; i < subList.length; i++){
+			listItems.push(subList[i].SCO_ID);// MCO_ID를 배열에 추가
+		}
+		
+		// listItems를 셀렉트 박스의 옵션 형식으로 변환
+		selectOptions = listItems.map(item => ({
+		    text: item,  // 표시할 텍스트
+		    value: item  // 실제 값
+		}));
+	    
+	    
 	    $.ajax({
 	        type: 'GET',
-	        url: '/admin/maincodes', // 데이터 가져올 API 엔드포인트
+	        url: '/admin/detailcodes', // 데이터 가져올 API 엔드포인트
 	        success: function(response) {
-				
 				console.log('서버 응답:', response); // 여기서 응답 데이터 출력
-	            
-	            // 데이터를 로컬 스토리지에 저장
-            	localStorage.setItem('mainList', JSON.stringify(response));
-            	
+	            // 데이터를 그리드에 뿌리기
 	            grid.resetData(response.map(item => ({
 	                ID: item.ID,           // ID 필드 포함
-	                MCO_ID: item.MCO_ID,   // MCO_ID 필드
-	                MCO_VALUE: item.MCO_VALUE // MCO_VALUE 필드
+	                SCO_ID: item.subCode.SCO_ID, // SCO_ID 필드
+	                DCO_ID: item.DCO_ID,   // DCO_ID 필드
+	                DCO_VALUE: item.DCO_VALUE // DCO_VALUE 필드
 	            })));
 	        },
 	        error: function(error) {
@@ -301,28 +311,8 @@ $(document).ready(function() {
 	        }
 	    });
 	}
-	
-	$('#subButton').click(function(){
-		// 페이지 이동
-        window.location.href = 'subCrud'; // 이동할 페이지의 경로로 변경
-	});
-	
-//	$('#subButton').click(function() {
-//		// 그리드 초기화
-//	    if (grid) {
-//	        grid.destroy(); // 기존 그리드 인스턴스 제거
-//	    }
-//	    $.getScript('/static/javascript/code/subcode.js', function() {
-//	        console.log('서브코드 관련 스크립트가 로드되었습니다.');
-//	        // 필요한 함수 호출
-//	        if (typeof initializeSubCode === "function") {
-//	            initializeSubCode(); // 서브코드 초기화 함수 호출
-//	        }
-//	    });
-//	});
+
    
 });
-
-
 
 

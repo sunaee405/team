@@ -1,7 +1,10 @@
 package com.example.team.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -23,15 +26,19 @@ public class DetailCodeEntity {
 	
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+	@JsonProperty("ID") // JSON직렬화 시 대문자 유지
     private Long ID; // 고유 ID
 	
-	@Column(length = 10)
+	@Column(length = 10, unique = true)
+	@JsonProperty("DCO_ID")
 	private String DCO_ID; //상세공통코드 ID
 	
 	@Column(length = 20)
+	@JsonProperty("DCO_VALUE")
 	private String DCO_VALUE; //상세공통코드 VALUE 
 	
-	@ManyToOne
-    @JoinColumn(name = "SCO_ID") // 외래 키 컬럼명
+	@ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "SCO_ID", referencedColumnName = "SCO_ID") // 외래 키 컬럼명
+	@JsonProperty("subCode") // JSON 직렬화 시 이름을 지정
     private SubCodeEntity subCode; // 서브 코드와의 관계
 }

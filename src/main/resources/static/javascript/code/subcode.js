@@ -83,7 +83,6 @@ $(document).ready(function() {
         },
       ]
     });
-    debugger;
     
     
     // 체크된 행 삭제 버튼 클릭 이벤트 처리
@@ -274,8 +273,6 @@ $(document).ready(function() {
 	            alert('업데이트 실패! 오류: ' + error);
 	        }
 	     });
-	     
-	     	
     });
     
     
@@ -303,11 +300,14 @@ $(document).ready(function() {
 	        url: '/admin/subcodes', // 데이터 가져올 API 엔드포인트
 	        success: function(response) {
 				console.log('서버 응답:', response); // 여기서 응답 데이터 출력
+				
+				// 데이터를 로컬 스토리지에 저장
+            	localStorage.setItem('subList', JSON.stringify(response));
 	            
 	            // 데이터를 그리드에 뿌리기
 	            grid.resetData(response.map(item => ({
 	                ID: item.ID,           // ID 필드 포함
-	                MCO_ID: item.MCO_ID, // MCO_VALUE 필드
+	                MCO_ID: item.mainCode.MCO_ID, // MCO_VALUE 필드
 	                SCO_ID: item.SCO_ID,   // MCO_ID 필드
 	                SCO_VALUE: item.SCO_VALUE // MCO_VALUE 필드
 	            })));
@@ -319,6 +319,10 @@ $(document).ready(function() {
 	    });
 	}
 	
+	$('#detailButton').click(function(){
+		// 페이지 이동
+        window.location.href = 'detailCrud'; // 이동할 페이지의 경로로 변경
+	});
 
    
 });
