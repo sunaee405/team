@@ -1,21 +1,5 @@
 const socket = new WebSocket('ws://localhost:8080/chat'); // 소켓 연결
-
-let memberNum = "";
-
-$(function() {
-//	let width = $(window).width() * 0.95;
-//	let height = $(window).height() * 0.95;
-	
-	fetch('/getSession', {
-			headers: {'X-Requested-With': 'XMLHttpRequest'}
-		})
-        .then(response => response.json())
-        .then(data => {
-            memberNum = data;
-        })
-        .catch(error => console.error('Error:', error));
-
-		
+$(async function() {
 	
 	//$('body').css({'width':width, 'height':height});
 	const urlParams = new URLSearchParams(window.location.search);
@@ -41,16 +25,15 @@ $(function() {
 		fetch(roomUrl, options)
 	    .then(response => response.json()) // 응답을 JSON으로 변환
 	    .then(success => {
-			
-			$(".chat").attr("data-rNum", success[0].CHA_NO);
-			
+				$(".chat").attr("data-rNum", success[0].CHA_NO);
+				
 			const socketSession = JSON.stringify({
 					"TYPE"	 : "setSession",
 					"CHA_NO" : success[0].CHA_NO,
-				});
+			});
+				
+				
 			socket.send(socketSession);
-			
-			
 
 			$(".chat").html(
 						`<div class="message-container">

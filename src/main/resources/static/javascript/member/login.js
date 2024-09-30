@@ -392,7 +392,6 @@ $(document).ready(function() {
 	$(document).on("click", "#signInBtn", function() {
 		var id = $('#loginId').val();
 		var pw = $('#loginPw').val();
-		debugger;
 		$.ajax({
 			type: 'POST',
 			url: '/members/login',
@@ -400,6 +399,7 @@ $(document).ready(function() {
 			data: JSON.stringify({ MEM_ID: id, MEM_PW: pw }),
 			success: function(response) {
 				if (response.success) {
+					debugger;
 					window.location.href = '/myPage/main'; // 성공 시 페이지 이동
 				} else {
 					$('#loginMessage').text('일치하는 아이디, 비밀번호가 없습니다.');

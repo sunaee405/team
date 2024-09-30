@@ -3,6 +3,7 @@ package com.example.team.service;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,7 +11,9 @@ import org.springframework.stereotype.Service;
 import com.example.team.Mapper.MyPageMapper;
 import com.example.team.Mapper.ProductMapper;
 import com.example.team.model.ChattingEntity;
+import com.example.team.model.MemberEntity;
 import com.example.team.persistence.ChattingRepository;
+import com.example.team.persistence.MemberRepository;
 
 @Service
 public class MyPageService {
@@ -21,6 +24,10 @@ public class MyPageService {
 	private MyPageMapper myPageMapper;
 	@Autowired
 	private ProductMapper productMapper;
+	@Autowired
+	private MemberRepository memberRepository; 
+	
+	
 	
 	
 	// 상품 카테고리
@@ -67,6 +74,20 @@ public class MyPageService {
 	public void insertBanner(Map<String, Object> data) {
 		// TODO Auto-generated method stub
 		
+	}
+
+
+
+	// 세션에 저장된 id로 회원정보
+	public Optional<MemberEntity> getSession(String data) {
+		return memberRepository.findByMemId(data);
+	}
+
+
+
+	// 회원정보를 통해 채팅리스트 저장
+	public List<Map<String, Object>> getChatList(Map<String, Object> data) {
+		return myPageMapper.getChatList(data);
 	}
 
 

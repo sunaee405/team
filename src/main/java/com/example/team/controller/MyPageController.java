@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.regex.Pattern;
 
 import javax.imageio.IIOImage;
@@ -27,9 +28,11 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.team.model.ChattingEntity;
+import com.example.team.model.MemberEntity;
 import com.example.team.service.MyPageService;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -40,6 +43,7 @@ public class MyPageController {
 	private MyPageService myPageService;
 	
 	private ObjectMapper objectMapper = new ObjectMapper();
+	
 	
 	
 	@PostMapping("/insertBanner")
@@ -89,7 +93,6 @@ public class MyPageController {
 	
 	// 공통코드 불러오기
 	public Map<String, Object> getDetailCode() {
-		
 		String jsonStr = myPageService.getDetailCode();
 		Map<String, Object> code = new HashMap<String, Object>();
 		try {
@@ -106,11 +109,11 @@ public class MyPageController {
 	// 테이블 공통코드 변환
 	public <T> T transCode(Object data) {
 	    try {
+	    	objectMapper.registerModule(new JavaTimeModule());
 	    	
-	    	System.out.println(data);
 			Map<String, Object> code = getDetailCode();
 			
-			String str = data.toString();
+			String str = objectMapper.writeValueAsString(data);
 
 		    // 키를 | 로 구분해 정규표현식에 사용할 문자열 패턴 생성
 		    String regex = String.join("|", code.keySet());
@@ -124,10 +127,11 @@ public class MyPageController {
 		        return code.get(matchedKey).toString();
 		    });
 		    
-		    result = result.replaceAll("(\\w+)=([\\s\\S]*?)(?=,|\\})", "\"$1\":\"$2\"") // 키에 큰따옴표 추가
-				    	   .replaceAll("=\"\"", ": \"\"") // 빈 값 처리
-				    	   .replaceAll("=(\\d+)", ": $1") // 숫자는 그대로 유지
-				    	   .replaceAll("=(\\w+)", ": \"$1\""); // 문자열 값에 큰따옴표 추가
+//		    result = result.replaceAll("(\\w+)=([\\s\\S]*?)(?=,|\\})", "\"$1\":\"$2\"") // 키에 큰따옴표 추가
+//				    	   .replaceAll("=\"\"", ": \"\"") // 빈 값 처리
+//				    	   .replaceAll("=(\\d+)", ": $1") // 숫자는 그대로 유지
+//				    	   .replaceAll("=(\\w+)", ": \"$1\""); // 문자열 값에 큰따옴표 추가
+		    
 		    
 		    System.out.println(result);
 		    
@@ -174,10 +178,13 @@ public class MyPageController {
 	
 	// 세션에서 값 가져오기
 	@GetMapping("/getSession")
-	public String getSession(HttpSession session) {
-//		String memberNum = (String) session.getAttribute("memberNum");
-		String memberNum = "2";
-		return memberNum;
+	public Optional<MemberEntity> getSession(HttpSession session) {
+		String data = (String) session.getAttribute("MEM_ID");
+		System.out.println("세션요청" + data);
+		
+		Optional<MemberEntity> entity = myPageService.getSession(data);
+		
+		return entity;
 	}
 	
 	
@@ -185,8 +192,8 @@ public class MyPageController {
 	// 채팅방 채팅로그 업데이트
 	@PostMapping("/updateChat")
 	public ResponseEntity<?> updateChat(@RequestBody Map<String, Object> data, HttpSession session) {
-//		String userId = session.getAttribute("memberNum");
-		final String userId = "2";
+		String userId = (String)session.getAttribute("MEM_ID");
+//		final String userId = "2";
 		
 		
 		data.put("USERID", userId);
@@ -204,6 +211,17 @@ public class MyPageController {
 	
 	
 	
+	
+	
+	// 로그인한 회원의 전체 채팅 목록
+	@GetMapping("/getChatList")
+	public List<Map<String, Object>> getChatList(@RequestParam Map<String, Object> data) {
+		List<Map<String, Object>> chatList = myPageService.getChatList(data);
+		
+		System.out.println("채팅리스트" + chatList);
+		
+		return chatList;
+	}
 	
 	
 	// 채팅방 값 찾기 + 값 없으면 채팅방 생성
@@ -226,6 +244,7 @@ public class MyPageController {
 		
 		if(chattingEntity == null || chattingEntity.size() == 0) {
 			myPageService.insertChatRoom(data);
+			System.out.println(data);
 			chattingEntity = myPageService.getChatRoom(data);
 		}
 		

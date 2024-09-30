@@ -11,6 +11,7 @@
 	</select>
 	
 	
+	
 	<select id="getMainProductList" resultType="Map">
 		SELECT MEM_NO
 			, PRO_NO
@@ -28,18 +29,18 @@
 			, PRO_IMG
 		FROM PRODUCT
 		WHERE 1 = 1
-	<choose>
-		<when test="TYPE != null and TYPE = 'Latest'">
-			ORDER BY PRO_DATE
-		</when>
-		<when test="TYPE != null and TYPE = 'Popular'">
-			ORDER BY PRO_VIEWS
-		</when>
-		<when test="TYPE != null and TYPE = 'Price'">
-			ORDER BY PRO_PRICE
-		</when>
-	</choose>
-	LIMIT 20;
+		<choose>
+			<when test="TYPE != null and TYPE = 'Latest'">
+				ORDER BY PRO_DATE
+			</when>
+			<when test="TYPE != null and TYPE = 'Popular'">
+				ORDER BY PRO_VIEWS
+			</when>
+			<when test="TYPE != null and TYPE = 'Price'">
+				ORDER BY PRO_PRICE
+			</when>
+		</choose>
+		LIMIT 20;
 	</select>
 
 
@@ -89,5 +90,17 @@
 		)
 		WHERE CHA_NO = #{CHA_NO}
 	</update>
+	
+	<!-- 특정 회원의 전체 채팅 목록 -->
+	<select id="getChatList">
+		SELECT CHA_MEM1
+			, CHA_MEM2
+			, CHA_NO
+			, CHA_LOG
+		FROM CHATTING
+		WHERE CHA_MEM1 = #{MEM_NO}
+		OR CHA_MEM2 = #{MEM_NO}
+	</select>
+	
 
 </mapper>

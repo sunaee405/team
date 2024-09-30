@@ -2,6 +2,7 @@ package com.example.team.persistence;
 
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,7 +20,6 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Integer>
 	List<ProductEntity> findByMemNo(Integer memNo);
 	
 	List<ProductEntity> findByProCategory(String proCategory);
-
 	
 }
 

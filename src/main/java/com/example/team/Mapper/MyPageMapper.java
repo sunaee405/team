@@ -15,6 +15,9 @@ public interface MyPageMapper {
 	// 코드 호출
 	String getDetailCode();
 	
+	// 세션에 저장된 id로 회원정보 받아오기
+//	Map<String, Object> getSession(String MEM_ID);
+	
 	// 메인페이지 상품 리스트
 	List<Map<String, Object>> getMainProductList(Map<String, Object> data);
 	
@@ -26,6 +29,7 @@ public interface MyPageMapper {
 	
 	// 채팅 대화내역 업데이트
 	Integer updateChat(Map<String, Object> data);
-
 	
+	// 회원의 채팅 목록 검색
+	List<Map<String, Object>> getChatList(Map<String, Object> data);
 }

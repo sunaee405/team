@@ -220,7 +220,7 @@ $(document).ready(function() {
                     				</div>
                 				</div>
             				</li>
-            				<input type="hidden" id="" name="" value="memNo"> 
+            				<input type="hidden" id="selMember" name="" value="${memNo}"> 
         				`;
 					});
 
@@ -302,7 +302,7 @@ $(document).ready(function() {
 						// 상품 등록자와 현재 사용자가 다른 경우
 						let buttonsHtml = `
 						<button data-variant="slim"
-							class="text-[13px] md:text-sm leading-4 inline-flex items-center cursor-pointer transition ease-in-out duration-300 font-semibold font-body text-center justify-center placeholder-white focus-visible:outline-none focus:outline-none rounded-md h-11 md:h-12 px-5 py-2 transform-none normal-case hover:shadow-cart ga4_product_detail_bottom w-full bg-white hover:bg-white/90 text-jnblack hover:text-jnblack border-[1px] border-jnblack">채팅하기</button>
+							class="text-[13px] md:text-sm leading-4 inline-flex items-center cursor-pointer transition ease-in-out duration-300 font-semibold font-body text-center justify-center placeholder-white focus-visible:outline-none focus:outline-none rounded-md h-11 md:h-12 px-5 py-2 transform-none normal-case hover:shadow-cart ga4_product_detail_bottom w-full bg-white hover:bg-white/90 text-jnblack hover:text-jnblack border-[1px] border-jnblack chatBtn">채팅하기</button>
 						<button data-variant="slim"
 							class="text-[13px] md:text-sm leading-4 inline-flex items-center cursor-pointer transition ease-in-out duration-300 font-semibold font-body text-center justify-center border-0 border-transparent placeholder-white focus-visible:outline-none focus:outline-none rounded-md h-11 md:h-12 px-5 text-white py-2 transform-none normal-case hover:text-white hover:shadow-cart w-full ga4_product_detail_bottom bg-jnblack hover:bg-jnblack/90">구매하기</button>
                         `;

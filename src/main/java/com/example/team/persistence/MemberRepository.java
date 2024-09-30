@@ -1,5 +1,7 @@
 package com.example.team.persistence;
 
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -23,6 +25,7 @@ public interface MemberRepository extends JpaRepository<MemberEntity, String> {
 	String findMemPwByMemEmailAndMemId(String MemEmail, String MemId);
 
 	String findMemPwByMemEmail(String MemEmail);
-
+	
+	Optional<MemberEntity> findByMemId(String MemId);
 
 }
