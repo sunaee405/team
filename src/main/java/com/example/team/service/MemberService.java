@@ -1,5 +1,7 @@
 package com.example.team.service;
 
+import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -146,6 +148,65 @@ public class MemberService {
 		String memNoStr = convertMemNoToString(memNo);
 	    return memberRepository.findById(memNoStr)
 	        .orElseThrow(() -> new RuntimeException("Member not found with id: " + memNo));
+	}
+	
+	public MemberEntity updateMember(Long memNo, Map<String, Object> updates) {
+		String memNoStr = convertMemNoToString(memNo);
+		// 해당 회원을 DB에서 조회
+        MemberEntity existingMember = memberRepository.findById(memNoStr)
+                .orElseThrow(() -> new RuntimeException("Member not found"));
+
+        // 업데이트할 필드가 있으면 기존 회원 정보 업데이트
+        if (updates.containsKey("mem_tel")) {
+            existingMember.setMemTel((String) updates.get("mem_tel"));
+        }
+        if (updates.containsKey("mem_name")) {
+            existingMember.setMemName((String) updates.get("mem_name"));
+        }
+        if (updates.containsKey("mem_birth")) {
+            existingMember.setMemBirth((String) updates.get("mem_birth"));
+        }
+        // 필요에 따라 다른 필드들도 추가
+
+        // DB에 저장
+        return memberRepository.save(existingMember);
+    }
+	
+	public void updateMemberStatus(Long memNo, Map<String, Object> updates) {
+		String memNoStr = convertMemNoToString(memNo);
+		MemberEntity member = memberRepository.findById(memNoStr)
+                .orElseThrow(() -> new RuntimeException("회원이 존재하지 않습니다."));
+
+		// 탈퇴 유예 처리 로직
+		if (updates.containsKey("mem_respite")) {
+		    OffsetDateTime memRespite = OffsetDateTime.parse((String) updates.get("mem_respite"));
+		    member.setMEM_RESPITE(memRespite.toLocalDateTime()); // 탈퇴 유예 시작 시간
+		}
+        // 탈퇴 유예 시작 시간 설정
+        member.setMEM_RESPITE(LocalDateTime.now());
+        // mem_out은 프론트엔드에서 받은 값을 사용
+        if (updates.containsKey("mem_out")) {
+            OffsetDateTime memOut = OffsetDateTime.parse((String) updates.get("mem_out"));
+            member.setMEM_OUT(memOut.toLocalDateTime()); // 탈퇴 완료 시간
+        }
+        // 탈퇴 여부 변경
+        if (updates.containsKey("mem_status")) {
+            String memStatus = (String) updates.get("mem_status");
+            member.setMEM_STATUS(memStatus); // 상태값 설정
+            System.out.println("회원 상태가 변경되었습니다: " + memStatus);
+        }
+
+        memberRepository.save(member); // 업데이트된 회원 정보 저장
+    }
+	
+	public void cancelMemberStatus(Long memNo, Map<String, Object> updates) {
+		String memNoStr = convertMemNoToString(memNo);
+	    MemberEntity member = memberRepository.findById(memNoStr)
+	            .orElseThrow(() -> new RuntimeException("회원이 존재하지 않습니다."));
+	    member.setMEM_RESPITE(null); // 유예 시간 초기화
+	    member.setMEM_OUT(null); // 탈퇴 시간 초기화
+	    member.setMEM_STATUS("F"); // 상태를 F로 변경
+	    memberRepository.save(member);
 	}
 	
 	// 채현 MemberRepository에서 string 타입으로 되어있어서 만듦..
