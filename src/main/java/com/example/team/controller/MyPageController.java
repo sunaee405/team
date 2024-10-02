@@ -32,6 +32,7 @@ import com.example.team.model.MemberEntity;
 import com.example.team.service.MyPageService;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import jakarta.servlet.http.HttpSession;
@@ -110,9 +111,8 @@ public class MyPageController {
 	public <T> T transCode(Object data) {
 	    try {
 	    	objectMapper.registerModule(new JavaTimeModule());
-	    	
+	    	objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
 			Map<String, Object> code = getDetailCode();
-			
 			String str = objectMapper.writeValueAsString(data);
 
 		    // 키를 | 로 구분해 정규표현식에 사용할 문자열 패턴 생성
@@ -149,6 +149,7 @@ public class MyPageController {
 	}
 	
 	
+	// ========================================== 메인, TOP ======================================================	
 	
 	
 	// 상단영역 카테고리 불러오기
@@ -187,16 +188,23 @@ public class MyPageController {
 		return entity;
 	}
 	
+	// ============================================ 마이페이지 ========================================================================
+	@GetMapping("/getDetailMyProduct")
+	public void getDetailMyProduct(@RequestBody Map<String, Object> data) {
+		myPageService.getDetailMyProduct(data);
+	}
+	
+	
+	// ============================================ 채팅 =============================================================================
+	
 	
 	
 	// 채팅방 채팅로그 업데이트
 	@PostMapping("/updateChat")
 	public ResponseEntity<?> updateChat(@RequestBody Map<String, Object> data, HttpSession session) {
-		String userId = (String)session.getAttribute("MEM_ID");
+//		String userId = (String)session.getAttribute("MEM_ID");
 //		final String userId = "2";
-		
-		
-		data.put("USERID", userId);
+//		data.put("USERID", userId);
 		
 		boolean check = myPageService.updateChat(data);
 		
@@ -208,9 +216,6 @@ public class MyPageController {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("failedUpdate");
 		}
 	}
-	
-	
-	
 	
 	
 	// 로그인한 회원의 전체 채팅 목록
@@ -226,19 +231,24 @@ public class MyPageController {
 	
 	// 채팅방 값 찾기 + 값 없으면 채팅방 생성
 	@PostMapping("/chatRoom")
-	public ResponseEntity<?> getChatRoom(@RequestBody Map<String, Object> data, HttpSession session) {
-		int user1 = Integer.parseInt((String)data.get("SELMEMBER"));
-//		int user2 = session.getAttribute("memberNum");
-		int user2 = 2;
+	public ResponseEntity<?> getChatRoom(@RequestParam Map<String, Object> data, HttpSession session) {
 		
+		System.out.println(data);
 		
-		if(user1 > user2) {
-			int num = user1;
-			user1 = user2;
-			user2 = num;
+		String selMem = (String)data.get("SEL_MEM");
+		if(selMem != null) {
+			int user1 = Integer.parseInt(selMem);
+			int user2 = (int)session.getAttribute("memberNum");
+					
+			if(user1 > user2) {
+				int num = user1;
+				user1 = user2;
+				user2 = num;
+			}
+			
+			data.put("CHA_MEM1", user1);
+			data.put("CHA_MEM2", user2);
 		}
-		data.put("CHA_MEM1", user1);
-		data.put("CHA_MEM2", user2);
 		
 		List<ChattingEntity> chattingEntity = myPageService.getChatRoom(data);
 		
@@ -248,6 +258,7 @@ public class MyPageController {
 			chattingEntity = myPageService.getChatRoom(data);
 		}
 		
+		System.out.println("채팅방"+chattingEntity);
 
 		return ResponseEntity.status(HttpStatus.OK).body(chattingEntity);
 	}

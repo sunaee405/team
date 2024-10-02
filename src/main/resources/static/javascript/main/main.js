@@ -1,55 +1,9 @@
 const TypeList = ["Price", "Popular", "Latest"];
 
 $(function() {
-//	getDetailCode();
     getMainProductList();
     
-//    debugger;
 });
-
-//function getDetailCode() {
-//	
-//	
-//	$.ajax({
-//	    url: "/getDetailCode",
-//	    method: 'GET',
-//	    dataType: 'json',
-//	    success: (data) => {
-//	        debugger; // 성공 시 실행될 코드
-//	    },
-//	    error: (error) => {
-//	        debugger; // 에러 발생 시 실행될 코드
-//	    }
-//	}); 
-//		
-//		
-//		
-////    fetch('/getDetailCode', {
-////        method: 'GET',
-////        headers: {
-////            'X-Requested-With': 'XMLHttpRequest',
-////            'Content-Type': 'application/json'
-////        }
-////    })
-////    .then(response => {
-////		debugger;
-////        if (!response.ok) {
-////            throw new Error('Network response was not ok');
-////            
-////        }
-////        return response.json();
-////    })
-////    .then(data => {
-////		debugger;
-////        alert(data);
-////    })
-////    .catch(error => {
-////		debugger;
-////        console.error('Error:', error);
-////    });
-//}
-
-
 
 
 
@@ -213,10 +167,9 @@ function forProductList(Type, data) {
 		}
 	}
 	
-	
 	let productList =
-		`<a class="productLink relative group box-border overflow-hidden flex rounded-md cursor-pointer pe-0 pb-2 lg:pb-3 flex-col items-start transition duration-200 ease-in-out transform bg-white ga4_main_latest_product">
-			<div href="/product/185430078" class="relative w-full rounded-md overflow-hidden dim pt-[100%] mb-3 md:mb-3.5">
+		`<a href="/product/contentProduct?proNo=${data.PRO_NO}" class="productLink relative group box-border overflow-hidden flex rounded-md cursor-pointer pe-0 pb-2 lg:pb-3 flex-col items-start transition duration-200 ease-in-out transform bg-white ga4_main_latest_product">
+			<div class="relative w-full rounded-md overflow-hidden dim pt-[100%] mb-3 md:mb-3.5">
 				<img alt="${data.PRO_TITLE}" referrerpolicy="no-referrer" src="https://img2.joongna.com/media/original/2024/09/18/1726641595651iq2_Tbvkn.jpg?impolicy=thumb&amp;size=150" decoding="async" data-nimg="fill" class="bg-gray-300 object-cover h-full group-hover:scale-105 w-full transition duration-200 ease-in rounded-md" loading="lazy" style="position:absolute;height:100%;width:100%;left:0;top:0;right:0;bottom:0;color:transparent">
 			</div>
 			<div class="w-full overflow-hidden p-2 md:px-2.5 xl:px-4">

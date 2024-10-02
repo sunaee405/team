@@ -90,5 +90,10 @@ public class MyPageService {
 		return myPageMapper.getChatList(data);
 	}
 
+	public void getDetailMyProduct(Map<String, Object> data) {
+		// TODO Auto-generated method stub
+		
+	}
+
 
 }

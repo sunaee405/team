@@ -5,13 +5,25 @@
 
 <mapper namespace="com.example.team.Mapper.MyPageMapper">
 
+
+
+
+
+	<!-- 공통코드 호출 -->
 	<select id="getDetailCode" resultType="String">
 		SELECT JSON_OBJECTAGG(DCO_ID, DCO_VALUE)
 		FROM TEST_DETAIL_CODE;
 	</select>
 	
 	
+	<!-- 마이페이지 상품록록 -->
+	<select id="getMyProducts">
+		SELECT 
+	</select>
 	
+	
+	
+	<!-- 메인페이지 상품목록 -->
 	<select id="getMainProductList" resultType="Map">
 		SELECT MEM_NO
 			, PRO_NO
@@ -28,7 +40,7 @@
 			, PRO_CONTENT
 			, PRO_IMG
 		FROM PRODUCT
-		WHERE 1 = 1
+		WHERE PRO_STATUS = 'STD1'
 		<choose>
 			<when test="TYPE != null and TYPE = 'Latest'">
 				ORDER BY PRO_DATE
@@ -40,31 +52,34 @@
 				ORDER BY PRO_PRICE
 			</when>
 		</choose>
-		LIMIT 20;
+		LIMIT 30;
 	</select>
 
-
+	<!-- 채팅룸 호출 -->
 	<select id="getChatRoom" resultType="map">
+		SELECT CHA_NO
+			, CHA_LOG
+			, CHA_MEM1
+			, CHA_MEM2 
+		FROM CHATTING
+		WHERE 1 = 1
 	<choose>
 		<when test="CHA_MEM1 != null and CHA_MEM2 != null">
-			SELECT CHA_NO
-				, CHA_LOG
-				, CHA_MEM1
-				, CHA_MEM2 
-			FROM CHATTING
-			WHERE CHA_MEM1 = #{CHA_MEM1}
+			AND CHA_MEM1 = #{CHA_MEM1}
 			AND CHA_MEM2 = #{CHA_MEM2}
 		</when>
 		<when test="CHA_NO != null">
-			SELECT CHA_NO
-				, JSON_EXTRACT(CHA_LOG, CONCAT('$[', JSON_LENGTH(CHA_LOG) - 1, ']')) as CHA_LOG
-				, CHA_MEM1
-				, CHA_MEM2 
-			FROM CHATTING
-			WHERE CHA_NO = #{CHA_NO}
+			AND CHA_NO = #{CHA_NO}
 		</when>
 	</choose>
 	</select>
+<!-- 	SELECT CHA_NO -->
+<!-- 				, JSON_EXTRACT(CHA_LOG, CONCAT('$[', JSON_LENGTH(CHA_LOG) - 1, ']')) as CHA_LOG -->
+<!-- 				, CHA_MEM1 -->
+<!-- 				, CHA_MEM2  -->
+<!-- 			FROM CHATTING -->
+<!-- 			WHERE CHA_NO = #{CHA_NO} -->
+	
 
 	<!-- 채팅룸 생성 -->
 	<insert id="insertChatRoom">
@@ -93,13 +108,23 @@
 	
 	<!-- 특정 회원의 전체 채팅 목록 -->
 	<select id="getChatList">
-		SELECT CHA_MEM1
-			, CHA_MEM2
-			, CHA_NO
-			, CHA_LOG
-		FROM CHATTING
-		WHERE CHA_MEM1 = #{MEM_NO}
-		OR CHA_MEM2 = #{MEM_NO}
+		SELECT C.CHA_NO
+			, C.CHA_MEM1
+			, C.CHA_MEM2
+		    , JSON_SET(JSON_EXTRACT(C.CHA_LOG, CONCAT('$[', JSON_LENGTH(C.CHA_LOG) - 1, ']')), '$.NICK', M.MEM_NICK) AS 'CHA_LOG'
+		FROM
+			(SELECT CHA_MEM1
+				, CHA_MEM2
+				, CHA_NO
+		        , CHA_LOG
+				, CASE 
+					   WHEN CHA_MEM1 = #{MEM_NO} THEN CHA_MEM2
+					   ELSE CHA_MEM1
+				   END AS OTHER_MEM
+			FROM CHATTING) C JOIN MEMBERS M
+		ON C.OTHER_MEM = M.MEM_NO
+		WHERE C.CHA_MEM1 = #{MEM_NO}
+		OR C.CHA_MEM2 = #{MEM_NO}
 	</select>
 	
 

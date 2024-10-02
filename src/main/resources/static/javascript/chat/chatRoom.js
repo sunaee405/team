@@ -1,9 +1,18 @@
 const socket = new WebSocket('ws://localhost:8080/chat'); // 소켓 연결
+const memberNum = sessionStorage.getItem('memNo');
 $(async function() {
 	
 	//$('body').css({'width':width, 'height':height});
-	const urlParams = new URLSearchParams(window.location.search);
-	const selMember = urlParams.get('selMember');
+//	const urlParams = new URLSearchParams(window.location.search);
+//	const selMember = urlParams.get('selMember');
+	const url = new URL(location.href).searchParams;
+	// FormData 객체 생성
+	const formData = new FormData();
+	
+	// 
+	url.forEach((value, key) => {
+	  formData.append(key, value); 
+	});
 	
 	//fetch 요청 보내기
 	//요청을 보낼 URL
@@ -13,11 +22,8 @@ $(async function() {
 	    method: 'POST',
 	    headers: {
 			'X-Requested-With': 'XMLHttpRequest', // 필터에서 ajax 요청으로 인식하도록 헤더 설정
-	        'Content-Type': 'application/json' // 요청 데이터 형식
 	    },
-	    body: JSON.stringify({
-	        "SELMEMBER": selMember // 판매자 id값
-	    })
+	    body: formData
 	};
 
 	// 소켓 연결시 ajax에서 유저 정보로 채팅내역 불러오기
@@ -50,7 +56,7 @@ $(async function() {
 
 			log.forEach(function(data, index) {
 				var currMe = data.USERID == memberNum ? "from-me" : "to-me";
-
+				debugger;
 				let time = new Date(data.TIME);
 				time = String(time.getHours()).padStart(2, '0') + "시" + String(time.getMinutes()).padStart(2, '0') + "분";
 				if(currMe === "from-me") {
@@ -76,6 +82,37 @@ $(async function() {
 			
 	    });
 	}
+	
+	// 소켓에서 채팅 메시지 수신
+	socket.onmessage = msg => {
+		const data = JSON.parse(msg.data);
+		
+		var currMe = data.USERID == memberNum ? "from-me" : "to-me";
+		let time = new Date(data.TIME);
+		
+		time = String(time.getHours()).padStart(2, '0') + "시" + String(time.getMinutes()).padStart(2, '0') + "분";
+		if(currMe === "from-me") {
+			sorttxt =  `<span class="time">${time}</span>
+				    	<span class="body">${data.TEXT}</span>`;
+		} else if(currMe === "to-me") {
+			sorttxt =  `<span class="body">${data.TEXT}</span>
+						<span class="time">${time}</span>`;
+		}
+		
+		
+		
+		var text = `
+			<div class="message ${currMe}">
+				<input type="hidden" class="cuUser" value="${data.USERID}">
+				${sorttxt}
+			</div>
+			`;
+			
+			
+		$(".message-container").append(text);
+	}
+	
+	
 
 });
 
@@ -92,7 +129,7 @@ $(document).on('keyup', "#inputBox", function(a, b, c, d, e) {
 
 
 $(document).on('click', ".btn-success", function() {
-	
+	debugger;
 	const chatRoomNo = $(".chat").attr("data-rNum");
 	const content = $("#inputBox").val();
 	const chatLog = JSON.stringify({
@@ -125,33 +162,4 @@ $(document).on('click', ".btn-success", function() {
 		.finally(() => {
 			$("#inputBox").val('');
 		});
-	
-	
-	socket.onmessage = msg => {
-		const data = JSON.parse(msg.data);
-		
-		var currMe = data.USERID == memberNum ? "from-me" : "to-me";
-		let time = new Date(data.TIME);
-		
-		time = String(time.getHours()).padStart(2, '0') + "시" + String(time.getMinutes()).padStart(2, '0') + "분";
-		if(currMe === "from-me") {
-			sorttxt =  `<span class="time">${time}</span>
-				    	<span class="body">${data.TEXT}</span>`;
-		} else if(currMe === "to-me") {
-			sorttxt =  `<span class="body">${data.TEXT}</span>
-						<span class="time">${time}</span>`;
-		}
-		
-		
-		
-		var text = `
-			<div class="message ${currMe}">
-				<input type="hidden" class="cuUser" value="${data.USERID}">
-				${sorttxt}
-			</div>
-			`;
-			
-			
-		$(".message-container").append(text);
-	}
 });
