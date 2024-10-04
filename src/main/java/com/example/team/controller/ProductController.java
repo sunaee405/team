@@ -43,12 +43,6 @@ public class ProductController {
 	@Inject
 	private ProductService productService;
 
-//	@GetMapping("/product/registerProduct")
-//	public String registerProduct() {
-//
-//		return "/product/registerProduct";
-//	}
-
 	// =================================== 상품 등록 ===================================
 
 	@GetMapping("/getMemNoByMemId")
@@ -207,7 +201,6 @@ public class ProductController {
 	}
 
 	// =================================== 상품 정보 수정
-	// ===================================
 
 	@PostMapping("/updateProduct")
 	@ResponseBody
