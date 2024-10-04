@@ -81,14 +81,10 @@ $(document).ready(function() {
 	    
 	    //전체데이터 중에 체크된 아이디가 null인 행
 	    const checkedRowsData = currentData.filter((row, index) =>  checkedRows.includes(index));
-		// const viewData = checkedRowsData.filter((row, index) => row.ID === null && checkedRows.includes(index));	    
 	    
 	    //전체데이터 중에 체크된 아이디가 null이 아닌 행(DB삭제)
-	    const dbData = checkedRowsData.filter((row, index) => row.ID !== null);
-	    const filteredIds = dbData.map(row => row.ID);
-	    // ID 가 있는 배열 (DB)
-	    // 필터링된 ID를 저장할 배열
-	    
+	    const dbData = checkedRowsData.filter((row, index) => row.PRO_NO !== null);
+	    const filteredIds = dbData.map(row => row.PRO_NO);
 	    
 	    if (checkedRows.length === 0) {
 	        alert('삭제할 행을 선택해 주세요.');
@@ -100,7 +96,7 @@ $(document).ready(function() {
 	        // AJAX 요청으로 서버에 DELETE
 	        $.ajax({
 	            type: 'DELETE',
-	            url: '/admin/subcodes', // 삭제 요청을 보낼 API 엔드포인트
+	            url: '/admin/products/deleteProducts', // 삭제 요청을 보낼 API 엔드포인트
 	            contentType: 'application/json',
 	            data: JSON.stringify(filteredIds), // 체크된 행의 ID 배열 전송
 	            success: function(response) {
@@ -108,8 +104,6 @@ $(document).ready(function() {
 	                alert('삭제 완료!' + filteredIds.length + '개의 행이 삭제되었습니다.');
 	                // 삭제 후, 데이터 다시 가져오기
                 	fetchData(); // 데이터 가져오는 함수 호출
-	                
-
 	            },
 	            error: function(xhr, status, error) {
 	                console.error('삭제 오류:', error);
@@ -121,25 +115,6 @@ $(document).ready(function() {
 	
 	// 그리드 이벤트 핸들러
     grid.on('beforeChange', ev => {
-		
-		const curr = grid.getData();
-		const dbData = curr.filter((row, index) => row.ID !== null);
-		const newData = curr.filter((row, index) => row.ID === null);
-		
-//		if (DB에 있던거면, ID가 null이 아닌거){
-//			return false;
-//		}
-
-		// 중복 체크
-		for(let i = 0; i < dbData.length; i++){
-			if (dbData[i].SCO_ID == ev.changes[0].nextValue) {
-	            alert(`"${dbData[i].SCO_ID}"는 이미 존재합니다. 다른 ID를 사용하세요.`);
-	            ev.changes[0].nextValue = "";
-	            grid.el.onfocus = true;
-	            return;
-        	}
-		}
-		
     	console.log('before change:', ev);
     });
     
@@ -152,43 +127,10 @@ $(document).ready(function() {
 	    const { rowKey, columnName } = ev;
 	    if (columnName === 'PRO_TITLE') { // pro_title 열이 클릭된 경우
 	        const proNo = grid.getValue(rowKey, 'PRO_NO');
-	        debugger;
 	        window.location.href = `detail?pro_no=${proNo}`;
 	        
 	    }
 	});
-    
-  	// 저장 버튼 클릭 이벤트 처리
-    $('#saveButton').click(function() {
-        const currentData = grid.getData();
-        
-		//아이디가 null이 아니면 update
-		const updatedData = currentData.filter((row, index) => row.mem_no !== null);
-		    
-        const updateList = updatedData.map(row => ({
-			mem_no : row.mem_no,
-			mem_name: row.mem_name,
-		    mem_pw: row.mem_pw,
-		}));
-		
-        // AJAX 요청으로 서버에 업데이트
-	    $.ajax({
-	        type: 'PUT',
-	        url: '/admin/members', // 데이터 업데이트를 위한 API 엔드포인트
-	        contentType: 'application/json',
-	        data: JSON.stringify(updateList), // 수정된 데이터 전송
-	
-	        success: function(response) {
-	            console.log('업데이트 성공:', response);
-	            alert('업데이트 성공!');
-	            
-	        },
-	        error: function(error) {
-	            console.error('업데이트 오류:', error);
-	            alert('업데이트 실패! 오류: ' + error);
-	        }
-	     });
-    });
     
     
     //------함수

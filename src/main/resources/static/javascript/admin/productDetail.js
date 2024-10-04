@@ -5,8 +5,6 @@ $(function() {
             type: 'GET',
             url: `/admin/products/${proNo}`, // 상세 정보 API 엔드포인트
             success: function(data) {
-				data;
-				debugger;
                 // 데이터가 성공적으로 반환되면 테이블에 추가
 	            $('#product-detail').html(`
 	            <tr>
@@ -23,7 +21,7 @@ $(function() {
                     <th>네고유무</th>
                     <td>${data.PRO_NEG}</td>
                     <th>상품금액</th>
-                    <td>${data.PRO_PRICE}</td>
+                    <td>${data.PRO_PRICE}원</td>
                 </tr>
                 <tr>
                     <th>판매글 제목</th>
@@ -59,17 +57,15 @@ $(function() {
 	        });
 	        
 	$('#deleteButton').click(function(){
-		$('#product-detail').html
-	    
 	    // Ajax 요청으로 서버에 데이터 전송
 	    $.ajax({
-			url: '/admin/products/delete', // 현재 상태에 따라 URL 선택
-	        type: 'PUT',
+			url: `/admin/products/delete/${proNo}`, // 현재 상태에 따라 URL 선택
+	        type: 'DELETE',
 	        contentType: 'application/json',
-	        data: JSON.stringify(data),
+//	        data: JSON.stringify(data),
 	        success: function(response) {
 	            alert('처리가 완료되었습니다.'); // 성공 시 메시지
-	            // 상태 셀 업데이트
+	            window.location.href = 'list';//페이지 이동
 	        },
 	        error: function(xhr, status, error) {
 	            // 오류 처리

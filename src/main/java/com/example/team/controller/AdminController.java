@@ -1,12 +1,12 @@
 package com.example.team.controller;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,9 +22,24 @@ import com.example.team.persistence.MemberRepository;
 import com.example.team.service.MemberService;
 import com.example.team.service.ProductService;
 
+import jakarta.servlet.http.HttpServletRequest;
+
 @RestController
 @RequestMapping("/admin/*")
 public class AdminController {
+	
+//	logout
+	@PostMapping("/logout")
+    public ResponseEntity<Map<String, String>> logout(HttpServletRequest request) {
+		System.out.println("@@@@@@@@@@@@@@@@@@@@@");
+		// 세션 무효화
+        request.getSession().invalidate();
+     // 리다이렉트 URL 생성
+        Map<String, String> response = new HashMap<>();
+//        TODO 메인화면으로 변경
+        response.put("redirectUrl", "/myPage/main");
+        return ResponseEntity.ok(response); // JSON 응답으로 리다이렉트 URL 반환
+    }
 	
 //	member -----------------------------------
 	@Autowired
@@ -86,6 +101,19 @@ public class AdminController {
     @GetMapping("products/{proNo}")
     public Map<String, Object> getProduct(@PathVariable("proNo") Long proNo) {
         return productService.getProduct(proNo); // 조회
+    }
+    
+    @DeleteMapping("products/deleteProducts")
+    public void deleteProducts(@RequestBody List<Long> ids) {
+    	for (Long id : ids) {
+    		productService.delete(id); // 각 ID로 삭제 메서드 호출
+        }
+    }
+    
+    @DeleteMapping("products/delete/{proNo}")
+    public void deleteproduct(@PathVariable("proNo") Long proNo) {
+    	System.out.println(proNo);
+    	productService.delete(proNo);
     }
 
 

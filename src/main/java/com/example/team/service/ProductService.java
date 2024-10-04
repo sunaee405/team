@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.team.Mapper.ProductMapper;
 import com.example.team.model.LikeEntity;
+import com.example.team.model.MainCodeEntity;
 import com.example.team.model.MemberEntity;
 import com.example.team.model.PaymentEntity;
 import com.example.team.model.ProductEntity;
@@ -252,6 +253,16 @@ public class ProductService {
 		int proNoInt = convertMemNoToInteger(proNo);
 		return productMapper.getContentProduct(proNoInt);
 	}
+	
+	public void delete(Long id) {
+		int proNoInt = convertMemNoToInteger(id);
+    	// ID로 메인 코드 엔티티를 찾고, 존재하지 않을 경우 예외 처리
+        ProductEntity existingProduct = productRepository.findById(proNoInt)
+            .orElseThrow(() -> new RuntimeException("ID not found: " + proNoInt));
+
+        // 엔티티 삭제
+        productRepository.delete(existingProduct);
+    }
 	
 	
 	// 채현 MemberRepository에서 string 타입으로 되어있어서 만듦..

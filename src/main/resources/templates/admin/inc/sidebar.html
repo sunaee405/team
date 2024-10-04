@@ -44,7 +44,7 @@
 
             <!-- Nav Item - Dashboard -->
             <li class="nav-item active">
-                <a class="nav-link" href="index">
+                <a class="nav-link" href="../../main/main">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>공식 홈페이지 바로가기</span></a>
             </li>
@@ -93,7 +93,6 @@
 <!--             </li> -->
 
             <!-- Divider -->
-            <hr class="sidebar-divider">
 
             <!-- Heading -->
             <div class="sidebar-heading">
@@ -210,9 +209,17 @@
             <hr class="sidebar-divider d-none d-md-block">
 
             <!-- Sidebar Toggler (Sidebar) -->
-            <div class="text-center d-none d-md-inline">
-                <button class="rounded-circle border-0" id="sidebarToggle"></button>
-            </div>
+<!--             <div class="text-center d-none d-md-inline"> -->
+<!--                 <button class="rounded-circle border-0" id="sidebarToggle"></button> -->
+<!--             </div> -->
+            
+            <li class="nav-item active">
+            	<a class="nav-link"
+            	   href="#"
+            	   onclick="logout()"
+				   style="text-align: center; padding-top: 3px; padding-bottom: 3px; font-size: 17px; padding-left: 27px;">
+				<i class="fas fa-fw fa-plug"></i><span>로그아웃 </span>
+			</a></li>
 
             <!-- Sidebar Message -->
 <!--             <div class="sidebar-card d-none d-lg-flex"> -->
@@ -220,8 +227,11 @@
 <!--                 <p class="text-center mb-2"><strong>SB Admin Pro</strong> is packed with premium features, components, and more!</p> -->
 <!--                 <a class="btn btn-success btn-sm" href="https://startbootstrap.com/theme/sb-admin-pro">Upgrade to Pro!</a> -->
 <!--             </div> -->
+			
 
         </ul>
+        
+        
         <!-- End of Sidebar -->
 </body>
 <script type="text/javascript">
@@ -244,7 +254,23 @@ $(document).ready(function(){
 	        $(target).collapse('hide'); // 닫기
 	    }
 	});
+	
+	
 });
+function logout() {
+	$.ajax({
+        url: '/admin/logout',
+        type: 'POST', // 또는 'GET'
+        contentType: 'application/json',
+        success: function(response) {
+            window.location.href = response.redirectUrl; // 리다이렉트 처리
+        },
+        error: function(xhr, status, error) {
+            console.error('로그아웃 오류:', error);
+        }
+    });
+}
+
 </script>
 
 </html>
