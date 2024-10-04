@@ -23,6 +23,7 @@ import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
@@ -54,20 +55,17 @@ public class ProductController {
 	@ResponseBody
 	public ResponseEntity<Integer> getMemNoByMemId(HttpSession session) {
 		String memId = (String) session.getAttribute("MEM_ID");
-		System.out.println("memId from session: " + memId);
 
-		if (memId == null) {
-			System.out.println("memId is null. User is not logged in.");
-			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
-		}
+//		if (memId == null) {
+//			System.out.println("memId is null. User is not logged in.");
+//			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+//		}
 
 		Integer memNo = productService.getMemNoByMemId(memId);
-		System.out.println("memNo from DB: " + memNo);
 
-		if (memNo == null) {
-			System.out.println("No memNo found for memId: " + memId);
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-		}
+//		if (memNo == null) {
+//			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+//		}
 
 		return ResponseEntity.ok(memNo);
 	}
@@ -161,7 +159,8 @@ public class ProductController {
 				searchKeyword);
 	}
 
-	// =================================== 상세 상품 정보 ===================================
+	// =================================== 상세 상품 정보
+	// ===================================
 
 	@GetMapping("getContentProduct")
 	@ResponseBody
@@ -207,7 +206,8 @@ public class ProductController {
 		return ResponseEntity.ok().body(isLiked);
 	}
 
-	// =================================== 상품 정보 수정 ===================================
+	// =================================== 상품 정보 수정
+	// ===================================
 
 	@PostMapping("/updateProduct")
 	@ResponseBody
@@ -266,4 +266,36 @@ public class ProductController {
 		return ResponseEntity.ok(response);
 	}
 
+	// =================================== 상품 삭제 ===================================
+
+	@PostMapping("/deleteProduct")
+	@ResponseBody
+	public ResponseEntity<?> deleteProduct(@RequestParam("proNo") int proNo) {
+		try {
+			// 서비스 레이어를 호출하여 상품 삭제
+			productService.deleteProduct(proNo);
+			return ResponseEntity.ok().build(); // 성공 시 200 OK 응답 반환
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("상품 삭제 중 오류 발생");
+		}
+	}
+
+	// =================================== 상품 결제 저장 ===================================
+
+	@PostMapping("/payProduct")
+	@ResponseBody
+	public ResponseEntity<?> insertPayment(@RequestBody Map<String, Object> paymentData) {
+		
+		productService.insertPayment(paymentData);
+		productService.updateAfterPayment(paymentData);
+
+		// 로직 처리 후
+		Map<String, String> response = new HashMap<>();
+		response.put("redirectUrl", "/myPage/main");
+		
+		return ResponseEntity.ok(response);
+	}
+	
+	
 }

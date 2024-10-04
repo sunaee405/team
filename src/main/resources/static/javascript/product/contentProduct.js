@@ -206,7 +206,7 @@ $(document).ready(function() {
 						const images = product.pro_img ? product.pro_img.split(',') : [];
 						const imageUrl = images.length > 0 ? '/images/' + images[0] : '/images/default.png';
 						const productUrl = '/product/contentProduct?proNo=' + product.pro_no;
-						
+
 						// 숨겨둔 memNo
 						otherProductHtml += `
             				<li class="flex py-3 h-[160px] overflow-hidden">
@@ -298,15 +298,82 @@ $(document).ready(function() {
 							const modifyUrl = `/product/modifyProduct?proNo=${proNo}`; // 상품 번호를 URL 파라미터로 전달
 							window.location.href = modifyUrl; // 수정 페이지로 리다이렉트
 						});
+
+						// **'삭제하기' 버튼 클릭 시 AJAX 요청**
+						$('#deleteButton').on('click', function() {
+							if (confirm('정말로 이 상품을 삭제하시겠습니까?')) {
+								$.ajax({
+									url: '/deleteProduct',
+									type: 'POST',
+									data: { proNo: proNo },
+									success: function(response) {
+										alert('상품이 성공적으로 삭제되었습니다.');
+										window.location.href = '/product/listProduct'; // 상품 목록 페이지로 리다이렉트
+									},
+									error: function(error) {
+										console.error('상품 삭제 중 오류 발생:', error);
+										alert('상품 삭제에 실패했습니다.');
+									}
+								});
+							}
+						});
+
 					} else {
 						// 상품 등록자와 현재 사용자가 다른 경우
 						let buttonsHtml = `
 						<button data-variant="slim"
-							class="text-[13px] md:text-sm leading-4 inline-flex items-center cursor-pointer transition ease-in-out duration-300 font-semibold font-body text-center justify-center placeholder-white focus-visible:outline-none focus:outline-none rounded-md h-11 md:h-12 px-5 py-2 transform-none normal-case hover:shadow-cart ga4_product_detail_bottom w-full bg-white hover:bg-white/90 text-jnblack hover:text-jnblack border-[1px] border-jnblack chatBtn">채팅하기</button>
-						<button data-variant="slim"
-							class="text-[13px] md:text-sm leading-4 inline-flex items-center cursor-pointer transition ease-in-out duration-300 font-semibold font-body text-center justify-center border-0 border-transparent placeholder-white focus-visible:outline-none focus:outline-none rounded-md h-11 md:h-12 px-5 text-white py-2 transform-none normal-case hover:text-white hover:shadow-cart w-full ga4_product_detail_bottom bg-jnblack hover:bg-jnblack/90">구매하기</button>
+							class="text-[13px] md:text-sm leading-4 inline-flex items-center cursor-pointer transition ease-in-out duration-300 font-semibold font-body text-center justify-center placeholder-white focus-visible:outline-none focus:outline-none rounded-md h-11 md:h-12 px-5 py-2 transform-none normal-case hover:shadow-cart ga4_product_detail_bottom w-full bg-white hover:bg-white/90 text-jnblack hover:text-jnblack border-[1px] border-jnblack chatBtn">
+							채팅하기</button>
+						<button id="payButton" data-variant="slim"
+							class="text-[13px] md:text-sm leading-4 inline-flex items-center cursor-pointer transition ease-in-out duration-300 font-semibold font-body text-center justify-center border-0 border-transparent placeholder-white focus-visible:outline-none focus:outline-none rounded-md h-11 md:h-12 px-5 text-white py-2 transform-none normal-case hover:text-white hover:shadow-cart w-full ga4_product_detail_bottom bg-jnblack hover:bg-jnblack/90">
+							구매하기</button>
                         `;
 						$('#sellCheckDiv').append(buttonsHtml);
+
+						// 결제 버튼 클릭 시 결제 로직
+						$('#payButton').on('click', function() {
+//							console.log(proNo);
+//							console.log(sessionMemNo);
+//							console.log(sellerMemNo);
+							var IMP = window.IMP; // 아임포트 객체 초기화
+							IMP.init("imp35316214"); // 가맹점 식별코드 입력
+
+							IMP.request_pay({
+								pg: "html5_inicis",        // 결제사 설정 (이니시스)
+								pay_method: "card",        // 결제 방식 (카드)
+								merchant_uid: "O" + new Date().getTime(), // 주문번호 생성
+								name: title,               // 상품명
+								// amount: price           // 결제 금액
+								amount: 10,
+								buyer_email: "",
+								buyer_name : "",
+							}, function(rsp) {
+								if (rsp.success) {
+									alert('결제가 완료되었습니다.');
+									// 결제 완료 후 서버에 결제 정보 전송
+									$.ajax({
+										url: '/payProduct',
+										type: 'POST',
+										contentType: 'application/json',
+										data: JSON.stringify({
+											proNo: proNo,
+											buyMemNo: sessionMemNo,
+											selMemNo: sellerMemNo
+										}),
+										success: function(response) {
+											// 결제 성공 시 리다이렉트 URL로 이동
+											window.location.href = response.redirectUrl;
+										},
+										error: function(error) {
+											console.error('결제 처리 중 오류 발생:', error);
+											alert('결제에 실패했습니다.');
+										}
+									});
+								} else {
+									alert('결제가 실패하였습니다.');
+								}
+							});
+						});
 					}
 
 					// 상품 상태에 따라 sellCheckDiv 보이기/숨기기
@@ -390,6 +457,7 @@ $(document).ready(function() {
 						}
 					});
 				},
+
 				//				error: function(error) {
 				//					console.error('세션에서 memNo를 가져오는 중 오류 발생:', error);
 				//					alert('로그인 상태를 확인할 수 없습니다.');
@@ -397,6 +465,7 @@ $(document).ready(function() {
 				//				}
 			});
 		},
+
 		error: function(error) {
 			console.error('상품 데이터를 가져오는 중 오류 발생:', error);
 		}

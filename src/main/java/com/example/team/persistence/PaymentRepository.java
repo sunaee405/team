@@ -9,16 +9,15 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import com.example.team.model.PaymentEntity;
 import com.example.team.model.ProductEntity;
 
 
 
 @Repository
-public interface ProductRepository extends JpaRepository<ProductEntity, Integer>{
+public interface PaymentRepository extends JpaRepository<PaymentEntity, Integer>{
 	
-	List<ProductEntity> findByMemNo(Integer memNo);
 	
-	List<ProductEntity> findByProCategory(String proCategory);
 	
 }
 

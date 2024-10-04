@@ -1,5 +1,5 @@
 $(document).ready(function() {
-	
+
 	const uploadButton = document.getElementById('imageUploadButton');
 	const imageInput = document.getElementById('imageInput');
 	const imageList = document.getElementById('imageList');
@@ -407,4 +407,9 @@ $(document).ready(function() {
 			},
 		});
 	});
+
+	$('#backButton').on('click', function() {
+		window.history.back();
+	});
+
 });

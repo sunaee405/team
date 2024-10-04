@@ -21,9 +21,11 @@ import org.springframework.stereotype.Service;
 
 import com.example.team.Mapper.ProductMapper;
 import com.example.team.model.LikeEntity;
+import com.example.team.model.PaymentEntity;
 import com.example.team.model.ProductEntity;
 import com.example.team.persistence.LikedRepository;
 import com.example.team.persistence.MemberRepository;
+import com.example.team.persistence.PaymentRepository;
 import com.example.team.persistence.ProductRepository;
 import com.mysql.cj.log.Log;
 
@@ -38,12 +40,15 @@ public class ProductService {
 
 	@Autowired
 	ProductRepository productRepository;
-	
+
 	@Autowired
 	LikedRepository likedRepository;
-	
+
 	@Autowired
 	MemberRepository memberRepository;
+
+	@Autowired
+	PaymentRepository paymentRepository;
 
 	@Autowired
 	ProductMapper productMapper;
@@ -71,13 +76,13 @@ public class ProductService {
 	public List<Map<String, Object>> getProductNego() {
 		return productMapper.getProductNego();
 	}
-	
+
 	public List<Map<String, Object>> getProductStatus() {
 		return productMapper.getProductStatus();
 	}
 
 	public void insertProduct(Map<String, String> params) {
-		
+
 		int memNo = Integer.parseInt(params.get("memNo"));
 		String productTitle = (String) params.get("productTitle");
 		String fileNames = (String) params.get("fileNames");
@@ -92,9 +97,8 @@ public class ProductService {
 		// 현재 시간을 LocalDateTime으로 설정 (초까지만)
 		LocalDateTime currentDateTime = LocalDateTime.now().withNano(0);
 
-		
 //		Method[] methods = Class.forName("ProductEntity").getMethods();
-		
+
 		// 엔티티 생성 후 데이터 설정
 		ProductEntity productEntity = new ProductEntity();
 		productEntity.setMemNo(memNo);
@@ -119,94 +123,122 @@ public class ProductService {
 		return productMapper.getSortList();
 	}
 
-	public Map<String, Object> getProductsSorted(int page, int size, String sortType, String categoryId, String locationScoId, String locationDcoId, String searchKeyword) {
-	    int start = (page - 1) * size;
-	    List<Map<String, Object>> products = productMapper.getProductsSorted(start, size, sortType, categoryId, locationScoId, locationDcoId, searchKeyword);
-	    int totalProducts = productMapper.getTotalProducts(categoryId, locationScoId, locationDcoId, searchKeyword); // 카테고리별로 제품 수 조회
-	    int totalPages = (int) Math.ceil((double) totalProducts / size);
+	public Map<String, Object> getProductsSorted(int page, int size, String sortType, String categoryId,
+			String locationScoId, String locationDcoId, String searchKeyword) {
+		int start = (page - 1) * size;
+		List<Map<String, Object>> products = productMapper.getProductsSorted(start, size, sortType, categoryId,
+				locationScoId, locationDcoId, searchKeyword);
+		int totalProducts = productMapper.getTotalProducts(categoryId, locationScoId, locationDcoId, searchKeyword); 
+		int totalPages = (int) Math.ceil((double) totalProducts / size);
 
-	    Map<String, Object> result = new HashMap<>();
-	    result.put("products", products);
-	    result.put("totalPages", totalPages);
-	    result.put("currentPage", page);
-	    return result;
+		Map<String, Object> result = new HashMap<>();
+		result.put("products", products);
+		result.put("totalPages", totalPages);
+		result.put("currentPage", page);
+		return result;
 	}
-	
-	
-	// =================================== 상품 상세 정보 ===================================
-	
+
+	// =================================== 상품 상세 정보
+
 	@Transactional
 	public void updateProViews(int proNo) {
 		productMapper.updateProViews(proNo);
 	}
-	
+
 	public Map<String, Object> getContentProduct(int proNo) {
-	    return productMapper.getContentProduct(proNo);
+		return productMapper.getContentProduct(proNo);
 	}
-	
+
 	public List<ProductEntity> getProductByMemNo(Integer memNo) {
-        return productRepository.findByMemNo(memNo);
-    }
-	
+		return productRepository.findByMemNo(memNo);
+	}
+
 	public List<ProductEntity> getProductByProCategory(String proCategory) {
-        return productRepository.findByProCategory(proCategory);
-    }
+		return productRepository.findByProCategory(proCategory);
+	}
 
 	public void insertLiked(Map<String, String> params) {
-		
+
 		int memNo = Integer.parseInt(params.get("memNo"));
 		int proNo = Integer.parseInt(params.get("proNo"));
-		
-        // 이미 찜했는지 확인
-        if (!likedRepository.existsByMemNoAndProNo(memNo, proNo)) {
-            LikeEntity likeEntity = new LikeEntity();
-            likeEntity.setMemNo(memNo);
-            likeEntity.setProNo(proNo);
 
-            // 찜 저장
-            likedRepository.save(likeEntity);
-        }
+		// 이미 찜했는지 확인
+		if (!likedRepository.existsByMemNoAndProNo(memNo, proNo)) {
+			LikeEntity likeEntity = new LikeEntity();
+			likeEntity.setMemNo(memNo);
+			likeEntity.setProNo(proNo);
+
+			// 찜 저장
+			likedRepository.save(likeEntity);
+		}
 	}
-	
-	@Transactional  // 트랜잭션을 보장
-	public void deleteLiked(Map<String, String> params) {
-        int memNo = Integer.parseInt(params.get("memNo"));
-        int proNo = Integer.parseInt(params.get("proNo"));
 
-        // 찜 삭제
-        likedRepository.deleteByMemNoAndProNo(memNo, proNo);
-    }
-	
+	@Transactional // 트랜잭션을 보장
+	public void deleteLiked(Map<String, String> params) {
+		int memNo = Integer.parseInt(params.get("memNo"));
+		int proNo = Integer.parseInt(params.get("proNo"));
+
+		// 찜 삭제
+		likedRepository.deleteByMemNoAndProNo(memNo, proNo);
+	}
+
 	public boolean isLiked(int memNo, int proNo) {
-	    return likedRepository.existsByMemNoAndProNo(memNo, proNo);
+		return likedRepository.existsByMemNoAndProNo(memNo, proNo);
 	}
 
 	public Integer getMemNoByMemId(String memId) {
-        return productMapper.getMemNoByMemId(memId);
-    }
-	
-	
-	// =================================== 상품 정보 수정 ===================================
-	
-	
-	
-	public void updateProduct(Map<String, String> params) {
-	    int proNo = Integer.parseInt(params.get("proNo"));
-	    ProductEntity productEntity = productRepository.findById(proNo).orElseThrow(() -> new IllegalArgumentException("상품을 찾을 수 없습니다."));
-
-	    productEntity.setProTitle(params.get("productTitle"));
-	    productEntity.setProImg(params.get("fileNames")); // 수정된 이미지 정보 저장
-	    productEntity.setProCategory(params.get("categoryDcoId"));
-	    productEntity.setProLocation(params.get("locationDcoId"));
-	    productEntity.setProState(params.get("stateDcoId"));
-	    productEntity.setProPrice(params.get("productPrice"));
-	    productEntity.setProContent(params.get("productDescription"));
-	    productEntity.setProType(params.get("typeDcoId"));
-	    productEntity.setProNeg(params.get("negoDcoId"));
-
-	    productRepository.save(productEntity); // 수정 내용 저장
+		return productMapper.getMemNoByMemId(memId);
 	}
 
-	
-	
+	// =================================== 상품 정보 수정
+
+	public void updateProduct(Map<String, String> params) {
+		int proNo = Integer.parseInt(params.get("proNo"));
+		ProductEntity productEntity = productRepository.findById(proNo)
+				.orElseThrow(() -> new IllegalArgumentException("상품을 찾을 수 없습니다."));
+
+		productEntity.setProTitle(params.get("productTitle"));
+		productEntity.setProImg(params.get("fileNames")); // 수정된 이미지 정보 저장
+		productEntity.setProCategory(params.get("categoryDcoId"));
+		productEntity.setProLocation(params.get("locationDcoId"));
+		productEntity.setProState(params.get("stateDcoId"));
+		productEntity.setProPrice(params.get("productPrice"));
+		productEntity.setProContent(params.get("productDescription"));
+		productEntity.setProType(params.get("typeDcoId"));
+		productEntity.setProNeg(params.get("negoDcoId"));
+		productEntity.setProStatus(params.get("statusDcoId"));
+		;
+
+		productRepository.save(productEntity); // 수정 내용 저장
+	}
+
+	// =================================== 상품 정보 삭제
+
+	@Transactional
+	public void deleteProduct(int proNo) {
+		productRepository.deleteById(proNo);
+	}
+
+	// =================================== 상품 결제 정보 저장 
+
+	public void insertPayment(Map<String, Object> paymentData) {
+		PaymentEntity paymentEntity = PaymentEntity.builder()
+				.proNo(Integer.parseInt(paymentData.get("proNo").toString())) // 값을 String으로 변환 후 Integer로 변환
+				.buyMemNo(Integer.parseInt(paymentData.get("buyMemNo").toString())) // 값을 String으로 변환 후 Integer로 변환
+				.selMemNo(Integer.parseInt(paymentData.get("selMemNo").toString())) // 값을 String으로 변환 후 Integer로 변환
+				.payDate(LocalDateTime.now()).build();
+
+		paymentRepository.save(paymentEntity);
+	}
+
+	public void updateAfterPayment(Map<String, Object> paymentData) {
+
+		int proNo = Integer.parseInt(paymentData.get("proNo").toString()); // toString()으로 Object를 String으로 변환
+		ProductEntity productEntity = productRepository.findById(proNo)
+				.orElseThrow(() -> new IllegalArgumentException("상품을 찾을 수 없습니다."));
+
+		productEntity.setProStatus("STD2");
+		productRepository.save(productEntity); // 상태 변경 후 저장
+
+	}
 }
