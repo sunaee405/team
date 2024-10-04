@@ -125,6 +125,8 @@ public class MemberService {
 		return response.getBody();
 	}
 	
+//	채현 admin 메서드 ----------------------
+	
 	public List<MemberEntity> findAll() { //채현 admin member모든 정보 가져오는 메서드
         return memberRepository.findAll();
     }

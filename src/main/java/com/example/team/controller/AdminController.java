@@ -17,13 +17,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.team.model.MemberEntity;
+import com.example.team.model.ProductEntity;
 import com.example.team.persistence.MemberRepository;
 import com.example.team.service.MemberService;
+import com.example.team.service.ProductService;
 
 @RestController
 @RequestMapping("/admin/*")
 public class AdminController {
 	
+//	member -----------------------------------
 	@Autowired
     private MemberService memberService;
 	
@@ -33,15 +36,10 @@ public class AdminController {
     }
 
     @GetMapping("members/{memNo}")
-    public MemberEntity getMainCode(@PathVariable("memNo") Long memNo) {
+    public MemberEntity getMember(@PathVariable("memNo") Long memNo) {
         return memberService.findById(memNo); // 조회
     }
     
-//    @PostMapping("members")
-//    public void insertdetailCode(@RequestBody List<MemberEntity> members) {
-//    	memberService.save(members); 
-//    }
-//
     @PutMapping("members")
     public void updateMembers(@RequestBody List<MemberEntity> members) {
     	System.out.println("Received subCodes: " + members);
@@ -61,7 +59,7 @@ public class AdminController {
         return ResponseEntity.ok(updatedMember);
     }
     
-    @PutMapping("/members/delete")
+    @PutMapping("members/delete")
     public ResponseEntity<String> deleteMember(@RequestBody Map<String, Object> data) {
         Long memNo = Long.valueOf((String) data.get("mem_no")); // mem_no를 Long으로 변환
         memberService.updateMemberStatus(memNo, data); // 서비스 호출
@@ -69,18 +67,26 @@ public class AdminController {
     }
     
     // 상태를 업데이트하는 메서드
-    @PutMapping("/members/status")
+    @PutMapping("members/status")
     public ResponseEntity<String> updateMemberStatus(@RequestBody Map<String, Object> data) {
         Long memNo = Long.valueOf((String) data.get("mem_no"));
         memberService.cancelMemberStatus(memNo, data);
         return ResponseEntity.ok("상태가 업데이트되었습니다.");
     }
-//
-//    @DeleteMapping("members")
-//    public void deleteMembers(@RequestBody List<Long> ids) {
-//    	for (Long id : ids) {
-//    		memberService.delete(id); // 각 ID로 삭제 메서드 호출
-//        }
-//    }
+    
+//    product  ----------------------
+    @Autowired
+    private ProductService productService;
+    
+    @GetMapping("products")
+    public List<Map<String, Object>> getAllProductInfo() {
+        return productService.getAllProductInfo();
+    }
+    
+    @GetMapping("products/{proNo}")
+    public Map<String, Object> getProduct(@PathVariable("proNo") Long proNo) {
+        return productService.getProduct(proNo); // 조회
+    }
+
 
 }

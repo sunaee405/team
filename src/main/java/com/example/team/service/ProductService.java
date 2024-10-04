@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.team.Mapper.ProductMapper;
 import com.example.team.model.LikeEntity;
+import com.example.team.model.MemberEntity;
 import com.example.team.model.PaymentEntity;
 import com.example.team.model.ProductEntity;
 import com.example.team.persistence.LikedRepository;
@@ -241,4 +242,23 @@ public class ProductService {
 		productRepository.save(productEntity); // 상태 변경 후 저장
 
 	}
+	
+//	채현 admin 메서드 ----------------------------
+	public List<Map<String, Object>> getAllProductInfo() { //채현 admin product모든 정보 가져오는 메서드
+		return productMapper.getAllProductInfo();
+    }
+	
+	public Map<String, Object> getProduct(Long proNo) {
+		int proNoInt = convertMemNoToInteger(proNo);
+		return productMapper.getContentProduct(proNoInt);
+	}
+	
+	
+	// 채현 MemberRepository에서 string 타입으로 되어있어서 만듦..
+	// 추가 메서드: Long을 Integer로 변환하는 메서드
+    private Integer convertMemNoToInteger(Long proNo) {
+        return proNo != null ? proNo.intValue() : null;
+    }
+
+	
 }

@@ -282,13 +282,16 @@ $(document).ready(function() {
 		// 로컬 스토리지에서 데이터 읽기
 	    subList = JSON.parse(localStorage.getItem('subList'));
 	    for(let i = 0; i < subList.length; i++){
-			listItems.push(subList[i].SCO_ID);// MCO_ID를 배열에 추가
+			listItems.push({
+            	text: `${subList[i].SCO_ID}(${subList[i].SCO_VALUE})`, // 표시할 텍스트
+            	value: subList[i].SCO_ID // 실제 값
+        	});
 		}
 		
 		// listItems를 셀렉트 박스의 옵션 형식으로 변환
 		selectOptions = listItems.map(item => ({
-		    text: item,  // 표시할 텍스트
-		    value: item  // 실제 값
+		    text: item.text,  // 표시할 텍스트
+		    value: item.value  // 실제 값
 		}));
 	    
 	    

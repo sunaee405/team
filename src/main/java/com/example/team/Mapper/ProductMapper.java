@@ -5,11 +5,7 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
-
-import com.example.team.model.ProductEntity;
 
 @Mapper
 @Repository
@@ -30,6 +26,8 @@ public interface ProductMapper {
 	List<Map<String, Object>> getProductStatus();
 
 	List<Map<String, Object>> getSortList();
+	
+	List<Map<String, Object>> getAllProductInfo();//채현 판매상태, 카테고리 공통코드 조인해서 이름 가져오는 쿼리
 
 	// 페이징 처리를 위한 메서드 수정
 	List<Map<String, Object>> getProductsSorted(@Param("start") int start
@@ -40,7 +38,7 @@ public interface ProductMapper {
 											  , @Param("locationDcoId") String locationDcoId
 											  , @Param("searchKeyword") String searchKeyword);
 
-	// 총 제품 개수 조회 메서드
+	// 총 제품 개수 조회 메서드 
 	int getTotalProducts(@Param("categoryId") String categoryId
 					   , @Param("locationScoId") String locationScoId
 					   , @Param("locationDcoId") String locationDcoId

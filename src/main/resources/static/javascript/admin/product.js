@@ -1,10 +1,6 @@
 $(document).ready(function() {
 	
-	let selectOptions = []; // 전역 변수로 선언하여 모든 함수에서 접근 가능하게 함
-	let mainList = [];
-	
 	// 초기 데이터 가져오기 (페이지 로드 시)
-	//mainCode();
 	fetchData();
 	
 	// 텍스트 수정기능
@@ -44,46 +40,39 @@ $(document).ready(function() {
       rowHeaders: ['checkbox'],
       columns: [
    	  	{
-   	        header: 'ID', // 숨길 ID
-   	        name: 'ID',
+   	        header: 'PRO_NO', // 숨길 NO
+   	        name: 'PRO_NO',
    	        hidden: true  // 숨기기 설정
    	    },
    	    {
-          header: '메인 공통 코드',
-          name: 'MCO_ID',
-          formatter: 'listItemText',
-          editor: {
-            type: 'select',
-            options: {
-              listItems: selectOptions, //동적으로 설정
-            }
-          }
+          header: '판매상태',
+          name: 'DCO_VALUE',
+          filter: 'select',
         },
         {
-          header: '서브 공통 코드 ID',
-          name: 'SCO_ID',
+          header: '카테고리',
+          name: 'PRO_CATEGORY',
+          filter: 'select'
+        },
+        {
+          header: '판매글 제목',
+          name: 'PRO_TITLE',
+          filter: { type: 'text', showApplyBtn: true, showClearBtn: true },
           editor: {
-            type: CustomTextEditor,//사용자 정의 편집기
+            type: CustomTextEditor,
             options: {
-              maxLength: 10, //글자수 제한
               disabled: true
             }
           }
         },
         {
-          header: '서브 공통 코드 값',
-          name: 'SCO_VALUE',
-          editor: {
-            type: CustomTextEditor,
-            options: {
-              maxLength: 20,
-              disabled: false
-            }
-          }
+          header: '업로드 날자',
+          name: 'PRO_DATE',
+          sortable: true,
+          rowSpan: true
         },
       ]
     });
-    
     
     // 체크된 행 삭제 버튼 클릭 이벤트 처리
 	$('#deleteButton').click(function() {
@@ -151,9 +140,6 @@ $(document).ready(function() {
         	}
 		}
 		
-		
-		// TODO
-		
     	console.log('before change:', ev);
     });
     
@@ -161,105 +147,34 @@ $(document).ready(function() {
     	console.log('after change:', ev);
     })
     
-    // 행 추가 버튼 클릭 이벤트 처리
-    $('#addRowButton').click(function() {
-        const currentData = grid.getData();
-        // 새 행 추가
-        grid.appendRow({ ID: null, MCO_ID: '', SCO_ID: '', SCO_VALUE: '' });
-        // 편집 모드로 전환    
-        requestAnimationFrame(() => {
-            const indexToEdit = grid.getData().length - 1;
-            grid.setEditing(indexToEdit, 'MCO_ID');
-        });
-    });
+    // 클릭 이벤트 핸들러
+	grid.on('click', (ev) => {
+	    const { rowKey, columnName } = ev;
+	    if (columnName === 'PRO_TITLE') { // pro_title 열이 클릭된 경우
+	        const proNo = grid.getValue(rowKey, 'PRO_NO');
+	        debugger;
+	        window.location.href = `detail?pro_no=${proNo}`;
+	        
+	    }
+	});
     
-  	 
   	// 저장 버튼 클릭 이벤트 처리
     $('#saveButton').click(function() {
         const currentData = grid.getData();
         
-		//const dataToInsert = []; // INSERT할 데이터
-		
-		const existingMCO_IDs = currentData.map(row => row.MCO_ID); // 기존 MCO_ID 배열
 		//아이디가 null이 아니면 update
-		const updatedData = currentData.filter((row, index) => row.ID !== null);
-		//아이디가 null인것은 저장
-		const newData = currentData.filter((row, index) => row.ID === null);
-		
-		const dataToInsert = newData.map(row => ({
-			ID: null,
-		    SCO_ID: row.SCO_ID,
-		    SCO_VALUE: row.SCO_VALUE,
-		    mainCode: { ID: row.MCO_ID } // mainCode 객체에 MCO_ID 포함
-		}));
-		
-		
-		// 필드 체크
-		for (let i = 0; i < newData.length; i++) {
-	        const row = newData[i];
-	        if (row.MCO_ID === '' || row.SCO_ID === '' || row.SCO_VALUE === '') {
-	            alert('모든 필드를 채워야 저장할 수 있습니다. 비어 있는 행이 있습니다.');
-	            return;
-	        }
-	        for(let j = 0; j < mainList.length; j++){
-				if(newData[i].MCO_ID === mainList[j].MCO_ID){
-				dataToInsert[i].mainCode.ID = mainList[j].ID;
-				break; // 변환이 완료되면 더 이상 반복할 필요 없음
-				}
-				
-			}
-	        
-	    }
-	    
-		
-        // AJAX 요청으로 서버에 INSERT
-        $.ajax({
-            type: 'POST',
-            url: '/admin/subcodes',
-            contentType: 'application/json',
-            data: JSON.stringify(dataToInsert),// ID를 제외한 데이터 전송
-            success: function(response) {
-                console.log('INSERT 성공:', response);
-                alert('INSERT 성공!');
-                fetchData(); // 데이터를 다시 가져오는 함수 호출
-            },
-            error: function(error) {
-                console.error('INSERT 오류:', error);
-                alert('INSERT 실패! 오류: ' + error);
-            }
-        });
-        
-        
+		const updatedData = currentData.filter((row, index) => row.mem_no !== null);
+		    
         const updateList = updatedData.map(row => ({
-			ID: row.ID,
-		    SCO_ID: row.SCO_ID,
-		    SCO_VALUE: row.SCO_VALUE,
-		    mainCode: { ID: row.MCO_ID } // mainCode 객체에 MCO_ID 포함
+			mem_no : row.mem_no,
+			mem_name: row.mem_name,
+		    mem_pw: row.mem_pw,
 		}));
-        
-        
-        
-		// 수정할 데이터에 대한 중복 체크
-	    for (let i = 0; i < updatedData.length; i++) {
-	        const row = updatedData[i];
-	        if (row.MCO_ID === '' || row.SCO_ID === '' || row.SCO_VALUE === '') {
-	            alert('모든 필드를 채워야 저장할 수 있습니다. 비어 있는 행이 있습니다.');
-	            return;
-	        }for(let j = 0; j < mainList.length; j++){
-				if(updatedData[i].MCO_ID === mainList[j].MCO_ID){
-				updateList[i].mainCode.ID = mainList[j].ID;
-				break; // 변환이 완료되면 더 이상 반복할 필요 없음
-				}
-				
-			}
-
-	    }
-   
-        
+		
         // AJAX 요청으로 서버에 업데이트
 	    $.ajax({
 	        type: 'PUT',
-	        url: '/admin/subcodes', // 데이터 업데이트를 위한 API 엔드포인트
+	        url: '/admin/members', // 데이터 업데이트를 위한 API 엔드포인트
 	        contentType: 'application/json',
 	        data: JSON.stringify(updateList), // 수정된 데이터 전송
 	
@@ -280,38 +195,23 @@ $(document).ready(function() {
     
     // DB에서 데이터 가져와서 화면에 뿌리기
 	function fetchData() {
-		
-		const listItems = [];// MCO_ID를 저장할 배열 초기화
-		// 로컬 스토리지에서 데이터 읽기
-	    mainList = JSON.parse(localStorage.getItem('mainList'));
-	    for(let i = 0; i < mainList.length; i++){
-			listItems.push({
-            	text: `${mainList[i].MCO_ID}(${mainList[i].MCO_VALUE})`, // 표시할 텍스트
-            	value: mainList[i].MCO_ID // 실제 값
-        	});
-		}
-		
-		// listItems를 셀렉트 박스의 옵션 형식으로 변환
-		selectOptions = listItems.map(item => ({
-		    text: item.text,  // 표시할 텍스트
-		    value: item.value  // 실제 값
-		}));
 	    
 	    $.ajax({
 	        type: 'GET',
-	        url: '/admin/subcodes', // 데이터 가져올 API 엔드포인트
+	        url: '/admin/products', // 데이터 가져올 API 엔드포인트
 	        success: function(response) {
-				console.log('서버 응답:', response); // 여기서 응답 데이터 출력
 				
+				console.log('서버 응답:', response); // 여기서 응답 데이터 출력
 				// 데이터를 로컬 스토리지에 저장
-            	localStorage.setItem('subList', JSON.stringify(response));
-	            
+            	//localStorage.setItem('subList', JSON.stringify(response));
 	            // 데이터를 그리드에 뿌리기
 	            grid.resetData(response.map(item => ({
-	                ID: item.ID,           // ID 필드 포함
-	                MCO_ID: item.mainCode.MCO_ID, // MCO_VALUE 필드
-	                SCO_ID: item.SCO_ID,   // MCO_ID 필드
-	                SCO_VALUE: item.SCO_VALUE // MCO_VALUE 필드
+	                PRO_NO: item.PRO_NO,           
+	                PRO_STATUS: item.PRO_STATUS, 
+	                DCO_VALUE: `${item.PRO_STATUS}(${item.STS})`,
+	                PRO_CATEGORY: `${item.PRO_CATEGORY}(${item.PRS})`,   
+	                PRO_TITLE: item.PRO_TITLE, 
+	                PRO_DATE: item.PRO_DATE 
 	            })));
 	        },
 	        error: function(error) {
