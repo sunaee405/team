@@ -198,7 +198,7 @@ async function getDetailMyProduct(selectType, sortType, memNo) {
 			    <div class="relative">
 			        <a class="group box-border overflow-hidden flex rounded-md cursor-pointer pe-0 pb-2 lg:pb-3 flex-col items-start transition duration-200 ease-in-out transform bg-white" title="${data.PRO_TITLE}" href="/product/contentProduct?proNo=${data.PRO_NO}">
 			            <div class="relative w-full rounded-md overflow-hidden dim pt-[100%] mb-3 md:mb-3.5">
-			                <img alt="${data.PRO_TITLE}" referrerpolicy="no-referrer" src="${data.PRO_IMG}?impolicy=thumb&amp;size=150" decoding="async" data-nimg="fill" class="bg-gray-300 object-cover h-full group-hover:scale-105 w-full transition duration-200 ease-in rounded-md" loading="lazy" style="position: absolute; height: 100%; width: 100%; inset: 0px; color: transparent;">
+			                <img alt="${data.PRO_TITLE}" referrerpolicy="no-referrer" src="/static/${data.PRO_IMG}?impolicy=thumb&amp;size=150" decoding="async" data-nimg="fill" class="bg-gray-300 object-cover h-full group-hover:scale-105 w-full transition duration-200 ease-in rounded-md" loading="lazy" style="position: absolute; height: 100%; width: 100%; inset: 0px; color: transparent;">
 			            </div>
 			            <div class="w-full overflow-hidden p-0 md:p-0 lg:p-0 xl:p-0 2xl:p-0">
 			                <h2 class="line-clamp-2 min-h-[2lh] text-sm md:text-base text-heading">${data.PRO_TITLE}</h2>

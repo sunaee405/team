@@ -11,12 +11,6 @@ import jakarta.servlet.http.HttpServletRequest;
 @Controller
 public class RedirectController {
 	
-//	@GetMapping("/**")
-//	public String redirectPage(HttpServletRequest request) {
-//		String pageUrl = request.getRequestURI();
-//	    return pageUrl;
-//	}
-	
 	@GetMapping("/redirect/**")
 	public String redirectPage(HttpServletRequest request) {
 		
