@@ -1,7 +1,28 @@
 const TypeList = ["최근등록순", "낮은가격순", "조회순"];
 
-$(function() {
-    getMainProductList();
+$(async function() {
+    await getMainProductList();
+    
+    $.ajax({
+		url: '/getBanner',
+		type: 'GET',
+		dataType: 'json',
+		success: (data) => {
+			data.forEach(function(silde) {
+//				${silde.link}
+				var text =
+				`<a href="">
+					<img src="${silde.base64Url}" style="height: 100%; width: 100%;">
+		        </a>`
+		        $('#adSlide').prepend(text);
+		        $('#adSlideTab').prepend(`<span class="swiper-pagination-bullet swiper-pagination-bullet-active"></span>`);
+			});
+				// <span class="swiper-pagination-bullet"></span>
+		},
+		error: (error) => {
+			
+		}
+	})
     
 });
 

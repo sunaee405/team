@@ -10,8 +10,10 @@ import org.springframework.stereotype.Service;
 
 import com.example.team.Mapper.MyPageMapper;
 import com.example.team.Mapper.ProductMapper;
+import com.example.team.model.BannerImgEntity;
 import com.example.team.model.ChattingEntity;
 import com.example.team.model.MemberEntity;
+import com.example.team.persistence.BannerImgRepository;
 import com.example.team.persistence.ChattingRepository;
 import com.example.team.persistence.MemberRepository;
 
@@ -26,6 +28,8 @@ public class MyPageService {
 	private ProductMapper productMapper;
 	@Autowired
 	private MemberRepository memberRepository; 
+	@Autowired
+	private BannerImgRepository bannerImgRepository;
 	
 	
 	
@@ -70,11 +74,6 @@ public class MyPageService {
 
 
 
-	// 배너저장
-	public void insertBanner(Map<String, Object> data) {
-		// TODO Auto-generated method stub
-		
-	}
 
 
 
@@ -99,6 +98,20 @@ public class MyPageService {
 	//비밀번호 변경
 	public void updateMemData(MemberEntity memEntity) {
 		memberRepository.save(memEntity);
+	}
+
+
+
+	// 배너저장
+	public void insertBanner(BannerImgEntity bannerImgEntity) {
+		bannerImgRepository.save(bannerImgEntity);
+	}
+
+
+
+
+	public List<BannerImgEntity> getBanner() {
+		return bannerImgRepository.findAll();
 	}
 
 

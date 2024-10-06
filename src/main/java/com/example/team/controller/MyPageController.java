@@ -2,6 +2,7 @@ package com.example.team.controller;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -27,6 +28,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.example.team.model.BannerImgEntity;
 import com.example.team.model.ChattingEntity;
 import com.example.team.model.MemberEntity;
 import com.example.team.service.MyPageService;
@@ -70,15 +72,10 @@ public class MyPageController {
                 // 변환한 이미지 저장
                 writer.write(null, new IIOImage(bufferedImage, null, null), param);
                 
-                Map<String, Object> data = new HashMap<String, Object>();
-                data.put("file", baos.toByteArray());
-                myPageService.insertBanner(data);
+                BannerImgEntity bannerImgEntity = new BannerImgEntity();
+                bannerImgEntity.setBanImg(baos.toByteArray());
                 
-//                System.out.println(baos.toByteArray());
-//                
-//                String base64Image = "data:image/png;base64,"+Base64.getEncoder().encodeToString(baos.toByteArray());
-//                
-//                return ResponseEntity.ok().body(base64Image);
+                myPageService.insertBanner(bannerImgEntity);               
             } finally {
             	// 닫기
                 writer.dispose();
@@ -88,6 +85,20 @@ public class MyPageController {
 	    	e.printStackTrace();
 	    }
 	    return null;
+	}
+	
+	@GetMapping("/getBanner")
+	public ResponseEntity<?> getBanner() {
+		List<BannerImgEntity> entity = myPageService.getBanner();
+		List<Map<String, Object>> data = new ArrayList();
+		for(int i = 0; i < entity.size(); i++) {
+			Map<String, Object> map = new HashMap<String, Object>();
+			String base64Url = "data:image/png;base64," + Base64.getEncoder().encodeToString(entity.get(i).getBanImg());
+			map.put("base64Url", base64Url);
+			map.put("link", entity.get(i).getBanLink());
+			data.add(map);
+		}
+		return ResponseEntity.ok().body(data);
 	}
 	
 	
