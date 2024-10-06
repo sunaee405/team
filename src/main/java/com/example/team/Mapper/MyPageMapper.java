@@ -32,4 +32,9 @@ public interface MyPageMapper {
 	
 	// 회원의 채팅 목록 검색
 	List<Map<String, Object>> getChatList(Map<String, Object> data);
+	
+	// 마이페이지 회원 상품 목록
+	List<Map<String, Object>> getDetailMyProduct(Map<String, Object> data);
+	
+	
 }

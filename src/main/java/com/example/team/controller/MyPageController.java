@@ -189,9 +189,58 @@ public class MyPageController {
 	}
 	
 	// ============================================ 마이페이지 ========================================================================
-	@GetMapping("/getDetailMyProduct")
-	public void getDetailMyProduct(@RequestBody Map<String, Object> data) {
-		myPageService.getDetailMyProduct(data);
+	@PostMapping("/getDetailMyProduct")
+	public ResponseEntity<?> getDetailMyProduct(@RequestBody Map<String, Object> data) {
+		System.out.println(data);
+		
+		List<Map<String, Object>> proList = myPageService.getDetailMyProduct(data);
+		
+		System.out.println("마이페이지 상품목록" + proList);
+		if(proList != null && proList.size() != 0) {
+			proList = transCode(proList);
+			return ResponseEntity.status(HttpStatus.OK).body(proList);
+		} else {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("noList");
+		}
+		
+	}
+	// 회원정보 찾기
+	@PostMapping("/getMemberData")	
+	public Optional<MemberEntity> getMemberData(HttpSession session) {
+		String data = (String) session.getAttribute("MEM_ID");
+		Optional<MemberEntity> entity = myPageService.getSession(data);
+		
+		return entity;
+	}
+	
+	@PostMapping("/updatePass")
+	public ResponseEntity<?> updatePass(HttpSession session, @RequestParam Map<String, Object> passData) {
+		String data = (String) session.getAttribute("MEM_ID");
+		Optional<MemberEntity> entity = myPageService.getSession(data);
+		MemberEntity memEntity = entity.get();
+		String pass = memEntity.getMemPw();
+		
+		if(pass != null && pass.equals(passData.get("oldPass"))) {
+			memEntity.setMemPw((String)passData.get("newPass"));
+			myPageService.updateMemData(memEntity);
+			return ResponseEntity.ok().body("success");
+		} else {
+			return ResponseEntity.badRequest().body("failedPass");
+		}
+		
+	}
+	
+	@PostMapping("/updateNick")
+	public ResponseEntity<?> updateNick(HttpSession session, @RequestParam Map<String, Object> nickData) {
+		String data = (String) session.getAttribute("MEM_ID");
+		Optional<MemberEntity> entity = myPageService.getSession(data);
+		MemberEntity memEntity = entity.get();
+		String newNick = (String)nickData.get("newNickNm");
+		memEntity.setMemNick(newNick);
+		
+		myPageService.updateMemData(memEntity);
+		
+		return ResponseEntity.ok().body(newNick);
 	}
 	
 	

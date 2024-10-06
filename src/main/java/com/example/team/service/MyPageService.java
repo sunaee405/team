@@ -90,10 +90,20 @@ public class MyPageService {
 		return myPageMapper.getChatList(data);
 	}
 
-	public void getDetailMyProduct(Map<String, Object> data) {
-		// TODO Auto-generated method stub
-		
+	public List<Map<String, Object>> getDetailMyProduct(Map<String, Object> data) {
+		return myPageMapper.getDetailMyProduct(data);
 	}
+
+
+
+	//비밀번호 변경
+	public void updateMemData(MemberEntity memEntity) {
+		memberRepository.save(memEntity);
+	}
+
+
+
+
 
 
 }

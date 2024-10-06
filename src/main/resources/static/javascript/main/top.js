@@ -1,27 +1,59 @@
 $(function() {
-	$.ajax({
-		method: 'GET',
-		url: '/getCategory',
-		dataType: 'json',
-		success: (data) => {
-			data.forEach((data) => {
-				let htmlText = 
-					`<li>
-		            	<a class="flex items-center py-2 ps-5 xl:ps-7 pe-3 xl:pe-3.5 hover:text-heading hover:bg-gray-300" href="/search?category=1">${data.DCO_VALUE}</a>
-		             </li>`
-				$('#categoryList').append(htmlText);
-			});
-			
-		},
-		error: (error) => {
-			
-		}
-	});
-
+	getCategory();
 
 	const currentUrl = window.location.href; // 현재 주소가 main일 경우 다른 스크립트에서 이벤트 동작
 	if(currentUrl != null && !currentUrl.includes('/myPage/main')) $(document).trigger('sessionLoaded');
+	
+	
+	// 검색어 전달
+	$('#search-box').on('keyup', function(event) {
+		if(event.key !== 'Enter') return;
+	    const searchKey = $(this).val();
+	    sessionStorage.setItem('searchText', searchKey);
+	    location.href = '/product/listProduct';
+	});
 });
+
+// 검색어 전달 확인
+$(window).on('load', function() {
+    const currentUrl = window.location.href; // 현재 URL 가져오기
+    if (currentUrl.includes('/product/listProduct')) {
+        const searchData = sessionStorage.getItem('searchText');
+        $(window.parent.document).find('#search-input').val(searchData).trigger('input'); // 부모 페이지의 요소에 값 설정
+        sessionStorage.removeItem('searchText'); // 검색어 입력 후 데이터 삭제
+    }
+});
+
+
+let isCategory = false;
+
+function getCategory() {
+    if (isCategory) return; // 값이 true면 함수 종료
+    
+    isCategory = true; // 값 변경
+    
+    $.ajax({
+        method: 'GET',
+        url: '/getCategory',
+        dataType: 'json',
+        success: (data) => {
+            data.forEach((data) => {
+                let htmlText = 
+                    `<li>
+                        <a class="flex items-center py-2 ps-5 xl:ps-7 pe-3 xl:pe-3.5 hover:text-heading hover:bg-gray-300" href="/search?category=1">${data.DCO_VALUE}</a>
+                    </li>`;
+                $('#categoryList').append(htmlText);
+            });
+        },
+        error: (error) => {
+            // 오류 처리
+        },
+        complete: () => {
+            isCategory = false; // 완료 후 다시 false로 설정
+        }
+    });
+}
+
 
 // 로그인 유무 확인
 $(document).on('sessionLoaded', function() {
@@ -62,6 +94,8 @@ $(document).off('click', '.btnLink').on('click', '.btnLink', function() {
 		$('#myPageTab').toggle();
 	}
 });
+
+
 
 
 

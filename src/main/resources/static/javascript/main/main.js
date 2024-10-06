@@ -1,4 +1,4 @@
-const TypeList = ["Price", "Popular", "Latest"];
+const TypeList = ["최근등록순", "낮은가격순", "조회순"];
 
 $(function() {
     getMainProductList();
@@ -112,7 +112,6 @@ async function getMainProductList() {
             if (error.message === 'emptyList') {
                 console.log('상품목록 없음');
             } else {
-				debugger;
                 console.error('에러 발생:', error);
             }
         };
@@ -170,7 +169,7 @@ function forProductList(Type, data) {
 	let productList =
 		`<a href="/product/contentProduct?proNo=${data.PRO_NO}" class="productLink relative group box-border overflow-hidden flex rounded-md cursor-pointer pe-0 pb-2 lg:pb-3 flex-col items-start transition duration-200 ease-in-out transform bg-white ga4_main_latest_product">
 			<div class="relative w-full rounded-md overflow-hidden dim pt-[100%] mb-3 md:mb-3.5">
-				<img alt="${data.PRO_TITLE}" referrerpolicy="no-referrer" src="https://img2.joongna.com/media/original/2024/09/18/1726641595651iq2_Tbvkn.jpg?impolicy=thumb&amp;size=150" decoding="async" data-nimg="fill" class="bg-gray-300 object-cover h-full group-hover:scale-105 w-full transition duration-200 ease-in rounded-md" loading="lazy" style="position:absolute;height:100%;width:100%;left:0;top:0;right:0;bottom:0;color:transparent">
+				<img alt="${data.PRO_TITLE}" referrerpolicy="no-referrer" src="${data.PRO_IMG}?impolicy=thumb&amp;size=150" decoding="async" data-nimg="fill" class="bg-gray-300 object-cover h-full group-hover:scale-105 w-full transition duration-200 ease-in rounded-md" loading="lazy" style="position:absolute;height:100%;width:100%;left:0;top:0;right:0;bottom:0;color:transparent">
 			</div>
 			<div class="w-full overflow-hidden p-2 md:px-2.5 xl:px-4">
 				<h2 class="line-clamp-2 min-h-[2lh] text-sm md:text-base">${data.PRO_TITLE}</h2>
@@ -199,7 +198,7 @@ function productSection(Type) {
 	let boxHeader = 
 		`<div class="heightFull relative mb-10 xl:mb-20">
 			<div class="flex items-center justify-between mt-2 pb-0.5 mb-4 md:mb-5 lg:mb-6 2xl:mb-7 3xl:mb-8">
-				<h3 class="text-lg md:text-xl lg:text-2xl 2xl:text-3xl xl:leading-10 font-bold text-heading">방금 등록된 상품</h3>
+				<h3 class="text-lg md:text-xl lg:text-2xl 2xl:text-3xl xl:leading-10 font-bold text-heading">상품 ${Type}</h3>
 				<a class="flex items-center text-xs lg:text-sm xl:text-base text-jnGray-700 mt-0.5 lg:mt-1" href="/product/list?type=recent">바로가기 <svg xmlns="http://www.w3.org/2000/svg" width="7" height="10" fill="none" class="mx-1 rotate-180"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M6 1 1 5l5 4"></path></svg></a>
 			</div>
 		 	<div class="carouselWrapper relative jn-carousel recent">

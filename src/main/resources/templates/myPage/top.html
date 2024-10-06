@@ -29,8 +29,9 @@
 		</div>
 		<div class="relative hidden ms-7 me-7 xl:ms-9 lg:block flex-1">
 			<!-- 검색 -->
-			<form role="search" novalidate="" class="w-full relative flex items-center h-10 overflow-hidden rounded-md bg-jnGray-200 px-3 py-[10px] lg:px-5 space-x-2">
-				<label for="search" class="flex items-center py-0.5 flex-none w-4 h-4"><svg width="24" height="24" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="w-[16px] h-[16px] text-[#9CA3AF]"><path d="M10.0278 19.0556C14.3233 19.0556 17.8056 15.5733 17.8056 11.2778C17.8056 6.98223 14.3233 3.5 10.0278 3.5C5.73223 3.5 2.25 6.98223 2.25 11.2778C2.25 15.5733 5.73223 19.0556 10.0278 19.0556Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="transparent"></path><path d="M21 21.8999L15.5 16.8999" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg></label><input id="search-box" aria-label="search-box" autocomplete="off" placeholder="어떤 상품을 찾으시나요?" class="flex-auto text-sm text-heading bg-transparent placeholder-[#9CA3AF] overflow-hidden text-ellipsis whitespace-nowrap outline-none ga4_main_top_search" name="search">
+			<form onsubmit="return false" role="search" novalidate="" class="w-full relative flex items-center h-10 overflow-hidden rounded-md bg-jnGray-200 px-3 py-[10px] lg:px-5 space-x-2">
+				<label for="search" class="flex items-center py-0.5 flex-none w-4 h-4"><svg width="24" height="24" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="w-[16px] h-[16px] text-[#9CA3AF]"><path d="M10.0278 19.0556C14.3233 19.0556 17.8056 15.5733 17.8056 11.2778C17.8056 6.98223 14.3233 3.5 10.0278 3.5C5.73223 3.5 2.25 6.98223 2.25 11.2778C2.25 15.5733 5.73223 19.0556 10.0278 19.0556Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="transparent"></path><path d="M21 21.8999L15.5 16.8999" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg></label>
+				<input id="search-box" aria-label="search-box" autocomplete="off" placeholder="어떤 상품을 찾으시나요?" class="flex-auto text-sm text-heading bg-transparent placeholder-[#9CA3AF] overflow-hidden text-ellipsis whitespace-nowrap outline-none ga4_main_top_search" name="search">
 			</form>
 <!-- 			<div class="absolute flex items-center h-auto pt-2 overflow-hidden text-xs"> -->
 <!-- 				<button class="w-5 h-5 border border-jnGray-200 rounded mr-[6px]"><svg xmlns="http://www.w3.org/2000/svg" width="7" height="10" fill="none" class="ml-[5px] mr-[6px] text-jnGray-500"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M6 1 1 5l5 4"></path></svg></button><button class="w-5 h-5 border rounded border-jnGray-200"><svg xmlns="http://www.w3.org/2000/svg" width="7" height="10" fill="none" class="mx-auto rotate-180 text-jnGray-500"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M6 1 1 5l5 4"></path></svg></button> -->
@@ -155,6 +156,5 @@
 	</div>
 </div>
 </header>
-<script src="/static/javascript/main/top.js" defer></script>
 </body>
 </html>

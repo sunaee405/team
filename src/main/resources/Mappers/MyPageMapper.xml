@@ -16,9 +16,50 @@
 	</select>
 	
 	
-	<!-- 마이페이지 상품록록 -->
-	<select id="getMyProducts">
-		SELECT 
+	<!-- 마이페이지 상품목록 -->
+	<select id="getDetailMyProduct">
+		SELECT P.MEM_NO
+			, P.PRO_NO
+			, P.PRO_VIEWS
+			, P.PRO_DATE
+			, P.PRO_CATEGORY
+			, P.PRO_LOCATION
+			, P.PRO_NEG
+			, P.PRO_PRICE
+			, P.PRO_STATE
+			, P.PRO_STATUS
+			, P.PRO_TITLE
+			, P.PRO_TYPE
+			, P.PRO_CONTENT
+			, P.PRO_IMG
+		FROM PRODUCT P
+		<choose>
+			<when test="SELECT_TYPE == '찜한상품'">
+				RIGHT OUTER JOIN LIKED L
+				ON P.PRO_NO = L.PRO_NO
+				WHERE L.MEM_NO = #{MEM_NO}
+				AND P.PRO_NO IS NOT NULL
+			</when>
+			<when test="SELECT_TYPE == '판매중'">
+				WHERE P.PRO_STATUS = 'STD1'
+				AND P.MEM_NO = #{MEM_NO}
+			</when>
+			<when test="SELECT_TYPE == '판매완료'">
+				WHERE P.PRO_STATUS = 'STD2'
+				AND P.MEM_NO = #{MEM_NO}
+			</when>
+		</choose>
+		<choose>
+			<when test="SORT_TYPE == '최신순'">
+				ORDER BY P.PRO_DATE
+			</when>
+			<when test="SORT_TYPE == '높은가격순'">
+				ORDER BY P.PRO_PRICE ASC
+			</when>
+			<when test="SORT_TYPE == '낮은가격순'">
+				ORDER BY P.PRO_PRICE 
+			</when>
+		</choose>
 	</select>
 	
 	
@@ -42,13 +83,13 @@
 		FROM PRODUCT
 		WHERE PRO_STATUS = 'STD1'
 		<choose>
-			<when test="TYPE != null and TYPE = 'Latest'">
+			<when test="TYPE != null and TYPE = '최근등록순'">
 				ORDER BY PRO_DATE
 			</when>
-			<when test="TYPE != null and TYPE = 'Popular'">
+			<when test="TYPE != null and TYPE = '조회순'">
 				ORDER BY PRO_VIEWS
 			</when>
-			<when test="TYPE != null and TYPE = 'Price'">
+			<when test="TYPE != null and TYPE = '낮은가격순'">
 				ORDER BY PRO_PRICE
 			</when>
 		</choose>
