@@ -87,6 +87,7 @@
 	<select id="getProductStatus" resultType="map">
 		SELECT TDC.DCO_ID
 			 , TDC.DCO_VALUE
+			 , TDC.ID
 			 , TSC.SCO_ID
 			 , TMC.MCO_ID
 		  FROM TEST_DETAIL_CODE TDC
@@ -149,7 +150,6 @@
           	 , TDC1.DCO_VALUE AS LOCATION_VALUE
          	 , PRO.PRO_PRICE
          	 , TDC4.DCO_VALUE AS PRO_STATUS
-<!--          	 , PRO.PRO_STATUS -->
          	 , PRO.PRO_TITLE
          	 , TDC2.DCO_VALUE AS TYPE_VALUE
          	 , PRO.PRO_IMG
@@ -173,6 +173,9 @@
            </if>
            <if test="locationDcoId != null and locationDcoId != ''">
            AND TDC1.DCO_ID = #{locationDcoId}
+           </if>
+           <if test="statusId != null and statusId != ''">
+           AND PRO.PRO_STATUS = #{statusId}
            </if>
            <if test="searchKeyword != null and searchKeyword != ''">
            AND PRO.PRO_TITLE LIKE CONCAT('%', #{searchKeyword}, '%')
@@ -215,6 +218,9 @@
     	  </if>
     	  <if test="locationDcoId != null and locationDcoId != ''">
      	   AND PRO.PRO_LOCATION = #{locationDcoId}
+    	 </if>
+    	 <if test="statusId != null and statusId != ''">
+     	   AND PRO.PRO_STATUS = #{statusId}
     	 </if>
     	 <if test="searchKeyword != null and searchKeyword != ''">
            AND PRO.PRO_TITLE LIKE CONCAT('%', #{searchKeyword}, '%')

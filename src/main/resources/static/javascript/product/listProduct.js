@@ -5,6 +5,7 @@ $(document).ready(function() {
 	let currentLocationScoId = ''; // 기본값은 전체 (모든 지역)
 	let currentLocationDcoId = ''; // 기본값은 전체 (모든 지역)
 	let currentSearchKeyword = ''; // 기본 검색어는 빈 값
+	let currentStatusId = '';
 
 	// 카테고리 데이터를 가져오기 위한 AJAX 요청
 	$.ajax({
@@ -231,6 +232,81 @@ $(document).ready(function() {
 		});
 	}
 
+	// 판매상태 데이터를 가져오기 위한 AJAX 요청
+	$.ajax({
+		url: '/getProductStatus', // 판매상태 데이터를 가져오는 API 엔드포인트
+		type: 'GET',
+		success: function(statusies) {
+			let statusFilter = $('#status-filter'); // <tr> 선택
+
+			// 판매상태 데이터를 ID의 오름차순으로 정렬
+			statusies.sort(function(a, b) {
+				return a.ID - b.ID; // ID 기준 오름차순 정렬
+			});
+
+			// ol 태그로 감싸서 li 항목 생성
+			let statusList = `
+            <td>
+                <div class="flex items-center w-full chawkbazarBreadcrumb">
+                    <ol class="flex flex-wrap items-center w-full mt-0 lg:mt-0">
+                        <li class="flex-shrink-0 px-0 mt-0 text-sm break-all transition duration-200 ease-in text-body first:ps-0 last:pe-0 hover:text-heading">
+                            <a class="text-base font-semibold text-jnBlack font-medium text-base text-jnBlack active" href="#" data-id="">
+                                전체
+                            </a>
+                        </li>
+                        <li class="pl-0 mx-2 mt-0 text-sm leading-5 text-jnGray-500 lg:mt-0">|</li>
+        `;
+
+			// 판매상태 항목을 추가
+			statusies.forEach(function(status, index) {
+				// 판매상태 항목 추가
+				let statusItem = `
+                <li class="flex-shrink-0 px-0 mt-0 text-sm break-all transition duration-200 ease-in text-body first:ps-0 last:pe-0 hover:text-heading">
+                    <a class="text-base font-semibold text-jnBlack font-medium text-base text-jnBlack" href="#" data-id="${status.DCO_ID}">
+                        ${status.DCO_VALUE}
+                    </a>
+                </li>
+            `;
+
+				// " | " 구분자는 첫 번째 카테고리 이후부터만 추가
+				if (index > 0) {
+					statusList += `<li class="pl-0 mx-2 mt-0 text-sm leading-5 text-jnGray-500 lg:mt-0">|</li>`;
+				}
+
+				statusList += statusItem;
+			});
+
+			// 닫는 ol 태그
+			statusList += `
+                    </ol>
+                </div>
+            </td>
+        `;
+
+			// 생성된 카테고리 목록을 <tr>에 추가
+			statusFilter.append(statusList);
+
+			// 카테고리 버튼 클릭 이벤트 설정 (필터링)
+			$('#status-filter a').click(function(event) {
+				event.preventDefault();
+				currentStatusId = $(this).data('id'); // DCO_ID 값 업데이트
+				console.log('선택된 판매상태 ID:', currentStatusId);
+
+				// 모든 카테고리 버튼의 active 클래스 제거
+				$('#status-filter a').removeClass('active');
+				// 클릭된 카테고리 버튼에 active 클래스 추가
+				$(this).addClass('active');
+
+				// 현재 선택된 카테고리 ID를 업데이트
+
+				loadProducts(1); // 첫 페이지부터 다시 로드
+			});
+		},
+		error: function(xhr, status, error) {
+			console.error('카테고리 로드 오류:', error);
+		}
+	});
+
 	// 검색 필터를 추가
 	let searchFilter = $('#search-filter');
 	let searchInput = `
@@ -273,6 +349,11 @@ $(document).ready(function() {
 		// 하위 지역 초기화
 		currentLocationDcoId = '';
 		$('#sub-location-filter').remove(); // 하위 지역 목록 제거
+		
+		// 상위 지역 전체로 설정
+		currentStatusId = '';
+		$('#status-filter a').removeClass('active');
+		$('#status-filter a[data-id=""]').addClass('active'); // 전체 선택
 
 		// 전체 상품 목록 다시 로드
 		loadProducts(1); // 첫 페이지부터 다시 로드
@@ -341,17 +422,18 @@ $(document).ready(function() {
 
 	// 상품 목록을 불러오는 함수
 	function loadProducts(page) {
-		console.log('페이지 로딩:', page, '정렬 기준:', currentSortType, '카테고리 ID:', currentCategoryId, '상위 지역 SCO_ID:', currentLocationScoId, '하위 지역 DCO_ID:', currentLocationDcoId, '검색어:', currentSearchKeyword);
+		console.log('페이지 로딩:', page, '정렬 기준:', currentSortType, '카테고리 ID:', currentCategoryId, '상위 지역 SCO_ID:', currentLocationScoId, '하위 지역 DCO_ID:', currentLocationDcoId, '검색어:', currentSearchKeyword, '판매상태 DCO_ID:', currentStatusId);
 		$.ajax({
 			url: '/listProductsSorted',
 			type: 'GET',
 			data: {
 				page: page,
-				size: 20, // 페이지당 20개의 상품을 가져옴
+				size: 5, // 페이지당 20개의 상품을 가져옴
 				sortType: currentSortType, // 선택한 정렬 기준을 서버로 전송
 				categoryId: currentCategoryId, // 선택한 카테고리 ID를 서버로 전송
 				locationScoId: currentLocationScoId, // 선택한 상위 지역 SCO_ID 전송
 				locationDcoId: currentLocationDcoId, // 선택한 하위 지역 DCO_ID 전송
+				statusId: currentStatusId,
 				searchKeyword: currentSearchKeyword // 검색어 전송
 			},
 			dataType: 'json',
