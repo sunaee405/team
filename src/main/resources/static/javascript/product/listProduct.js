@@ -292,7 +292,7 @@ $(document).ready(function() {
 			// 응답으로 받은 data 배열을 순회
 			data.forEach(function(item) {
 				// <li> 요소 생성
-				let listItem = $('<li>')
+				let listItem = $('<li id="sortList">')
 					.addClass("text-sm leading-[17px] font-medium text-jnGray-900")
 					.append(
 						$('<button>')
