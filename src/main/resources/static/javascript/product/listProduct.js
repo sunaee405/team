@@ -284,7 +284,7 @@ $(document).ready(function() {
 		type: 'GET',
 		success: function(data) {
 			// 응답 데이터를 받아와서 각각의 DCO_ID, DCO_VALUE로 <li>와 <button>을 생성
-			let sortListContainer = $('.inline-flex'); // <ul> 태그 선택
+			let sortListContainer = $('#sortList'); // <ul> 태그 선택
 
 			// 기존 내용을 비우기
 			sortListContainer.empty();
@@ -292,7 +292,7 @@ $(document).ready(function() {
 			// 응답으로 받은 data 배열을 순회
 			data.forEach(function(item) {
 				// <li> 요소 생성
-				let listItem = $('<li id="sortList">')
+				let listItem = $('<li>')
 					.addClass("text-sm leading-[17px] font-medium text-jnGray-900")
 					.append(
 						$('<button>')
