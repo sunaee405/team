@@ -8,7 +8,6 @@ $(async function() {
 	const url = new URL(location.href).searchParams;
 	// FormData 객체 생성
 	const formData = new FormData();
-	
 	// 
 	url.forEach((value, key) => {
 	  formData.append(key, value); 
@@ -29,7 +28,14 @@ $(async function() {
 	// 소켓 연결시 ajax에서 유저 정보로 채팅내역 불러오기
 	socket.onopen = () => {
 		fetch(roomUrl, options)
-	    .then(response => response.json()) // 응답을 JSON으로 변환
+	    .then(response => {
+ 			if (!response.ok) {
+	            return response.text().then(text => {
+	                throw new Error(text);
+	            });
+	        }
+	        return response.json(); // 응답을 JSON으로 변환
+	    })
 	    .then(success => {
 				$(".chat").attr("data-rNum", success[0].CHA_NO);
 				
@@ -79,7 +85,14 @@ $(async function() {
 
 	    })
 	    .catch(error => {
-			
+			const em = error.message;
+			if (em === "notLogin") {
+	           	alert('로그인 상태가 아닙니다 다시 로그인해주세요');
+	           	window.close();
+	        } else {
+				오류
+				window.close();
+			}
 	    });
 	}
 	
@@ -151,13 +164,26 @@ $(document).on('click', ".btn-success", function() {
 		body: chatLog
 	};
 	fetch(url, options)
-		.then(response => response.json())
+		.then(response => {
+ 			if (!response.ok) {
+	            return response.text().then(text => {
+	                throw new Error(text);
+	            });
+	        }
+	        return response.json(); // 응답을 JSON으로 변환
+	    })
 		.then(success => {
 			socket.send(chatLog);
 		})
 		.catch(error => {
-			const check = confirm('메시지 업로드 실패.\n 메시지를 다시 전송 하시겠습니까?');
-			if(check) $('.btn-success').trigger('click');
+			const em = error.message;
+			if (em === "notLogin") {
+	           	alert('로그인 상태가 아닙니다 다시 로그인해주세요');
+	           	window.close();
+	        } else if(em === "failedUpdate") {
+				const check = confirm('메시지 업로드 실패.\n 메시지를 다시 전송 하시겠습니까?');
+				if(check) $('.btn-success').trigger('click');
+			}
 		})
 		.finally(() => {
 			$("#inputBox").val('');

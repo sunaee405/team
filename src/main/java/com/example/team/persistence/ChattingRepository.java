@@ -11,5 +11,4 @@ import com.example.team.model.ChattingEntity;
 
 @Repository
 public interface ChattingRepository extends JpaRepository<ChattingEntity, String> {
-	List<ChattingEntity> findByChaMem1AndChaMem2(int chaMem1, int chaMem2);
 }

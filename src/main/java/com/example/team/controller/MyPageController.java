@@ -277,14 +277,15 @@ public class MyPageController {
 	@PostMapping("/updateChat")
 	public ResponseEntity<?> updateChat(@RequestBody Map<String, Object> data, HttpSession session) {
 		String memId = (String)session.getAttribute("MEM_ID");
+		if(memId == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("notLogin");
+		
 		Optional<MemberEntity> entity = myPageService.getSession(memId);
 		MemberEntity memEntity = entity.get();
 		String memNo = memEntity.getMemNo().toString();
 		data.put("USERID", memNo);
 		
 		boolean check = myPageService.updateChat(data);
-		
-		
+				
 		if(check) {
 			List<ChattingEntity> chattingEntity = myPageService.getChatRoom(data);
 			return ResponseEntity.ok(chattingEntity);
@@ -296,24 +297,27 @@ public class MyPageController {
 	
 	// 로그인한 회원의 전체 채팅 목록
 	@GetMapping("/getChatList")
-	public List<Map<String, Object>> getChatList(@RequestParam Map<String, Object> data) {
+	public ResponseEntity<?> getChatList(@RequestParam Map<String, Object> data, HttpSession session) {
+		String memId = (String)session.getAttribute("MEM_ID");
+		if(memId == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("notLogin");
+		
+		
 		List<Map<String, Object>> chatList = myPageService.getChatList(data);
-		
-		System.out.println("채팅리스트" + chatList);
-		
-		return chatList;
+		return ResponseEntity.ok().body(chatList);
 	}
 	
 	
 	// 채팅방 값 찾기 + 값 없으면 채팅방 생성
 	@PostMapping("/chatRoom")
 	public ResponseEntity<?> getChatRoom(@RequestParam Map<String, Object> data, HttpSession session) {
+		String memId = (String)session.getAttribute("MEM_ID");
+		if(memId == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("notLogin");
 		
-		System.out.println(data);
-		Optional<MemberEntity> entity = myPageService.getSession((String)session.getAttribute("MEM_ID"));
+		Optional<MemberEntity> entity = myPageService.getSession(memId);
 		MemberEntity memEntity = entity.get();
 		
 		String selMem = (String)data.get("SEL_MEM");
+		
 		if(selMem != null) {
 			int user1 = Integer.parseInt(selMem);
 			int user2 = memEntity.getMemNo().intValue();
@@ -338,7 +342,6 @@ public class MyPageController {
 		}
 		
 		System.out.println("채팅방"+chattingEntity);
-
 		return ResponseEntity.status(HttpStatus.OK).body(chattingEntity);
 	}
 	
