@@ -36,7 +36,8 @@ $(document).ready(function() {
     const grid = new tui.Grid({
       el: document.getElementById('grid'),
       scrollX: false,
-      scrollY: false,
+      bodyHeight: 500,
+//      scrollY: false,
       rowHeaders: ['checkbox'],
       columns: [
    	  	{
@@ -57,6 +58,7 @@ $(document).ready(function() {
         {
           header: '판매글 제목',
           name: 'PRO_TITLE',
+          validation: { required: true },
           filter: { type: 'text', showApplyBtn: true, showClearBtn: true },
           editor: {
             type: CustomTextEditor,
@@ -125,7 +127,7 @@ $(document).ready(function() {
     // 클릭 이벤트 핸들러
 	grid.on('click', (ev) => {
 	    const { rowKey, columnName } = ev;
-	    if (columnName === 'PRO_TITLE') { // pro_title 열이 클릭된 경우
+	    if (columnName === 'PRO_TITLE' && ev.targetType !== 'columnHeader') { // pro_title 열이 클릭된 경우
 	        const proNo = grid.getValue(rowKey, 'PRO_NO');
 	        window.location.href = `detail?pro_no=${proNo}`;
 	        

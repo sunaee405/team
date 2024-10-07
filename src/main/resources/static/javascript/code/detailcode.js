@@ -40,7 +40,8 @@ $(document).ready(function() {
     const grid = new tui.Grid({
       el: document.getElementById('grid'),
       scrollX: false,
-      scrollY: false,
+      bodyHeight: 500,
+//      scrollY: false,
       rowHeaders: ['checkbox'],
       columns: [
    	  	{
@@ -51,6 +52,7 @@ $(document).ready(function() {
    	    {
           header: '서브 공통 코드',
           name: 'SCO_ID',
+          filter: 'select',
           formatter: 'listItemText',
           editor: {
             type: 'select',
@@ -76,12 +78,13 @@ $(document).ready(function() {
           editor: {
             type: CustomTextEditor,
             options: {
-              maxLength: 20,
+              maxLength: 50,
               disabled: false
             }
           }
         },
-      ]
+      ],
+      
     });
     
     // 체크된 행 삭제 버튼 클릭 이벤트 처리
@@ -249,10 +252,8 @@ $(document).ready(function() {
 				}
 				
 			}
-
 	    }
    
-        
         // AJAX 요청으로 서버에 업데이트
 	    $.ajax({
 	        type: 'PUT',
@@ -263,7 +264,6 @@ $(document).ready(function() {
 	        success: function(response) {
 	            console.log('업데이트 성공:', response);
 	            alert('업데이트 성공!');
-	            
 	        },
 	        error: function(error) {
 	            console.error('업데이트 오류:', error);

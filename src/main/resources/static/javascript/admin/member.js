@@ -36,7 +36,8 @@ $(document).ready(function() {
     const grid = new tui.Grid({
       el: document.getElementById('grid'),
       scrollX: false,
-      scrollY: false,
+      bodyHeight: 500,
+//      scrollY: false,
       rowHeaders: ['checkbox'],
       columns: [
    	  	{
@@ -47,6 +48,7 @@ $(document).ready(function() {
    	    {
           header: '아이디',
           name: 'mem_id',
+          validation: { required: true },
           filter: { type: 'text', showApplyBtn: true, showClearBtn: true },
           editor: {
             type: CustomTextEditor,//사용자 정의 편집기
@@ -67,6 +69,7 @@ $(document).ready(function() {
             }
           }
         },
+        
         {
           header: '닉네임',
           name: 'mem_nick',
@@ -171,7 +174,7 @@ $(document).ready(function() {
     // 클릭 이벤트 핸들러
 	grid.on('click', (ev) => {
 	    const { rowKey, columnName } = ev;
-	    if (columnName === 'mem_id') { // mem_id 열이 클릭된 경우
+	    if (columnName === 'mem_id' && ev.targetType !== 'columnHeader') { // mem_id 열이 클릭된 경우
 	        const memNo = grid.getValue(rowKey, 'mem_no');
 	        window.location.href = `detail?mem_no=${memNo}`;
 	    }

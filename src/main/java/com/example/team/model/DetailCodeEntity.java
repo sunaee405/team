@@ -33,7 +33,7 @@ public class DetailCodeEntity {
 	@JsonProperty("DCO_ID")
 	private String DCO_ID; //상세공통코드 ID
 	
-	@Column(length = 20)
+	@Column(length = 50)
 	@JsonProperty("DCO_VALUE")
 	private String DCO_VALUE; //상세공통코드 VALUE 
 	

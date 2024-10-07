@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -211,10 +212,21 @@ public class MemberService {
 	    memberRepository.save(member);
 	}
 	
-	// 채현 MemberRepository에서 string 타입으로 되어있어서 만듦..
-	// 추가 메서드: Long을 String으로 변환하는 메서드
-    private String convertMemNoToString(Long memNo) {
-        return memNo != null ? String.valueOf(memNo) : null;
+	
+    
+    // 탈퇴@Scheduled(cron = "0 0 0 * * ?")
+    // 매일 자정에 실행될 메서드(fixedRate = 60000)//1분마다
+    @Scheduled(fixedRate = 60000) // 매일 자정
+    public void removeExpiredMembers() {
+        LocalDateTime now = LocalDateTime.now();
+        List<MemberEntity> expiredMembers = memberRepository.findExpiredMembers(now);
+        memberRepository.deleteAll(expiredMembers); // 만료된 회원 삭제
     }
+    
+    // 채현 MemberRepository에서 string 타입으로 되어있어서 만듦..
+ 	// 추가 메서드: Long을 String으로 변환하는 메서드
+     private String convertMemNoToString(Long memNo) {
+         return memNo != null ? String.valueOf(memNo) : null;
+     }
 
 }

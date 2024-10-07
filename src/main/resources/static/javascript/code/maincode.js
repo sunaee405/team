@@ -34,7 +34,8 @@ $(document).ready(function() {
     const grid = new tui.Grid({
       el: document.getElementById('grid'),
       scrollX: false,
-      scrollY: false,
+      bodyHeight: 500,
+//      scrollY: false,
       rowHeaders: ['checkbox'],
       columns: [
    	  	{

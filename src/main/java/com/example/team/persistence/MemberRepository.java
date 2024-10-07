@@ -1,5 +1,7 @@
 package com.example.team.persistence;
 
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -27,5 +29,8 @@ public interface MemberRepository extends JpaRepository<MemberEntity, String> {
 	String findMemPwByMemEmail(String MemEmail);
 	
 	Optional<MemberEntity> findByMemId(String MemId);
+	
+	@Query("SELECT m FROM MemberEntity m WHERE m.MEM_OUT < ?1") // 오늘 날자보다 이전 날자 삭제
+    List<MemberEntity> findExpiredMembers(LocalDateTime currentDate);
 
 }
