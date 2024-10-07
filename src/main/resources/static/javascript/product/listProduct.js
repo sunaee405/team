@@ -507,10 +507,10 @@ $(document).ready(function() {
 		}
 
 		// 페이지 네비게이션 삽입
-		$('ul.flex').html(pageNavHtml);
+		$('#paging').html(pageNavHtml);
 
 		// 이벤트 리스너 등록
-		$('ul.flex').off('click').on('click', 'a', function(event) {
+		$('#paging').off('click').on('click', 'a', function(event) {
 			event.preventDefault();
 			var page = $(this).data('page');
 			loadProducts(page);
