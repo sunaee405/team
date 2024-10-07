@@ -37,6 +37,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
+import jakarta.persistence.criteria.CriteriaBuilder.In;
 import jakarta.servlet.http.HttpSession;
 
 @RestController
@@ -294,11 +295,14 @@ public class MyPageController {
 	public ResponseEntity<?> getChatRoom(@RequestParam Map<String, Object> data, HttpSession session) {
 		
 		System.out.println(data);
+		Optional<MemberEntity> entity = myPageService.getSession((String)session.getAttribute("MEM_ID"));
+		MemberEntity memEntity = entity.get();
 		
 		String selMem = (String)data.get("SEL_MEM");
 		if(selMem != null) {
 			int user1 = Integer.parseInt(selMem);
-			int user2 = (int)session.getAttribute("memberNum");
+			int user2 = memEntity.getMemNo().intValue();
+			
 					
 			if(user1 > user2) {
 				int num = user1;

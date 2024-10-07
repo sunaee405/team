@@ -73,15 +73,10 @@ public class MyPageService {
 	}
 
 
-
-
-
-
 	// 세션에 저장된 id로 회원정보
 	public Optional<MemberEntity> getSession(String data) {
 		return memberRepository.findByMemId(data);
 	}
-
 
 
 	// 회원정보를 통해 채팅리스트 저장
