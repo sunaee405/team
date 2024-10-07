@@ -36,12 +36,14 @@ public interface ProductMapper {
 											  , @Param("categoryId") String categoryId
 											  , @Param("locationScoId") String locationScoId
 											  , @Param("locationDcoId") String locationDcoId
+											  , @Param("statusId") String statusId
 											  , @Param("searchKeyword") String searchKeyword);
 
 	// 총 제품 개수 조회 메서드 
 	int getTotalProducts(@Param("categoryId") String categoryId
 					   , @Param("locationScoId") String locationScoId
 					   , @Param("locationDcoId") String locationDcoId
+					   , @Param("statusId") String statusId
 					   , @Param("searchKeyword") String searchKeyword);
 	
 

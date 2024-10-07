@@ -147,14 +147,14 @@ public class ProductController {
 			@RequestParam(value = "categoryId", required = false) String categoryId,
 			@RequestParam(value = "locationScoId", required = false) String locationScoId,
 			@RequestParam(value = "locationDcoId", required = false) String locationDcoId,
+			@RequestParam(value = "statusId", required = false) String statusId,
 			@RequestParam(value = "searchKeyword", required = false) String searchKeyword) {
 
-		return productService.getProductsSorted(page, size, sortType, categoryId, locationScoId, locationDcoId,
-				searchKeyword);
+		return productService.getProductsSorted(page, size, sortType, categoryId, locationScoId, locationDcoId, statusId
+				, searchKeyword);
 	}
 
 	// =================================== 상세 상품 정보
-	// ===================================
 
 	@GetMapping("getContentProduct")
 	@ResponseBody
