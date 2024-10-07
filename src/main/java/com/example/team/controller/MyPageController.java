@@ -276,9 +276,11 @@ public class MyPageController {
 	// 채팅방 채팅로그 업데이트
 	@PostMapping("/updateChat")
 	public ResponseEntity<?> updateChat(@RequestBody Map<String, Object> data, HttpSession session) {
-//		String userId = (String)session.getAttribute("MEM_ID");
-//		final String userId = "2";
-//		data.put("USERID", userId);
+		String memId = (String)session.getAttribute("MEM_ID");
+		Optional<MemberEntity> entity = myPageService.getSession(memId);
+		MemberEntity memEntity = entity.get();
+		String memNo = memEntity.getMemNo().toString();
+		data.put("USERID", memNo);
 		
 		boolean check = myPageService.updateChat(data);
 		
