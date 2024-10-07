@@ -2,6 +2,7 @@ package com.example.team.controller;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.HashMap;
@@ -38,7 +39,10 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import jakarta.persistence.criteria.CriteriaBuilder.In;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import reactor.netty.http.server.HttpServerRequest;
+import retrofit2.http.GET;
 
 @RestController
 public class MyPageController {
@@ -47,6 +51,15 @@ public class MyPageController {
 	private MyPageService myPageService;
 	
 	private ObjectMapper objectMapper = new ObjectMapper();
+	
+	@GetMapping("/api/topLogout")
+	public ResponseEntity<?> logout(HttpSession session) {
+		System.out.println("로그아웃");
+		session.invalidate();
+		return ResponseEntity.status(HttpStatus.FOUND) // 302 Found
+                			 .location(URI.create("/myPage/main")) // 리다이렉트할 URL
+                			 .build();
+	}
 	
 	
 	
@@ -326,6 +339,7 @@ public class MyPageController {
 
 		return ResponseEntity.status(HttpStatus.OK).body(chattingEntity);
 	}
+	
 	
 	
 	

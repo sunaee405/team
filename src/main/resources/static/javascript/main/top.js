@@ -83,8 +83,7 @@ $(document).on('sessionLoaded', function() {
 // 로그아웃
 $(document).on('click', '#logoutBtn', function() {
 	sessionStorage.clear();
-	
-	location.href = `/api/logout`;
+	location.href = '/api/topLogout';
 });
 
 // 마이페이지
