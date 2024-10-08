@@ -1,9 +1,67 @@
-$(async function() {
-	await bodyInner();
+$(function() {
+	bodyInner();
 	$('#proListType>li:first').trigger('click');
-	
-})
+});
 
+$(document).on('click', '#deleteMem', function() {
+	var confText = `<ol style="list-style-type: decimal; text-align: left;">
+						<li>탈퇴 신청일로부터 6개월 동안 동일한 아이디와 휴대폰 번호로 재가입이 불가능하며, 6개월이 경과한 후 계정이 삭제됩니다.</li> <br><br>
+						<li>회원 탈퇴 시 본인 계정에 등록된 모든 게시물은 삭제됩니다.</li>
+					</ol>
+					`
+	
+	Swal.fire({
+	    title: '회원 탈퇴 동의',
+	    html: confText,
+	    background: '#fff', // 모달 배경 색상
+	    color: '#000', // 글자 색상
+	    confirmButtonColor: '#0AC26E', // 확인 버튼 색상
+	    cancelButtonColor: '#C0C0C0', // 취소 버튼 색상
+	    showCancelButton: true,
+	    confirmButtonText: '회원탈퇴',
+	    cancelButtonText: '취소'
+	}).then((result) => {
+		// 취소면 리턴
+	    if (!result.isConfirmed) return;
+	    
+	    
+		const MEM_RESPITE = new Date();
+		// 6개월 더하기
+		const MEM_OUT = new Date(MEM_RESPITE); // 현재 날짜를 복사
+		MEM_OUT.setMonth(MEM_RESPITE.getMonth() + 6); // 6개월 더해서 삭제일 구하기
+		
+		const outDate = {
+			'MEM_RESPITE' : MEM_RESPITE.toISOString(),
+			'MEM_OUT' : MEM_OUT.toISOString()
+		}
+		
+		debugger;
+		
+		$.ajax({
+			url: '/deleteMember',
+			type: 'PUT',
+			contentType: 'application/json', // JSON 형식으로 전송
+    		data: JSON.stringify(outDate), // JSON 문자열로 변환
+			success: (data) => {
+				// 로그아웃
+				if(data == 'success') location.href = '/api/topLogout';
+			},
+			error: (error) => {
+				const errorMsg = error.responseText;
+				if(errorMsg == "login") {
+					alert('비정상적인 접근 로그인 된 회원이 아닙니다.');
+				} else if(errorMsg = 'nullMember') {
+					alert('비정상적인 접근 존재하지 않는  회원입니다.');
+				}
+			}
+		});
+		
+		
+			
+			
+	        
+	});
+});
 
 
 // 페이지 로드시 body 영역
@@ -19,7 +77,7 @@ function bodyInner() {
 		           <!--  <h3 class="pt-0 mb-3 text-lg font-semibold border-none text-jnBlack">거래 정보</h3>
 		           	<ul id="productDetails">
 		              <li class="selProduct">판매내역</li>
-		               <li>구매내역</li>
+		              <li>구매내역</li>
 		              <li>택배</li> 
 		              <li class="likedProduct">찜한상품</li>
 		            </ul>		            -->
@@ -28,7 +86,7 @@ function bodyInner() {
 		                <li><a href="/myPage/myData">회원 정보</a></li>
 		           <!-- <li>배송지 관리</li>
 		                <li>거래 후기</li>  -->
-		                <li>탈퇴하기</li>
+		                <li id="deleteMem">탈퇴하기</li>
 		            </ul>
 		        </div>
 		        <div class="mx-auto box-content max-w-[1024px] min-[1600px]:max-w-[1280px] basis-[calc(100%-180px)] flex-grow px-0 md:px-0 2xl:px-0">
@@ -127,6 +185,8 @@ function bodyInner() {
 		</main>`
 	$('body').append(text);	
 }
+
+
 
 //해당 상품영역 디테일
 //$(document).on('click', '#productDetails>li', async function()
@@ -297,7 +357,7 @@ $(document).on('click', '#proListType>li', function() {
 });
 
 //정렬 버튼
-$(document).off('click').on('click', '#sortProduct button', function() {
+$(document).off('click', '#sortProduct button').on('click', '#sortProduct button', function() {
 	$('#sortProduct button').removeClass('text-[#141313]').addClass('text-[#787E89]');
 	$(this).removeClass('text-[#787E89]').addClass('text-[#141313]');
 	

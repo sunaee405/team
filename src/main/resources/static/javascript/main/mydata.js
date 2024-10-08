@@ -43,11 +43,12 @@ function myDataInner() {
 		                                        <li>
 		                                            <div class="sc-d5117916-0 bmBXaP">이메일</div>
 		                                            <div>
-		                                                <div class="profile_userId_value">${data.mem_email}</div>
-		                                                <div class="emailErrorMsg"></div>
+		                                                <div id="emailVal" class="profile_userId_value">${data.mem_email}</div>
 		                                            </div>
 		                                            <div>
-		                                                <div class="sc-525246f5-0 kHiBe"><button class="" type="button">변경</button></div>
+		                                                <div class="sc-525246f5-0 kHiBe">
+		                                                	<button class="emailBtn" type="button">변경</button>
+	                                                	</div>
 		                                            </div>
 		                                        </li>
 		                                        <li>
@@ -62,35 +63,6 @@ function myDataInner() {
 		                                            </div>
 		                                            <!-- <div class="certificates_box_btn"><button class="" type="button">이름변경</button></div> -->
 		                                        </li>
-		                                        <!-- 카카오톡 네이버 연동 주석 
-		                                        <li>
-		                                            <div class="sc-d5117916-0 jksEIJ">소셜연동</div>
-		                                            <div>
-		                                                <div>
-	                                                   
-	                                               <div class="sc-a27a2b0b-0 fDwYcZ">
-		                                                        <img src="https://ccimage.hellomarket.com/img/web/auth/kakao_check_x2.png" alt="social logo" class="sc-a27a2b0b-2 cwNsJy">
-		                                                        <div class="sc-a27a2b0b-1 gCbZiB">카카오톡</div>
-		                                                    </div> 
-		                                                    <div class="sc-a27a2b0b-0 fDwYcZ">
-		                                                        <img src="https://ccimage.hellomarket.com/img/web/auth/naver_check_x2.png" alt="social logo" class="sc-a27a2b0b-2 cwNsJy">
-		                                                        <div class="sc-a27a2b0b-1 gCbZiB">네이버 연동완료</div>
-		                                                    </div>
-		                                                </div>
-		                                            </div>
-		                                            
-		                                            <div>
-		                                                <div>
-		                                                    <div>
-		                                                        <div class="sc-525246f5-0 bfnbzk"><button class="">연동</button></div>
-		                                                    </div>
-		                                                    <div>
-		                                                        <div class="sc-525246f5-0 bfnbzk"><button class="edit_cancel_btn">해제</button></div>
-		                                                    </div>
-		                                                </div>
-		                                            </div>
-		                                        </li>
-		                                        -->
 		                                    </ul>
 		                                    <div class="profile_edit_bye"><span>회원탈퇴</span></div>
 		                                </div>
@@ -129,6 +101,89 @@ $(document).on('click', '#nickBtn', function() {
 	
 });
 
+//이메일 변경 버튼
+$(document).on('click', '.emailBtn', function() {
+	const inputMail = `<input id="newEmail" type="text" placeholder="이메일 주소 입력" class="input_box phone_input_box detMail" oninput="this.value = this.value.replace(/[^a-zA-Z0-9a-zA-Z0-9!@#$%^&*().]/g, '');" value="">`
+	const authBtn = `<div class="sc-525246f5-0 kHiBe detMail"><button id="emailAuthBtn" class="phone_button_box" type="button">인증요청</button></div>`;
+	
+	$('#emailVal').after(inputMail);
+	$(this).after(authBtn);
+	$(this).replaceWith(`<button id="emailCancel" class="edit_cancel_btn" type="button">취소</button>`);
+});
+
+// 이메일변경 취소버튼
+$(document).on('click', '#emailCancel', function() {
+	$('.detMail').remove();
+	$('#emailCancel').replaceWith(`<button class="emailBtn" type="button">변경</button>`);
+});
+
+// 이메일 인증
+$(document).on('click', '#emailAuthBtn', function() {
+	const newEmail = $("#newEmail").val();
+	$.ajax({
+		url: '/members/checkEmail',
+		type: "POST",
+		contentType: "application/json",
+		data: JSON.stringify({MEM_EMAIL : newEmail}),
+		success: (response) => {
+			if(response.length === 0) {
+				sendEmail(newEmail);
+			} else {
+				alert(`이미 등록된 이메일 입니다.`);
+			}
+		}
+	})
+});
+
+let successEmailNumber;
+// 인증메일 보내기
+function sendEmail(newEmail) {
+	const emailRegex = new RegExp('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$');
+	const ckEmail = emailRegex.test(newEmail);
+	debugger;
+	if(!ckEmail) {
+		alert(`입력한 주소가 이메일 형식에 유효하지 않습니다.`);
+		return;
+	}
+	
+	
+	$("#newEmail").attr('readonly', true);
+	$('#newEmail').after(`<input id="eMailVerCode" type="text" placeholder="인증번호를 입력해주세요" class="input_box phone_input_box detEmail" value="">`);
+	$('#emailAuthBtn').closest('div').after(`<div class="sc-525246f5-0 kHiBe"><button id="ckEmailNumber" class="phone_button_box detEmail" type="button">확인</button></div>`);
+	
+	$.ajax({
+		url: '/members/sendEmail',
+		type: 'POST',
+		contentType: "application/json",
+		data: JSON.stringify({
+			MEM_EMAIL : newEmail,
+			type : 'check'
+		}),
+		success: (response) => {
+			successEmailNumber = response;
+		},
+		error: (error) => {
+			console.error(error);
+		}
+//		check
+	});
+}
+
+$(document).on('click', '#ckEmailNumber', function() {
+	const inputNumber = ('#eMailVerCode').val();
+	const newMemEmail = $("#newEmail").val();
+	
+	if(successEmailNumber === inputNumber) {
+		location.href = `/myPage/insertEmail?MEM_EMAIL=${newMemEmail}`
+	} else {
+		alert(`잘못된 인증번호 입니다`);
+	}
+});
+
+
+
+
+
 
 
 // 비밀번호 변경 버튼
@@ -137,13 +192,16 @@ $(document).on('click', '.passByBtn', function() {
 	`<li class="profile_password_area profile_password_area_middle">
 	    <div class="sc-d5117916-0 bmBXaP">현재 비밀번호</div>
 	    <div>
-	        <input id="oldPass" autocomplete="new-password" type="password" placeholder="현재 비밀번호 입력" class="input_box" value="">
+	        <input id="oldPass"  oninput="this.value = this.value.replace(/[^a-zA-Z0-9._%+-@]/g, '');" autocomplete="new-password" type="password" placeholder="현재 비밀번호 입력" class="input_box" value="">
 	    </div>
+	    <div style="text-align: center;">
+	    	<i id="viewPass" class="material-icons" style="font-size:36px; width: 36px; height:36px; cursor: pointer; opacity: 0.75;">visibility_off</i>
+		</div>
 	</li>
 	<li class="profile_password_area profile_password_area_last">
 	    <div class="sc-d5117916-0 bmBXaP">신규 비밀번호</div>
 	    <div>
-	        <input id="newPass" autocomplete="new-password" type="password" placeholder="신규 비밀번호 입력" class="input_box" value="">
+	        <input id="newPass" oninput="this.value = this.value.replace(/[^a-zA-Z0-9a-zA-Z0-9!@#$%^&*()]/g, '');" autocomplete="new-password" type="password" placeholder="10자 이내 신규 비밀번호 입력" maxlength="10" class="input_box" value="">
 	    </div>
 	    <div class="sc-525246f5-0 kHiBe">
 	        <button id="updatePass" type="button">확인</button>
@@ -153,6 +211,23 @@ $(document).on('click', '.passByBtn', function() {
 	$(this).closest('li').after(text);
 	$('.passByBtn').replaceWith(`<button class="passReplaceBtn" type="button">취소</button>`);
 });
+
+// 비밀번호
+$(document).on('click', '#viewPass', function() {
+	const viewCheck  = $(this).text();
+	const onByOff = viewCheck == 'visibility_off' ? $(this).text('visibility_on') : $(this).text('visibility_off');
+	
+	if(onByOff.text() == 'visibility_on') {
+		$('.profile_password_area').find('input').attr('type', 'text');
+	} else if(onByOff.text() == 'visibility_off') {
+		$('.profile_password_area').find('input').attr('type', 'password');
+	}
+});
+
+
+//String MEM_EMAIL, String type, String randomNumber
+
+
 // 비밀번호 변경 취소 버튼
 $(document).on('click', '.passReplaceBtn', function() {
 	$('.passReplaceBtn').replaceWith(`<button class="passByBtn" type="button">변경</button>`);

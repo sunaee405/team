@@ -104,10 +104,19 @@ public class MyPageService {
 
 
 
-
+	//배너 호출
 	public List<BannerImgEntity> getBanner() {
 		return bannerImgRepository.findAll();
 	}
+
+
+
+	// 회원탈퇴일 등록
+	public void deleteMember(MemberEntity memEntity) {
+		memberRepository.save(memEntity);
+	}
+
+
 
 
 

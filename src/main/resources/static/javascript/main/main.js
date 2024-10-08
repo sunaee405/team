@@ -9,11 +9,10 @@ $(async function() {
 		dataType: 'json',
 		success: (data) => {
 			data.forEach(function(silde) {
-//				${silde.link}
 				var text =
-				`<a href="">
+				`<div class="pageNav" data-code="${silde.link}">
 					<img src="${silde.base64Url}" style="height: 100%; width: 100%;">
-		        </a>`
+		        </div>`
 		        $('#adSlide').prepend(text);
 		        $('#adSlideTab').prepend(`<span class="swiper-pagination-bullet swiper-pagination-bullet-active"></span>`);
 			});

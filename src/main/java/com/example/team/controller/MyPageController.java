@@ -3,6 +3,8 @@ package com.example.team.controller;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URI;
+import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.HashMap;
@@ -24,6 +26,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -157,13 +160,10 @@ public class MyPageController {
 //				    	   .replaceAll("=(\\d+)", ": $1") // 숫자는 그대로 유지
 //				    	   .replaceAll("=(\\w+)", ": \"$1\""); // 문자열 값에 큰따옴표 추가
 		    
-		    
 		    System.out.println(result);
-		    
 		    if (data instanceof Map) {
 	            return (T) objectMapper.readValue(result, Map.class);
 	        } else if (data instanceof List) {
-	        	
 	            return (T) objectMapper.readValue(result, List.class);
 	        }
 	    } catch (Exception e) {
@@ -179,12 +179,10 @@ public class MyPageController {
 	
 	// 상단영역 카테고리 불러오기
 	@GetMapping("/getCategory")
-	public ResponseEntity getCategory() {
+	public ResponseEntity<?>  getCategory() {
 		List<Map<String, Object>> categoryList = myPageService.getCategory();
-		
 		return ResponseEntity.ok().body(categoryList);
 	}
-	
 	
 	// 메인페이지 상품메뉴 생성
 	@GetMapping("/getMainProductList")
@@ -238,6 +236,7 @@ public class MyPageController {
 		return entity;
 	}
 	
+	// 비밀번호 수정
 	@PostMapping("/updatePass")
 	public ResponseEntity<?> updatePass(HttpSession session, @RequestParam Map<String, Object> passData) {
 		String data = (String) session.getAttribute("MEM_ID");
@@ -255,6 +254,7 @@ public class MyPageController {
 		
 	}
 	
+	// 닉네임 수정
 	@PostMapping("/updateNick")
 	public ResponseEntity<?> updateNick(HttpSession session, @RequestParam Map<String, Object> nickData) {
 		String data = (String) session.getAttribute("MEM_ID");
@@ -266,6 +266,35 @@ public class MyPageController {
 		myPageService.updateMemData(memEntity);
 		
 		return ResponseEntity.ok().body(newNick);
+	}
+	
+	// 회원 탈퇴 신청
+	@PutMapping("/deleteMember")
+	public ResponseEntity<String> deleteMember(@RequestBody Map<String, Object> data, HttpSession session) {
+		System.out.println("회원탈퇴신청");
+		
+		// 로그인 유무 확인
+		String id = (String) session.getAttribute("MEM_ID");
+		if(id == null) return ResponseEntity.status(HttpStatus.OK).body("login");
+		// 해당 세션의 id값에 해당하는 멤버가 존재하지 않음
+		Optional<MemberEntity> entity = myPageService.getSession(id);
+		if(entity == null) return ResponseEntity.status(HttpStatus.OK).body("nullMember");
+		
+		MemberEntity memEntity = entity.get();
+		
+		// 날자를 LocalDateTime으로 파싱
+		LocalDateTime MEM_RESPITE = convertDate((String)data.get("MEM_RESPITE"));
+		LocalDateTime MEM_OUT = convertDate((String)data.get("MEM_OUT"));
+		
+		memEntity.setMEM_RESPITE(MEM_RESPITE);
+		memEntity.setMEM_OUT(MEM_OUT);
+		memEntity.setMEM_STATUS("T");
+		myPageService.deleteMember(memEntity);
+		return ResponseEntity.status(HttpStatus.OK).body("success");
+	}
+	
+	public LocalDateTime convertDate(String date) {
+		return ZonedDateTime.parse(date).toLocalDateTime();
 	}
 	
 	
@@ -321,7 +350,6 @@ public class MyPageController {
 		if(selMem != null) {
 			int user1 = Integer.parseInt(selMem);
 			int user2 = memEntity.getMemNo().intValue();
-			
 					
 			if(user1 > user2) {
 				int num = user1;

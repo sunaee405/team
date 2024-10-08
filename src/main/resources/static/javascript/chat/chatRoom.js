@@ -87,12 +87,17 @@ $(async function() {
 	    .catch(error => {
 			const em = error.message;
 			if (em === "notLogin") {
-	           	alert('로그인 상태가 아닙니다 다시 로그인해주세요');
-	           	window.close();
+				if (window.opener && !window.opener.closed) {
+                	window.opener.showAlert('로그인 상태가 아닙니다 다시 로그인해주세요');
+                	debugger;
+	            } else {
+	                alert('비정상적인 접근');
+	            }
 	        } else {
-				오류
-				window.close();
+//				
 			}
+			
+			window.close();
 	    });
 	}
 	

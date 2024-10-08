@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 </head>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <link href="/static/css/main/a5055aa57af99147.css" rel="stylesheet">
 <link href="/static/css/main/4d4e407f2280d50c.css" rel="stylesheet">
 <link href="/static/css/main/c5a395054df1af09.css" rel="stylesheet">
@@ -114,41 +114,22 @@
 	</div>
 	<div class="md:px-8 2xl:px-16 lg:flex lg:h-16 items-center min-[1600px]:max-w-[1280px] max-w-[1024px] hidden headerBottom mx-auto box-content">
 		<!--$-->
-		<div class="relative flex-shrink-0 categoryMenu hidden lg:block">
-    <div class="flex items-center justify-center gap-2 px-3.5 xl:px-4 text-sm relative before:absolute before:-bottom-2.5 before:h-2.5 before:w-full before:z-10 font-semibold text-white transition-colors rounded-md cursor-pointer h-11 bg-heading hover:bg-black">
+	<div class="relative flex-shrink-0 lg:block" style="cursor: default;">
+    <div style="cursor: default;" class="flex items-center justify-center gap-2 px-3.5 xl:px-4 text-sm relative before:absolute before:-bottom-2.5 before:h-2.5 before:w-full before:z-10 font-semibold text-white transition-colors rounded-md cursor-pointer h-11 bg-heading">
     	<svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 20 20" class="text-xl" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">
             <path fill-rule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"></path>
-        </svg>카테고리
+        </svg>탭
     </div>
     <div class="absolute invisible bg-white opacity-0 subMenu shadow-header start-0">
         <ul id="categoryList" class="py-5 text-sm text-body max-h-[480px] overflow-y-scroll">
+        	
         </ul>
     </div>
 </div>
 		<!--/$-->
 		<!--$-->
 		<nav class="headerMenu flex w-full relative hidden lg:flex ps-3.5 xl:ps-5">
-		<div class="menuItem group cursor-pointer ">
-			<a target="_self" class="ga4_main_gnb relative inline-flex items-center px-3 py-3 text-sm font-normal xl:text-base text-heading xl:px-4 group-hover:text-black" href="/event/list?searchType=ING">이벤트</a>
-		</div>
-		<div class="menuItem group cursor-pointer ">
-			<a target="_blank" class="ga4_main_gnb relative inline-flex items-center px-3 py-3 text-sm font-normal xl:text-base text-heading xl:px-4 group-hover:text-black" href="https://web.joongna.com/coupon">J쿠폰</a>
-		</div>
-		<div class="menuItem group cursor-pointer ">
-			<a target="_self" class="ga4_main_gnb relative inline-flex items-center px-3 py-3 text-sm font-normal xl:text-base text-heading xl:px-4 group-hover:text-black" href="/fraud">사기조회</a>
-		</div>
-		<div class="menuItem group cursor-pointer ">
-			<a target="_self" class="ga4_main_gnb relative inline-flex items-center px-3 py-3 text-sm font-normal xl:text-base text-heading xl:px-4 group-hover:text-black" href="/search-price">시세조회</a>
-		</div>
-		<div class="menuItem group cursor-pointer ">
-			<a target="_self" class="ga4_main_gnb relative inline-flex items-center px-3 py-3 text-sm font-normal xl:text-base text-heading xl:px-4 group-hover:text-black" href="/contents">콘텐츠</a>
-		</div>
-		<div class="cursor-pointer menuItem group">
-			<a class="ga4_main_gnb relative inline-flex items-center px-3 py-3 text-sm font-normal xl:text-base text-heading xl:px-4 group-hover:text-black" href="/#">찜한 상품</a>
-		</div>
-		<div class="cursor-pointer menuItem group">
-			<a class="ga4_main_gnb relative inline-flex items-center px-3 py-3 text-sm font-normal xl:text-base text-heading xl:px-4 group-hover:text-black" href="/event/1306">내 폰 팔기</a>
-		</div>
+			<!-- 상단 텝메뉴 -->
 		</nav>
 		<!--/$-->
 	</div>
