@@ -176,7 +176,7 @@ $(document).ready(function() {
 	    const { rowKey, columnName } = ev;
 	    if (columnName === 'mem_id' && ev.targetType !== 'columnHeader') { // mem_id 열이 클릭된 경우
 	        const memNo = grid.getValue(rowKey, 'mem_no');
-	        window.location.href = `detail?mem_no=${memNo}`;
+	        window.location.href = `info?mem_no=${memNo}`;
 	    }
 	});
     

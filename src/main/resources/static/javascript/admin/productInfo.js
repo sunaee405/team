@@ -6,7 +6,7 @@ $(function() {
             url: `/admin/products/${proNo}`, // 상세 정보 API 엔드포인트
             success: function(data) {
                 // 데이터가 성공적으로 반환되면 테이블에 추가
-	            $('#product-detail').html(`
+	            $('#product-info').html(`
 	            <tr>
                     <th>상품번호</th>
                     <td>${data.PRO_NO}</td>

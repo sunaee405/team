@@ -196,7 +196,6 @@ public class MemberService {
         if (updates.containsKey("mem_status")) {
             String memStatus = (String) updates.get("mem_status");
             member.setMEM_STATUS(memStatus); // 상태값 설정
-            System.out.println("회원 상태가 변경되었습니다: " + memStatus);
         }
 
         memberRepository.save(member); // 업데이트된 회원 정보 저장

@@ -179,7 +179,6 @@ $(document).ready(function() {
   	// 저장 버튼 클릭 이벤트 처리
     $('#saveButton').click(function() {
         const currentData = grid.getData();
-        
 		//const dataToInsert = []; // INSERT할 데이터
 		
 		const existingMCO_IDs = currentData.map(row => row.SCO_ID); // 기존 SCO_ID 배열
@@ -278,7 +277,7 @@ $(document).ready(function() {
     // DB에서 데이터 가져와서 화면에 뿌리기
 	function fetchData() {
 		
-		const listItems = [];// MCO_ID를 저장할 배열 초기화
+		const listItems = [];// SCO_ID를 저장할 배열 초기화
 		// 로컬 스토리지에서 데이터 읽기
 	    subList = JSON.parse(localStorage.getItem('subList'));
 	    for(let i = 0; i < subList.length; i++){
@@ -300,6 +299,10 @@ $(document).ready(function() {
 	        url: '/admin/detailcodes', // 데이터 가져올 API 엔드포인트
 	        success: function(response) {
 				console.log('서버 응답:', response); // 여기서 응답 데이터 출력
+				
+				// 데이터를 로컬 스토리지에 저장
+            	localStorage.setItem('detailList', JSON.stringify(response));
+				
 	            // 데이터를 그리드에 뿌리기
 	            grid.resetData(response.map(item => ({
 	                ID: item.ID,           // ID 필드 포함

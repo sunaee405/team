@@ -46,7 +46,6 @@ public class SubCodeController {
 
     @PutMapping
     public List<SubCodeEntity> updateSubCodes(@RequestBody List<SubCodeEntity> subCodes) {
-    	System.out.println("Received subCodes: " + subCodes);
     	List<SubCodeEntity> updatedCodes = new ArrayList<>();
         for (SubCodeEntity subCode : subCodes) {
             updatedCodes.add(subCodeService.update(subCode.getID(), subCode)); // 각 메인코드 업데이트

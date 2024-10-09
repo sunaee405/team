@@ -129,7 +129,7 @@ $(document).ready(function() {
 	    const { rowKey, columnName } = ev;
 	    if (columnName === 'PRO_TITLE' && ev.targetType !== 'columnHeader') { // pro_title 열이 클릭된 경우
 	        const proNo = grid.getValue(rowKey, 'PRO_NO');
-	        window.location.href = `detail?pro_no=${proNo}`;
+	        window.location.href = `info?pro_no=${proNo}`;
 	        
 	    }
 	});
@@ -164,11 +164,6 @@ $(document).ready(function() {
 	        }
 	    });
 	}
-	
-	$('#detailButton').click(function(){
-		// 페이지 이동
-        window.location.href = 'detailCrud'; // 이동할 페이지의 경로로 변경
-	});
 
    
 });

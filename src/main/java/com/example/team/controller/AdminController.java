@@ -17,9 +17,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.team.model.MemberEntity;
+import com.example.team.model.NewsEntity;
 import com.example.team.model.ProductEntity;
+import com.example.team.model.SubCodeEntity;
 import com.example.team.persistence.MemberRepository;
 import com.example.team.service.MemberService;
+import com.example.team.service.NewsService;
 import com.example.team.service.ProductService;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -57,7 +60,6 @@ public class AdminController {
     
     @PutMapping("members")
     public void updateMembers(@RequestBody List<MemberEntity> members) {
-    	System.out.println("Received subCodes: " + members);
         for (MemberEntity member : members) {
         	memberService.update(member.getMemNo(), member); // 각 디테일코드 업데이트
         }
@@ -74,7 +76,8 @@ public class AdminController {
         return ResponseEntity.ok(updatedMember);
     }
     
-    @PutMapping("members/delete")
+    // 멤버 탈퇴 유예처리
+    @PutMapping("members/delete") 
     public ResponseEntity<String> deleteMember(@RequestBody Map<String, Object> data) {
         Long memNo = Long.valueOf((String) data.get("mem_no")); // mem_no를 Long으로 변환
         memberService.updateMemberStatus(memNo, data); // 서비스 호출
@@ -112,9 +115,59 @@ public class AdminController {
     
     @DeleteMapping("products/delete/{proNo}")
     public void deleteproduct(@PathVariable("proNo") Long proNo) {
-    	System.out.println(proNo);
     	productService.delete(proNo);
     }
-
+    
+//  news  ----------------------
+    @Autowired
+    private NewsService newsService;
+    
+    @GetMapping("news/list")
+    public List<NewsEntity> getAllNewsList() {
+        return newsService.findAll();
+    }
+    
+    @PostMapping("news/insert")
+    public void insertNews(@RequestBody List<NewsEntity> newslist) {
+    	newsService.save(newslist);
+    }
+    
+    @PutMapping("news/update")
+    public List<NewsEntity> updateNews(@RequestBody List<NewsEntity> newslist) {
+    	List<NewsEntity> updatedNews = new ArrayList<>();
+        for (NewsEntity news : newslist) {
+        	updatedNews.add(newsService.update(news.getNEW_NUM(), news));
+        }
+        return updatedNews; // 업데이트된 데이터 반환
+    }
+    
+    @DeleteMapping("news/delete")
+    public void deleteNews(@RequestBody List<Long> ids) {
+    	for (Long id : ids) {
+    		newsService.delete(id); // 각 ID로 삭제 메서드 호출
+        }
+    }
+    
+    @GetMapping("news/{newsNo}")
+    public NewsEntity getNews(@PathVariable("newsNo") Long newsNo) {
+        return newsService.findById(newsNo); // 조회
+    }
+    
+    @PutMapping("news/{newsNo}")
+    public ResponseEntity<NewsEntity> updateNews(
+    		@PathVariable("newsNo") Long newsNo, 
+    		@RequestBody Map<String, Object> updates) {
+    	// 서비스 메서드를 호출하여 업데이트
+    	NewsEntity updatedNews = newsService.updateNews(newsNo, updates);
+    	
+    	// 업데이트 로직
+        return ResponseEntity.ok(updatedNews);
+    }
+    
+//    @DeleteMapping("news/delete/{newsNo}")
+//    public void deleteNews(@PathVariable("newsNo") Long newsNo) {
+//    	newsService.delete(newsNo);
+//    }
+    
 
 }
