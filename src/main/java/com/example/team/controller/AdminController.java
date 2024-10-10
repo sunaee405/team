@@ -19,11 +19,13 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.team.model.MemberEntity;
 import com.example.team.model.NewsEntity;
 import com.example.team.model.ProductEntity;
+import com.example.team.model.ReportEntity;
 import com.example.team.model.SubCodeEntity;
 import com.example.team.persistence.MemberRepository;
 import com.example.team.service.MemberService;
 import com.example.team.service.NewsService;
 import com.example.team.service.ProductService;
+import com.example.team.service.ReportService;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -34,12 +36,11 @@ public class AdminController {
 //	logout
 	@PostMapping("/logout")
     public ResponseEntity<Map<String, String>> logout(HttpServletRequest request) {
-		System.out.println("@@@@@@@@@@@@@@@@@@@@@");
 		// 세션 무효화
         request.getSession().invalidate();
-     // 리다이렉트 URL 생성
+        // 리다이렉트 URL 생성
         Map<String, String> response = new HashMap<>();
-//        TODO 메인화면으로 변경
+        // 메인화면 페이지 이동
         response.put("redirectUrl", "/myPage/main");
         return ResponseEntity.ok(response); // JSON 응답으로 리다이렉트 URL 반환
     }
@@ -136,7 +137,7 @@ public class AdminController {
     public List<NewsEntity> updateNews(@RequestBody List<NewsEntity> newslist) {
     	List<NewsEntity> updatedNews = new ArrayList<>();
         for (NewsEntity news : newslist) {
-        	updatedNews.add(newsService.update(news.getNEW_NUM(), news));
+        	updatedNews.add(newsService.update(news.getNEW_NO(), news));
         }
         return updatedNews; // 업데이트된 데이터 반환
     }
@@ -164,10 +165,19 @@ public class AdminController {
         return ResponseEntity.ok(updatedNews);
     }
     
-//    @DeleteMapping("news/delete/{newsNo}")
-//    public void deleteNews(@PathVariable("newsNo") Long newsNo) {
-//    	newsService.delete(newsNo);
-//    }
+    @DeleteMapping("news/{newsNo}")
+    public void deleteNews(@PathVariable("newsNo") Long newsNo) {
+    	newsService.delete(newsNo);
+    }
+    
+//  report  ----------------------
+    @Autowired
+    private ReportService reportService;
+    
+    @GetMapping("report/list")
+    public List<ReportEntity> getAllReportList() {
+        return reportService.findAll();
+    }
     
 
 }

@@ -1,6 +1,6 @@
 $(function() {
 	const urlParams = new URLSearchParams(window.location.search);
-	const newsNo = urlParams.get('NEW_NUM');
+	const newsNo = urlParams.get('NEW_NO');
 	
 	const listItems = [];// DCO_ID를 저장할 배열 초기화
 	// 로컬 스토리지에서 데이터 읽기
@@ -41,7 +41,7 @@ $(function() {
 	            $('#news-info').html(`
 	            <tr>
                     <th>*번호</th>
-                    <td>${data.NEW_NUM}</td>
+                    <td>${data.NEW_NO}</td>
                 </tr>
                 <tr>
                     <th>섹션</th>
@@ -151,13 +151,12 @@ $(function() {
 	        });
 	        
 	$('#deleteButton').click(function(){
-	    
 	    // Ajax 요청으로 서버에 데이터 전송
 	    $.ajax({
 			url: `/admin/news/${newsNo}`, // 현재 상태에 따라 URL 선택
 	        type: 'DELETE',
 	        contentType: 'application/json',
-	        data: JSON.stringify(data),
+//	        data: JSON.stringify(data),
 	        success: function(response) {
 	            alert('처리가 완료되었습니다.'); // 성공 시 메시지
 	            window.location.href = 'list';//페이지 이동

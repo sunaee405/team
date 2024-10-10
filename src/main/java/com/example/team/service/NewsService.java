@@ -112,13 +112,5 @@ public class NewsService {
         return newsRepository.save(existingNews);
     }
     
-//    public void deleteNews(Long newsNo) {
-//    	// ID로 메인 코드 엔티티를 찾고, 존재하지 않을 경우 예외 처리
-//        ProductEntity existingProduct = productRepository.findById(proNoInt)
-//            .orElseThrow(() -> new RuntimeException("ID not found: " + proNoInt));
-//
-//        // 엔티티 삭제
-//        newsRepository.delete(existingProduct);
-//    }
 
 }

@@ -2,7 +2,6 @@
 <html lang="en">
 <html xmlns:th="http://www.thymeleaf.org">
 
-
 <head>
 
     <meta charset="utf-8">
@@ -24,16 +23,29 @@
 
     <!-- Custom styles for this page -->
     <link href="/static/bootstrap/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://uicdn.toast.com/grid/latest/tui-grid.css" />
+	<link rel="stylesheet" href="https://uicdn.toast.com/grid/latest/tui-grid.css" />
+    <link rel="stylesheet" href="/static/css/admin/modal.css"><!-- 모달 CSS 파일 -->
     
     <script src="/static/javascript/jquery-3.6.0.js"></script> <!-- jQuery 파일 -->
 	<script src="https://uicdn.toast.com/grid/latest/tui-grid.js"></script>
-	<script src="/static/javascript/admin/newsInfo.js"></script>
+	<script src="/static/javascript/admin/inquiry.js"></script> <!-- 문의사항 -->
 	<script src="/static/bootstrap/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 </head>
 
 <body id="page-top">
 
+	<!-- 모달 오버레이 -->
+	<div class="modal-overlay" id="modalOverlay" style="display:none;"></div>
+	
+	<!-- 텍스트 수정 모달 -->
+	<div class="modal" id="editModal" style="display:none;">
+	    <h3>내용 수정</h3>
+	    <textarea id="editTextArea" rows="20" cols="65" maxlength="5000"></textarea>
+	    <br>
+	    <button id="saveEditButton">저장</button>
+	    <button id="cancelEditButton">취소</button>
+	</div>
+	
     <!-- Page Wrapper -->
     <div id="wrapper">
 
@@ -255,47 +267,63 @@
                 <!-- End of Topbar -->
 
                 <!-- Begin Page Content -->
-				<div class="container-fluid">
+                <div class="container-fluid">
 
-					<!-- Page Heading -->
+                    <!-- Page Heading -->
 					<h1 class="h3 mb-2 text-gray-800"
-						style="margin-left: 30px; padding-top: 12px;">뉴스/공지사항</h1>
+						style="margin-left: 30px; padding-top: 12px;">문의목록</h1>
 					<hr style="margin-bottom: 20px; margin-top: 30px;">
-
-					<!-- DataTales -->
+					
+					
+					<!-- DataTales Example -->
 					<div class="card shadow mb-4">
+						<div class="card-header py-3">
+							<h6 class="m-0 font-weight-bold text-primary">상세보기는 제목 클릭</h6>
+						</div>
 						<div class="card-body">
 							<div class="table-responsive">
-								<table class="table table-infoboard" width="100%"
-									cellspacing="0">
-									<thead>
-										<tr>
-											<th colspan="6">상세정보</th>
-										</tr>
-									</thead>
-									<tbody id="news-info">
-										
-									</tbody>
-								</table>
-
-								<div class="button-container" style="text-align: right;">
-									<button
-										type="submit"
-										class="btn btn-success btn-user" 
-										style="font-weight: bold;"
-										id="saveButton">저장</button>
-									<button
-										type="button"
-										class="btn btn-danger btn-user" 
-										style="font-weight: bold;"
-										id="deleteButton">삭제</button>
-								</div>
-							</div>
-						</div>
-					</div>
+									<button id="addRowButton"
+											class="btn btn-danger btn-user same-size">+</button>
+									<table class="table schedule-bordered" id="dataTable1" name="codeForm"
+										width="100%" cellspacing="0">
+									<div class="button-container" style="margin-bottom: 15px;">	
+									</div>
+									
+									
+									
+									<div id="grid"></div>
+									</table>
+									
+									<div class="button-container" style="margin-bottom: 15px;">
+										<button type="submit"
+												id="saveButton"
+												class="btn btn-danger btn-user same-size"
+												style="margin-right: 2px;">등록</button>
+										<button type="button"
+												class="btn btn-secondary btn-user same-size"
+										 		id="deleteButton">삭제</button>	
+									</div>
+									
+									
+                    <!-- DataTales Example -->
+<!-- 					
+					<!-- card shadow mb-4 -->
 
 				</div>
-				<!-- /.container-fluid -->
+				<!-- End of Page Content -->
+
+				<!-- Begin Page Content -->
+				<div class="container-fluid">
+					<hr>
+					<!-- container-fluid -->
+
+
+					<!-- Page Heading -->
+
+
+					<!-- DataTales Example -->
+                <!-- /.container-fluid -->
+
             </div>
             <!-- End of Main Content -->
 

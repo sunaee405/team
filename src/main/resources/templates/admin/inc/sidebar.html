@@ -22,6 +22,7 @@
     <link href="/static/bootstrap/css/sb-admin-2.min.css" rel="stylesheet">
     
     <script src="/static/javascript/jquery-3.6.0.js"></script> <!-- jQuery 파일 -->
+    <script src="/static/javascript/admin/sidebar.js"></script> <!-- sidebar -->
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script> <!-- Bootstrap JS 파일 -->
 </head>
 </head>
@@ -159,6 +160,7 @@
                 <div id="collapseCustomerService" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">INQUIRY:</h6>
+                        <a class="collapse-item" href="../inquiry/list">문의목록</a>
                         <a class="collapse-item" href="../news/list">공지/자주찾는질문</a>
                     </div>
                 </div>
@@ -224,43 +226,5 @@
         
         <!-- End of Sidebar -->
 </body>
-<script type="text/javascript">
-$(document).ready(function(){
-
-	$('.nav-link').click(function() {
-	    const target = $(this).data('target');
-	    const isCollapsed = $(this).hasClass('collapsed');
-
-	    // aria-expanded 속성을 토글
-	    $(this).attr('aria-expanded', !isCollapsed);
-
-	    // collapsed 클래스를 토글
-	    $(this).toggleClass('collapsed');
-
-	    // collapse 상태에 따라 보이기 또는 숨기기
-	    if (isCollapsed) {
-	        $(target).collapse('show'); // 열기
-	    } else {
-	        $(target).collapse('hide'); // 닫기
-	    }
-	});
-	
-	
-});
-function logout() {
-	$.ajax({
-        url: '/admin/logout',
-        type: 'POST', // 또는 'GET'
-        contentType: 'application/json',
-        success: function(response) {
-            window.location.href = response.redirectUrl; // 리다이렉트 처리
-        },
-        error: function(xhr, status, error) {
-            console.error('로그아웃 오류:', error);
-        }
-    });
-}
-
-</script>
 
 </html>

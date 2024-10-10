@@ -29,14 +29,14 @@ public class NewsEntity {
 	
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-	@JsonProperty("NEW_NUM") // JSON직렬화 시 대문자 유지
-    private Long NEW_NUM; // 고유 ID
+	@JsonProperty("NEW_NO") // JSON직렬화 시 대문자 유지
+    private Long NEW_NO; // 고유 ID
 	
 	
 	@ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "NEW_SECTION", referencedColumnName = "DCO_ID") // 외래 키 컬럼명
 	@JsonProperty("detailCode") // JSON 직렬화 시 이름을 지정
-    private DetailCodeEntity detailCode; // 메인 코드와의 관계 MainCodeEntity의 ID를 참조
+    private DetailCodeEntity detailCode;
 	
 	@Column(length = 100)
 	@JsonProperty("NEW_NAME") 
@@ -46,7 +46,7 @@ public class NewsEntity {
 	@JsonProperty("NEW_CONTENT") 
 	private String NEW_CONTENT;
 	
-	@Column(length = 100)
+	@Column
 	@JsonProperty("NEW_DATE") 
 	private LocalDateTime NEW_DATE;
 	

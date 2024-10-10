@@ -62,7 +62,6 @@ $(function() {
 			url: `/admin/products/delete/${proNo}`, // 현재 상태에 따라 URL 선택
 	        type: 'DELETE',
 	        contentType: 'application/json',
-//	        data: JSON.stringify(data),
 	        success: function(response) {
 	            alert('처리가 완료되었습니다.'); // 성공 시 메시지
 	            window.location.href = 'list';//페이지 이동
