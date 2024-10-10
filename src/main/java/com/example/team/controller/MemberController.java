@@ -75,7 +75,7 @@ public class MemberController {
 		String type = data.get("type");
 		String result = "";
 		if ("sendPw".equals(type)) {
-			result = memberService.checkPwEmail(MEM_EMAIL, MEM_ID);
+			result = memberService.checkPwEmail(data);
 		} else {
 			result = memberService.checkEmail(MEM_EMAIL);
 		}
@@ -84,11 +84,8 @@ public class MemberController {
 
 	@PostMapping("/sendEmail")
 	public ResponseEntity<Map<String, String>> sendEmail(@RequestBody Map<String, String> data, HttpSession session) {
-		String MEM_EMAIL = data.get("MEM_EMAIL");
-		String type = data.get("type");
 		String randomNumber = randomNumber();
-
-		memberService.sendEmail(MEM_EMAIL, type, randomNumber);
+		memberService.sendEmail(data, randomNumber);
 
 		session.setAttribute("emailNumber", randomNumber);
 		

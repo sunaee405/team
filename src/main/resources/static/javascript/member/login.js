@@ -87,17 +87,6 @@ $(document).ready(function() {
       <div class="container">
         <form>
           <h1>아이디 찾기</h1>
-          <div class="social-links">
-            <div>
-              <a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a>
-            </div>
-            <div>
-              <a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-            </div>
-            <div>
-              <a href="#"><i class="fa fa-linkedin" aria-hidden="true"></i></a>
-            </div>
-          </div>
           <div class="checkGroup">
           	<input type="email" class="checkInput" id="findEmail" placeholder="받을 메일 주소">
   			<button type="button" class="checkButton"  id=sendFindEmail >인증</button>
@@ -115,52 +104,12 @@ $(document).ready(function() {
       <div class="container">
         <form>
           <h1>비밀번호 찾기</h1>
-          <div class="social-links">
-            <div>
-              <a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a>
-            </div>
-            <div>
-              <a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-            </div>
-            <div>
-              <a href="#"><i class="fa fa-linkedin" aria-hidden="true"></i></a>
-            </div>
-          </div>
           <input type="text" id="findPwId" placeholder="ID">
           <div class="checkGroup">
           	<input type="email" class="checkInput" id="findPwEmail" placeholder="받을 메일 주소">
   			<button type="button" class="checkButton"  id=sendFindPwEmail >인증</button>
 		  </div>
 		  <button type="button" class="formBtn" id="rollBack">로그인</button>
-        </form>
-      </div>
-    </div>
-    `;
-
-
-	const resetPw = `
-    <div class="wrapper">
-      <div class="container">
-        <form>
-          <h1>비밀번호 찾기</h1>
-          <div class="social-links">
-            <div>
-              <a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a>
-            </div>
-            <div>
-              <a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-            </div>
-            <div>
-              <a href="#"><i class="fa fa-linkedin" aria-hidden="true"></i></a>
-            </div>
-          </div>
-          <input type="text" id="nowId" placeholder="ID">
-          <input type="text" id="nowPw" placeholder="PW">
-          
-          <input type="password" id="resetpw" placeholder="Password 10자이내" maxlength="10" >
-          <input type="password" id="resetpw2" placeholder="Password Check" >
-          <span id="checkPw" ></span>
-		  <button type="button" class="formBtn" id="resetPwBtn">비밀번호 수정</button>
         </form>
       </div>
     </div>
@@ -544,12 +493,12 @@ $(document).ready(function() {
 						alert("이미 가입된 이메일입니다.");
 					} else {
 						alert("본인 인증 발송 되었습니다");
-						sendEmail(type, email);
+						sendEmail(type, email,id);
 					}
 				} else {
 					if (response) {
 						alert("메일 발송 되었습니다");
-						sendEmail(type, email);
+						sendEmail(type, email, id);
 					} else {
 						alert("일치하는 아이디가 없습니다");
 					}
@@ -561,13 +510,14 @@ $(document).ready(function() {
 	}
 
 	// 이메일 보내는 함수 start
-	function sendEmail(type, email) {
+	function sendEmail(type, email, id) {
 		$.ajax({
 			url: '/members/sendEmail',
 			type: 'POST',
 			data: JSON.stringify({
 				type: type
-				, MEM_EMAIL: email
+			   ,MEM_EMAIL: email
+			   ,MEM_ID: id
 
 			}),
 			contentType: 'application/json',

@@ -10,6 +10,7 @@
 		FROM MEMBERS
 		WHERE MEM_EMAIL = #{MEM_EMAIL}
 		AND MEM_SNS ='F'
+		AND MEM_STATUS = 'F'
 	</select>
 
 	<insert id="insertUser">
@@ -73,6 +74,7 @@
         FROM MEMBERS
         WHERE MEM_EMAIL = #{MEM_EMAIL}
         AND   MEM_SNS = 'F'
+        AND MEM_STATUS = 'F'
     </select>
     
     <select id="sendEmailPw" resultType="string">
@@ -80,6 +82,7 @@
         FROM MEMBERS
         WHERE MEM_EMAIL = #{MEM_EMAIL}
         AND   MEM_SNS = 'F'
+        AND MEM_STATUS = 'F'
     </select>
 
 	<insert id="kakaoInsertUser" parameterType="map">
@@ -94,6 +97,16 @@
         	   ,#{MEM_NICK}
         	   )
     </insert>
+    
+    
+    <select id="checkPwEmail" parameterType="map" resultType="String">
+    SELECT MEM_PW
+    FROM MEMBERS
+    WHERE MEM_ID = #{MEM_ID}
+    AND MEM_EMAIL = #{MEM_EMAIL}
+    AND MEM_SNS = 'F'
+    AND MEM_STATUS = 'F'
+</select>
 
 	
 

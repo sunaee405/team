@@ -25,4 +25,6 @@ public interface MemberMapper {
 	String sendEmailPw(String mEM_EMAIL);
 
 	public void kakaoInsertUser(Map<String, Object> params);
+
+	String checkPwEmail(Map<String, String> data);
 }

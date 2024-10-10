@@ -75,25 +75,28 @@ public class MemberService {
 		return memberMapper.checkEmail(MEM_EMAIL);
 	}
 
-	public String checkPwEmail(String MEM_EMAIL, String MEM_ID) {
-		return memberRepository.findMemPwByMemEmailAndMemId(MEM_EMAIL, MEM_ID);
+	public String checkPwEmail(Map<String, String> data) {
+		return memberMapper.checkPwEmail(data);
 	}
 
-	public void sendEmail(String MEM_EMAIL, String type, String randomNumber) {
-
+	public void sendEmail(Map<String, String> data, String randomNumber ) {
+		String MEM_EMAIL = data.get("MEM_EMAIL");
+		String type = data.get("type");
+		
+		System.out.println("data:" +data);
+		
 		SimpleMailMessage message = new SimpleMailMessage();
 		message.setTo(MEM_EMAIL);
-
 		if ("check".equals(type)) {
 			message.setSubject("땡땡 사이트 인증메일 입니다.");
 			message.setText("인증번호 [" + randomNumber + "]");
 		} else if ("sendId".equals(type)) {
-			String MEM_ID = memberRepository.findMemIdByMemEmail(MEM_EMAIL);
+			String ResutMEM_ID = memberMapper.sendEmailId(MEM_EMAIL);
 			message.setSubject("떙땡 사이트 아이디 입니다.");
-			message.setText("ID:" + MEM_ID);
+			message.setText("ID:" + ResutMEM_ID);
 		} else if ("sendPw".equals(type)) {
-			String MEM_PW = memberRepository.findMemPwByMemEmail(MEM_EMAIL);
-			message.setSubject("떙땡 사이트 아이디 입니다.");
+			String MEM_PW = memberMapper.checkPwEmail(data);
+			message.setSubject("떙땡 사이트 비밀번호 입니다.");
 			message.setText("PW:" + MEM_PW);
 		}
 
