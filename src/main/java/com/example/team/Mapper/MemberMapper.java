@@ -1,5 +1,6 @@
 package com.example.team.Mapper;
 
+import java.util.List;
 import java.util.Map;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
@@ -27,4 +28,6 @@ public interface MemberMapper {
 	public void kakaoInsertUser(Map<String, Object> params);
 
 	String checkPwEmail(Map<String, String> data);
+
+	List<Map<String, Object>> selectTable(String MEM_NO);
 }

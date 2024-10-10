@@ -1,0 +1,17 @@
+@charset "EUC-KR";
+
+.tbl_notice_list thead tr {
+	background-color: #f8f8f8;
+	border-bottom: 2px solid #ddd;
+	border-top: 2px solid #ddd;
+}
+
+.tbl_notice_list {
+	width: 100%; /* 테이블이 부모 div 너비를 100% 차지 */
+	border-collapse: collapse; /* 경계선이 중첩되지 않도록 */
+}
+
+.tbl_notice_list th, .tbl_notice_list td {
+	text-align: center; /* 텍스트 중앙 정렬 */
+	border: 1px solid #ccc; /* 각 셀의 경계선 */
+}

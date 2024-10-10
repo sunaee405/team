@@ -82,6 +82,7 @@ function bodyInner() {
 		           <!-- <li>배송지 관리</li>
 		                <li>거래 후기</li>  -->
 		                <li id="deleteMem">탈퇴하기</li>
+		                <li><a href="/myPage/myInquiry">내 문의내역</a></li>
 		            </ul>
 		        </div>
 		        <div class="mx-auto box-content max-w-[1024px] min-[1600px]:max-w-[1280px] basis-[calc(100%-180px)] flex-grow px-0 md:px-0 2xl:px-0">
@@ -361,11 +362,11 @@ $(document).off('click', '#sortProduct button').on('click', '#sortProduct button
 	getDetailMyProduct(selectType, sortType, memNo);
 });
 
-$(document).on('click', '#proListType>li', function() {
-	$('#proListType>li').removeClass('text-black border-b-[2px] border-black').addClass('text-[#9CA3AF]');
-	$(this).removeClass('text-[#9CA3AF]').addClass('text-black border-b-[2px] border-black');
-	
-	$('#sortProduct button').filter(function() {
-		return $(this).hasClass('text-[#141313]');
-	}).trigger('click');
-});
+//$(document).on('click', '#proListType>li', function() {
+//	$('#proListType>li').removeClass('text-black border-b-[2px] border-black').addClass('text-[#9CA3AF]');
+//	$(this).removeClass('text-[#9CA3AF]').addClass('text-black border-b-[2px] border-black');
+//	
+//	$('#sortProduct button').filter(function() {
+//		return $(this).hasClass('text-[#141313]');
+//	}).trigger('click');
+//});

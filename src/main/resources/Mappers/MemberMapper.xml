@@ -100,14 +100,30 @@
     
     
     <select id="checkPwEmail" parameterType="map" resultType="String">
-    SELECT MEM_PW
-    FROM MEMBERS
-    WHERE MEM_ID = #{MEM_ID}
-    AND MEM_EMAIL = #{MEM_EMAIL}
-    AND MEM_SNS = 'F'
-    AND MEM_STATUS = 'F'
-</select>
+    	SELECT MEM_PW
+    	FROM MEMBERS
+    	WHERE MEM_ID = #{MEM_ID}
+    	AND MEM_EMAIL = #{MEM_EMAIL}
+    	AND MEM_SNS = 'F'
+    	AND MEM_STATUS = 'F'
+	</select>
 
+	<select id="selectTable" resultType="map" parameterType="String">
+        SELECT 
+        INQ_TITLE
+       ,INQ_DATE
+       ,ROW_NUMBER() OVER (ORDER BY INQ_DATE ASC) AS NUMBER
+       ,INQ_CONTENT
+       ,A.ANS_CONTENT
+       ,A.ANS_DATE
+       ,CASE WHEN A.ANS_CONTENT IS NULL THEN '처리중' 
+       									ELSE '답변 완료'
+    	END AS RESULT
+    	FROM INQUIRY I
+    	LEFT JOIN ANSWER A 
+    	ON I.INQ_NO = A.INQ_NO
+    	WHERE I.MEM_NO = #{MEM_NO}
+    </select>
 	
 
 

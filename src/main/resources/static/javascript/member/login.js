@@ -335,7 +335,6 @@ $(document).ready(function() {
 	$(document).on("click", "#signInBtn", function() {
 		var id = $('#loginId').val();
 		var pw = $('#loginPw').val();
-		debugger;
 		$.ajax({
 			type: 'POST',
 			url: '/members/login',

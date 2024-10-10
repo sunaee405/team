@@ -236,4 +236,9 @@ public class MemberService {
          return memNo != null ? String.valueOf(memNo) : null;
      }
 
+	public List<Map<String, Object>> selectTable(String MEM_NO) {
+		return memberMapper.selectTable(MEM_NO);
+		
+	}
+
 }

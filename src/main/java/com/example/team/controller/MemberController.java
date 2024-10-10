@@ -1,6 +1,7 @@
 package com.example.team.controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -18,6 +19,7 @@ import com.example.team.persistence.MemberRepository;
 import com.example.team.service.MemberService;
 
 import jakarta.servlet.http.HttpSession;
+import retrofit2.http.GET;
 
 @RestController
 @RequestMapping("/members")
@@ -95,6 +97,18 @@ public class MemberController {
 		return  ResponseEntity.ok(response);
 	}
 
+	@GetMapping("/selectTable")
+	public ResponseEntity<List<Map<String, Object>>> selectTable(@RequestParam("MEM_NO") String MEM_NO) {
+	    List<Map<String, Object>> data = memberService.selectTable(MEM_NO);
+	    System.out.println(data);
+	    
+	    
+	    return ResponseEntity.ok(data);
+	}
+	
+	
+	
+	
 	private String randomNumber() {
 		Random random = new Random();
 		int randomCode = 1000 + random.nextInt(9000); // 1000 ~ 9999 사이의 숫자
