@@ -55,11 +55,6 @@ $(document).on('click', '#deleteMem', function() {
 				}
 			}
 		});
-		
-		
-			
-			
-	        
 	});
 });
 
@@ -223,8 +218,6 @@ async function getDetailMyProduct(selectType, sortType, memNo) {
 	    }
 		
 		responseData = await response.json();
-		
-		
 		
 		
 		$('#detailPoint .py-12').remove();

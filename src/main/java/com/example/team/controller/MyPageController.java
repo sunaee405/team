@@ -236,6 +236,18 @@ public class MyPageController {
 		return entity;
 	}
 	
+	// 이메일 수정
+	@PutMapping("/updateEmail")
+	public ResponseEntity<String> updateEmail(@RequestBody Map<String, Object> data, HttpSession session) {
+		String memId = (String) session.getAttribute("MEM_ID");
+		MemberEntity memEntity = myPageService.getSession(memId).get();
+		memEntity.setMemEmail((String)data.get("MEM_EMAIL"));
+		myPageService.updateMemData(memEntity);
+		
+		return ResponseEntity.status(HttpStatus.OK).body("emailUpdated");
+	}
+	
+	
 	// 비밀번호 수정
 	@PostMapping("/updatePass")
 	public ResponseEntity<?> updatePass(HttpSession session, @RequestParam Map<String, Object> passData) {
@@ -369,7 +381,6 @@ public class MyPageController {
 			chattingEntity = myPageService.getChatRoom(data);
 		}
 		
-		System.out.println("채팅방"+chattingEntity);
 		return ResponseEntity.status(HttpStatus.OK).body(chattingEntity);
 	}
 	

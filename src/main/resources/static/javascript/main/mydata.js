@@ -41,8 +41,8 @@ function myDataInner() {
 		                                            <div><button id="nickBtn" type="button">변경</button></div>
 		                                        </li>
 		                                        <li>
-		                                            <div class="sc-d5117916-0 bmBXaP">이메일</div>
-		                                            <div>
+		                                            <div style="class="sc-d5117916-0 bmBXaP">이메일</div>
+		                                            <div style="position:relative;">
 		                                                <div id="emailVal" class="profile_userId_value">${data.mem_email}</div>
 		                                            </div>
 		                                            <div>
@@ -64,7 +64,7 @@ function myDataInner() {
 		                                            <!-- <div class="certificates_box_btn"><button class="" type="button">이름변경</button></div> -->
 		                                        </li>
 		                                    </ul>
-		                                    <div class="profile_edit_bye"><span>회원탈퇴</span></div>
+		                             <!-- <div class="profile_edit_bye"><span>회원탈퇴</span></div> -->
 		                                </div>
 		                            </div>
 			                    </div>
@@ -117,8 +117,23 @@ $(document).on('click', '#emailCancel', function() {
 	$('#emailCancel').replaceWith(`<button class="emailBtn" type="button">변경</button>`);
 });
 
-// 이메일 인증
+// 이메일 동작중인지 확인
+let eAuthBtn = false;
+// 인증버튼 이미 한번 눌렸는지 확인
+let reAuthBtn = false;
+// 이메일 인증요청 버튼
 $(document).on('click', '#emailAuthBtn', function() {
+	if(eAuthBtn) return;
+	if(reAuthBtn) ('.reABtn').remove();
+	
+	eAuthBtn = true;
+	reAuthBtn = true;
+		
+	var loader = `<svg id="loadSvg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid" style="width:100%; height:100%; shape-rendering: auto; display: block;"><g data-idx="1"><g transform="matrix(1,0,0,1,0,0)" data-idx="2"><rect fill="#8e747a" height="12" width="6" ry="6" rx="3" y="24" x="47" data-idx="3" opacity="0.053334"></rect></g><g transform="matrix(0.8660254037844387,0.49999999999999994,-0.49999999999999994,0.8660254037844387,31.698729810778058,-18.30127018922194)" data-idx="5"><rect fill="#8e747a" height="12" width="6" ry="6" rx="3" y="24" x="47" data-idx="6" opacity="0.136667"></rect></g><g transform="matrix(0.5000000000000001,0.8660254037844386,-0.8660254037844386,0.5000000000000001,68.30127018922192,-18.30127018922194)" data-idx="8"><rect fill="#8e747a" height="12" width="6" ry="6" rx="3" y="24" x="47" data-idx="9" opacity="0.22"></rect></g><g transform="matrix(6.123233995736766e-17,1,-1,6.123233995736766e-17,100,0)" data-idx="11"><rect fill="#8e747a" height="12" width="6" ry="6" rx="3" y="24" x="47" data-idx="12" opacity="0.303334"></rect></g><g transform="matrix(-0.4999999999999998,0.8660254037844387,-0.8660254037844387,-0.4999999999999998,118.30127018922192,31.69872981077805)" data-idx="14"><rect fill="#8e747a" height="12" width="6" ry="6" rx="3" y="24" x="47" data-idx="15" opacity="0.386667"></rect></g><g transform="matrix(-0.8660254037844387,0.49999999999999994,-0.49999999999999994,-0.8660254037844387,118.30127018922194,68.30127018922194)" data-idx="17"><rect fill="#8e747a" height="12" width="6" ry="6" rx="3" y="24" x="47" data-idx="18" opacity="0.47"></rect></g><g transform="matrix(-1,1.2246467991473532e-16,-1.2246467991473532e-16,-1,100,100)" data-idx="20"><rect fill="#8e747a" height="12" width="6" ry="6" rx="3" y="24" x="47" data-idx="21" opacity="0.553334"></rect></g><g transform="matrix(-0.8660254037844386,-0.5000000000000001,0.5000000000000001,-0.8660254037844386,68.30127018922192,118.30127018922194)" data-idx="23"><rect fill="#8e747a" height="12" width="6" ry="6" rx="3" y="24" x="47" data-idx="24" opacity="0.636667"></rect></g><g transform="matrix(-0.5000000000000004,-0.8660254037844385,0.8660254037844385,-0.5000000000000004,31.698729810778097,118.30127018922195)" data-idx="26"><rect fill="#8e747a" height="12" width="6" ry="6" rx="3" y="24" x="47" data-idx="27" opacity="0.72"></rect></g><g transform="matrix(-1.8369701987210297e-16,-1,1,-1.8369701987210297e-16,7.105427357601002e-15,100)" data-idx="29"><rect fill="#8e747a" height="12" width="6" ry="6" rx="3" y="24" x="47" data-idx="30" opacity="0.803334"></rect></g><g transform="matrix(0.5000000000000001,-0.8660254037844386,0.8660254037844386,0.5000000000000001,-18.30127018922194,68.30127018922192)" data-idx="32"><rect fill="#8e747a" height="12" width="6" ry="6" rx="3" y="24" x="47" data-idx="33" opacity="0.886667"></rect></g><g transform="matrix(0.8660254037844384,-0.5000000000000004,0.5000000000000004,0.8660254037844384,-18.30127018922194,31.698729810778104)" data-idx="35"><rect fill="#8e747a" height="12" width="6" ry="6" rx="3" y="24" x="47" data-idx="36" opacity="0.97"></rect></g><g data-idx="38"></g></g><text data-watermark="true" text-anchor="middle" dominant-baseline="middle" stroke-opacity="0.1" fill="black" fill-opacity="0.1" stroke="white" stroke-width="1" font-size="5.0" x="50" y="50" data-idx="39" style="opacity: 1; font-size: 5px;">LOADING</text></svg>`
+	$('#emailAuthBtn').parent('div').append(loader);
+	$('#loadSvg').addClass('rotate');
+	
+	// 새로운 이메일 값
 	const newEmail = $("#newEmail").val();
 	$.ajax({
 		url: '/members/checkEmail',
@@ -133,23 +148,24 @@ $(document).on('click', '#emailAuthBtn', function() {
 			}
 		}
 	})
+	
+	
+	eAuthBtn = false;
 });
 
 let successEmailNumber;
+
 // 인증메일 보내기
 function sendEmail(newEmail) {
 	const emailRegex = new RegExp('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$');
 	const ckEmail = emailRegex.test(newEmail);
-	debugger;
 	if(!ckEmail) {
 		alert(`입력한 주소가 이메일 형식에 유효하지 않습니다.`);
 		return;
 	}
-	
-	
 	$("#newEmail").attr('readonly', true);
-	$('#newEmail').after(`<input id="eMailVerCode" type="text" placeholder="인증번호를 입력해주세요" class="input_box phone_input_box detEmail" value="">`);
-	$('#emailAuthBtn').closest('div').after(`<div class="sc-525246f5-0 kHiBe"><button id="ckEmailNumber" class="phone_button_box detEmail" type="button">확인</button></div>`);
+	
+	
 	
 	$.ajax({
 		url: '/members/sendEmail',
@@ -160,25 +176,80 @@ function sendEmail(newEmail) {
 			type : 'check'
 		}),
 		success: (response) => {
-			successEmailNumber = response;
+			// 인증번호
+			successEmailNumber = response.emailNumber;
+			// 인증번호 입력 칸 추가 
+			$('#newEmail').after(`<input id="eMailVerCode" type="text" placeholder="인증번호를 입력해주세요" class="input_box phone_input_box detEmail reABtn" value="">`);
+			$('#emailAuthBtn').closest('div').after(`<div class="sc-525246f5-0 kHiBe"><button id="ckEmailNumber" class="phone_button_box detEmail reABtn" type="button">확인</button></div>`);
+			
+			$('#loadSvg').remove();
+			
+			const ms = 180000; // 3분
+			// countDown(time)에서 사용할 초단위 시간
+			const time = ms / 1000;
+			// 카운트다운 함수 호출
+			countDown(time);
+			// 인증번호 삭제
+			setTimeout(() => {
+		        successEmailNumber = '';
+		    }, ms);
 		},
 		error: (error) => {
 			console.error(error);
 		}
-//		check
 	});
 }
 
-$(document).on('click', '#ckEmailNumber', function() {
-	const inputNumber = ('#eMailVerCode').val();
-	const newMemEmail = $("#newEmail").val();
+// 남은시간 카운트다운
+function countDown(time) {
+	// 카운트 다운 영역 추가
+	$('#eMailVerCode').after(`<b id="countEmail" class="reABtn" style="position: absolute; right: 20px; bottom: 10px;"></b>`)
+	let countTime = time;
 	
-	if(successEmailNumber === inputNumber) {
-		location.href = `/myPage/insertEmail?MEM_EMAIL=${newMemEmail}`
-	} else {
+	setInterval(() => {
+		const minutes = Math.floor(countTime / 60); // 남은 분
+		const seconds = countTime % 60; //  초 구하기
+		
+		$('#countEmail').html(`${String(Math.floor(minutes)).padStart(2, '0')} : ${String(seconds).padStart(2, '0')}`);
+		
+		if (countTime <= 0) {
+		    clearInterval();
+	    } else {
+	        countTime--;
+	    }
+	}, 1000);
+};
+
+// 이메일 인증번호 확인
+$(document).on('click', '#ckEmailNumber', function() {
+	const inputNumber = $("#eMailVerCode").val();
+	if(successEmailNumber.length === ''){
+		alert(`인증번호가 만료 되었습니다.`);
+		return;
+	} 
+	if(String(successEmailNumber) !== String(inputNumber)) {
 		alert(`잘못된 인증번호 입니다`);
+		return;
 	}
+	const newMemEmail = $("#newEmail").val();
+	$.ajax({
+		url: '/updateEmail',
+		type: 'PUT',
+		contentType: "application/json",
+		data: JSON.stringify({MEM_EMAIL:newMemEmail}),
+		success: (response) => {
+			if(response === "emailUpdated") {
+				alert(`이메일 변경 성공`);
+				location.reload();
+			}
+		},
+		error: (error) => {
+			alert(`오류! 이메일 변경 실패`);
+		}
+	});
+	
 });
+
 
 
 
