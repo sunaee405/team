@@ -54,10 +54,13 @@
 				ORDER BY P.PRO_DATE
 			</when>
 			<when test="SORT_TYPE == '높은가격순'">
-				ORDER BY P.PRO_PRICE ASC
+				ORDER BY P.PRO_PRICE DESC
 			</when>
 			<when test="SORT_TYPE == '낮은가격순'">
-				ORDER BY P.PRO_PRICE 
+				ORDER BY P.PRO_PRICE ASC
+			</when>
+			<when test="SORT_TYPE == '조회순'">
+				ORDER BY P.PRO_VIEWS
 			</when>
 		</choose>
 	</select>

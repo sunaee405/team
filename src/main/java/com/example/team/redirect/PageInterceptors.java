@@ -15,7 +15,6 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 @Configuration
 public class PageInterceptors implements WebMvcConfigurer {
 	
-	
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
 		// static 파일 경로설정

@@ -1,6 +1,7 @@
-const TypeList = ["최근등록순", "낮은가격순", "조회순"];
+let TypeList = [];
 
 $(async function() {
+	await getSort();
     await getMainProductList();
     
     $.ajax({
@@ -10,26 +11,97 @@ $(async function() {
 		success: (data) => {
 			data.forEach(function(silde) {
 				var text =
-				`<div class="pageNav" data-code="${silde.link}">
+				`<div class="banImg" data-code="${silde.link}" style="dispaly:none;">
 					<img src="${silde.base64Url}" style="height: 100%; width: 100%;">
 		        </div>`
 		        $('#adSlide').prepend(text);
-		        $('#adSlideTab').prepend(`<span class="swiper-pagination-bullet swiper-pagination-bullet-active"></span>`);
+		        $('#adSlideTab').prepend(`<span class="bannerSwiper swiper-pagination-bullet"></span>`);
+		        $('.bannerSwiper:first').trigger('click');
 			});
-				// <span class="swiper-pagination-bullet"></span>
 		},
 		error: (error) => {
 			
 		}
 	})
-    
+	
+	
 });
 
+// 슬라이들 자동이동 인터벌 설정
+let setBanInterval;
+$(window).on('load', function() {
+	bannerInterbal();
+})
+function bannerInterbal() {
+	// 'click', '.bannerSwiper'이벤트에서 bannerInterbal();호출 시 이미 인터벌 설정 있으면 삭제하고 다시 생성
+	if(setBanInterval) clearInterval(setBanInterval);
+	// 인터벌 설정;
+	setBanInterval = setInterval(function() {
+        $('[data-label="next"]').trigger('click');
+    }, 3000);
+}
 
+// 배너 이미지 스와이프
+$(document).on('click', '.bannerSwiper', function() {
+	//해당 이미지 탭? 활성화
+	$(this).addClass('swiper-pagination-bullet-active').siblings().removeClass('swiper-pagination-bullet-active');
+	// 현재 활성화될 이미지의 인덱스 구하기
+	const index = $(this).index('.bannerSwiper');
+	// 이미지를 숨기고 현재 스와이프에 해당하는 이미지만 활성화
+	$('.banImg').hide().eq(index).show();
+	
+	// 인터벌 시간 초기화
+	bannerInterbal();
+});
+
+// 배너 이미지 좌우 이동 버튼
+$(document).on('click', '.bannerBtn', function() {
+	let index = $('#adSlideTab .swiper-pagination-bullet-active').index('.bannerSwiper');
+	const btnType = $(this).attr('data-label');
+	
+	const lastIndex = $('.bannerSwiper:last').index();
+	
+	if(btnType === 'next') {
+		index = lastIndex === index ? 0 : index + 1;
+	} else if(btnType === 'prev') {
+		index = 0 === index ? lastIndex : index - 1;
+	}
+	
+	$('.bannerSwiper').eq(index).trigger('click');
+});
+
+//정렬 타입 설정
+async function getSort() {
+   // AJAX 요청을 시작
+   try {
+        const response = await fetch('/getSortList', { 
+			                 method: 'GET',
+			                 headers: {
+			                    'X-Requested-With': 'XMLHttpRequest', // 필터에서 ajax 요청으로 인식하도록 헤더 설정
+			                    'Content-Type': 'application/json' // 요청 데이터 형식
+			                 }
+			             });
+        if (!response.ok) throw new Error();
+        const data = await response.json();
+
+		// 타입리스트에 값 넣기
+        data.forEach(function(item) {
+            const map = new Map();
+            map.set('keyId', item.DCO_ID);
+            map.set('typeValue', item.DCO_VALUE);
+            TypeList.push(map);
+        });
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+
+//
 
 //<button class="bannerButton w-7 h-7 text-black flex items-center justify-center absolute z-10 transition duration-250 transform top-1/2 focus:outline-none rounded-full text-sm md:text-base lg:w-9 lg:h-9 lg:text-xl xl:w-10 xl:h-10 3xl:w-12 3xl:h-12 3xl:text-2xl left-2 bg-transparent shadow-transparent hover:bg-transparent hover:text-black -translate-y-[calc(50%+1em)]" id="main-banner-carousel-prev" aria-label="prev-button"><svg width="26" height="28" viewBox="0 0 26 28" fill="none" xmlns="http://www.w3.org/2000/svg" class="rotate-[0deg]"><g filter="url(#filter0_d_19461_8348)"><path fill-rule="evenodd" clip-rule="evenodd" d="M15.8122 5.34218C16.4517 6.0669 16.3825 7.17278 15.6578 7.81224L8.645 14L15.6578 20.1878C16.3825 20.8273 16.4517 21.9331 15.8122 22.6579C15.1727 23.3826 14.0669 23.4517 13.3421 22.8122L5.26706 15.6872C4.25192 14.7914 4.25192 13.2086 5.26706 12.3129L13.3421 5.1878C14.0669 4.54835 15.1727 4.61747 15.8122 5.34218Z" fill="white"></path></g><defs><filter id="filter0_d_19461_8348" x="0.505707" y="0.75" width="19.7443" height="26.5" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB"><feFlood flood-opacity="0" result="BackgroundImageFix"></feFlood><feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"></feColorMatrix><feOffset></feOffset><feGaussianBlur stdDeviation="2"></feGaussianBlur><feComposite in2="hardAlpha" operator="out"></feComposite><feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.35 0"></feColorMatrix><feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_19461_8348"></feBlend><feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_19461_8348" result="shape"></feBlend></filter></defs></svg></button>
-// 목록 슬라이드 버튼
-$(document).on('click', '.swiper-pagination-bullet', function() {
+// 상품목록 슬라이드 버튼
+$(document).on('click', '.sectionSwiper', function() {
 	const currentSection = $(this).parents('section');
 	currentSection.find('.swiper-pagination-bullet').removeClass('swiper-pagination-bullet-active');
 	$(this).addClass('swiper-pagination-bullet-active');
@@ -57,10 +129,10 @@ $(document).on('click', '.swiper-pagination-bullet', function() {
 
 
 
-
-$(document).on('click', '.bannerButton', function() {
+// 이미지 이동
+$(document).on('click', '.sectionBtn', function() {
 	const currentSection = $(this).parents('section');
-	//현재 섹션에서 보이는 목록중 마지막 요소의 인덱스
+	//현재 섹션에서 선택된 sectionSwiper의 인덱스
 	let index = currentSection.find('.swiper-pagination .swiper-pagination-bullet-active').index();
 	//버튼 타입
 	const btnType = $(this).attr('aria-label');
@@ -71,10 +143,7 @@ $(document).on('click', '.bannerButton', function() {
 		++index;
 	}
 	
-	
-	currentSection.find('.swiper-pagination-bullet').eq(index).click();
-	
-	
+	currentSection.find('.sectionSwiper').eq(index).click();
 });
 
 async function getMainProductList() {
@@ -84,7 +153,7 @@ async function getMainProductList() {
 
     for(const Type of randomType) {
         try {
-            const response = await fetch(`/getMainProductList?TYPE=${Type}`, { 
+            const response = await fetch(`/getMainProductList?TYPE=${Type.get("typeValue")}`, { 
                 method: 'GET',
                 headers: {
                     'X-Requested-With': 'XMLHttpRequest', // 필터에서 ajax 요청으로 인식하도록 헤더 설정
@@ -100,15 +169,13 @@ async function getMainProductList() {
             
             
             // 각 정렬 요소 영역 찍어주는 함수
-            productSection(Type);
-            
-            
+            productSection(Type.get('keyId'), Type.get('typeValue'));
             result.forEach(function(productMap) {
 				// 각 상품 영역 찍어주는 함수
-                forProductList(Type, productMap);
+                forProductList(Type.get('keyId'), Type.get('typeValue'), productMap);
             });
             
-		    const filterLink = $(`.${Type}Section`).find('.productLink') // 현재 섹션 내의 모든 .productLink 요소 선택
+		    const filterLink = $(`.${Type.get("typeValue")}Section`).find('.productLink') // 현재 섹션 내의 모든 .productLink 요소 선택
 												   .filter(function(index) {
 													    // 인덱스가 6보다 크면 리턴
 													    return index >= 6;
@@ -123,7 +190,7 @@ async function getMainProductList() {
             
             
             for(let i = 0; i < Math.floor(swiperLength); i++) {
-				$('.swiper-pagination:last').append(`<span class="swiper-pagination-bullet"></span>`);
+				$('.swiper-pagination:last').append(`<span class="sectionSwiper swiper-pagination-bullet"></span>`);
 			}
 			
 			$('.swiper-pagination:last').find('.swiper-pagination-bullet:first').trigger('click');
@@ -139,33 +206,8 @@ async function getMainProductList() {
 };
 
 
-//function getDetailCode() {
-//	fetch('/getDetailCode', {
-//	    method: 'GET',
-//		    headers: {
-//		        'X-Requested-With': 'XMLHttpRequest', // 필터에서 ajax 요청으로 인식하도록 헤더 설정
-//		        'Content-Type': 'application/json' // 요청 데이터 형식
-//		    }
-//		})
-//	.then(response => response.json())
-//	.then(data => {
-//		return new Map(Object.entries(data));
-//	})
-//	.catch(Error => {
-//		
-//	});
-//}
-
-
-
-
-
-
-
-
-
 // 각 상품 영역 찍어주는 함수
-function forProductList(Type, data) {
+function forProductList(key, typeValue, data) {
 	// 등록일과 현재 시각 초단위로 얼마나 차이나는지	
 	const time = Math.floor((new Date() - new Date(data.PRO_DATE)) / 1000);
 
@@ -206,26 +248,25 @@ function forProductList(Type, data) {
 		</a>`
 		;
 		
-	$(`.${Type}Section`).append(productList);
-	
+	$(`.${key}Section`).append(productList);
 }
 
 
 // 각 정렬 요소 영역 찍어주는 함수
-function productSection(Type) {
-	
-	$('.productSilde').append(`<section class="${Type}Box max-w-[1024px] min-[1600px]:max-w-[1280px] m-auto"></section>`);
+function productSection(key, typeValue) {
+	$('.productSilde').append(`<section class="${key}Box max-w-[1024px] min-[1600px]:max-w-[1280px] m-auto"></section>`);
 	let boxHeader = 
 		`<div class="heightFull relative mb-10 xl:mb-20">
 			<div class="flex items-center justify-between mt-2 pb-0.5 mb-4 md:mb-5 lg:mb-6 2xl:mb-7 3xl:mb-8">
-				<h3 class="text-lg md:text-xl lg:text-2xl 2xl:text-3xl xl:leading-10 font-bold text-heading">상품 ${Type}</h3>
-				<a class="flex items-center text-xs lg:text-sm xl:text-base text-jnGray-700 mt-0.5 lg:mt-1" href="/product/list?type=recent">바로가기 <svg xmlns="http://www.w3.org/2000/svg" width="7" height="10" fill="none" class="mx-1 rotate-180"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M6 1 1 5l5 4"></path></svg></a>
+				<h3 class="text-lg md:text-xl lg:text-2xl 2xl:text-3xl xl:leading-10 font-bold text-heading">상품 ${typeValue}</h3>
+				<a data-code="${key}" class="sortLink flex items-center text-xs lg:text-sm xl:text-base text-jnGray-700 mt-0.5 lg:mt-1">바로가기
+				<svg xmlns="http://www.w3.org/2000/svg" width="7" height="10" fill="none" class="mx-1 rotate-180"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M6 1 1 5l5 4"></path></svg></a>
 			</div>
 		 	<div class="carouselWrapper relative jn-carousel recent">
 				<div class="swiper swiper-initialized swiper-horizontal swiper-pointer-events swiper-backface-hidden" dir="ltr">
 					<div class="swiper-wrapper">
 						<div class="swiper-slide carouselItem swiper-slide-active">
-							<div class="${Type}Section grid gap-x-2 gap-y-2 bg-white grid-cols-3 lg:grid-cols-6 sm:gap-x-4 sm:gap-y-4">
+							<div class="${key}Section grid gap-x-2 gap-y-2 bg-white grid-cols-3 lg:grid-cols-6 sm:gap-x-4 sm:gap-y-4">
 								<!-- 개별 상품 이미지 및 링크 추가 -->
 							</div>
 						</div>
@@ -233,13 +274,19 @@ function productSection(Type) {
 					<div class="swiper-pagination swiper-pagination-clickable swiper-pagination-bullets swiper-pagination-horizontal">
 					</div>
 				</div>
-				<button class="bannerButton  w-7 h-7 text-black absolute transition duration-250 transform hover:bg-gray-900 hover:text-white focus:outline-none text-sm md:text-base lg:w-9 lg:h-9 lg:text-xl xl:w-10 xl:h-10 3xl:w-12 3xl:h-12 3xl:text-2xl left-0 bg-white/25 shadow-transparent !w-12 !h-12 rounded-none hidden lg:flex justify-center items-center z-10 top-[66px] min-[1600px]:top-[84px] translate-y-0 m-0 swiper-button-disabled" id="recent-prev" aria-label="prev-button" disabled=""><svg width="26" height="28" viewbox="0 0 26 28" fill="none" xmlns="http://www.w3.org/2000/svg" class="rotate-[0deg]"><g filter="url(#filter0_d_19461_8348)"><path fill-rule="evenodd" clip-rule="evenodd" d="M15.8122 5.34218C16.4517 6.0669 16.3825 7.17278 15.6578 7.81224L8.645 14L15.6578 20.1878C16.3825 20.8273 16.4517 21.9331 15.8122 22.6579C15.1727 23.3826 14.0669 23.4517 13.3421 22.8122L5.26706 15.6872C4.25192 14.7914 4.25192 13.2086 5.26706 12.3129L13.3421 5.1878C14.0669 4.54835 15.1727 4.61747 15.8122 5.34218Z" fill="white"></path></g><defs><filter id="filter0_d_19461_8348" x="0.505707" y="0.75" width="19.7443" height="26.5" filterunits="userSpaceOnUse" color-interpolation-filters="sRGB"><feflood flood-opacity="0" result="BackgroundImageFix"></feflood><fecolormatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"></fecolormatrix><feoffset></feoffset><fegaussianblur stddeviation="2"></fegaussianblur><fecomposite in2="hardAlpha" operator="out"></fecomposite><fecolormatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.35 0"></fecolormatrix><feblend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_19461_8348"></feblend><feblend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_19461_8348" result="shape"></feblend></filter></defs></svg></button>
-				<button class="bannerButton  w-7 h-7 text-black absolute transition duration-250 transform hover:bg-gray-900 hover:text-white focus:outline-none text-sm md:text-base lg:w-9 lg:h-9 lg:text-xl xl:w-10 xl:h-10 3xl:w-12 3xl:h-12 3xl:text-2xl right-0 bg-white/25 shadow-transparent !w-12 !h-12 rounded-none hidden lg:flex justify-center items-center z-10 top-[66px] min-[1600px]:top-[84px] translate-y-0 m-0" id="recent-next" aria-label="next-button"><svg width="26" height="28" viewbox="0 0 26 28" fill="none" xmlns="http://www.w3.org/2000/svg" class="rotate-[180deg]"><g filter="url(#filter0_d_19461_8348)"><path fill-rule="evenodd" clip-rule="evenodd" d="M15.8122 5.34218C16.4517 6.0669 16.3825 7.17278 15.6578 7.81224L8.645 14L15.6578 20.1878C16.3825 20.8273 16.4517 21.9331 15.8122 22.6579C15.1727 23.3826 14.0669 23.4517 13.3421 22.8122L5.26706 15.6872C4.25192 14.7914 4.25192 13.2086 5.26706 12.3129L13.3421 5.1878C14.0669 4.54835 15.1727 4.61747 15.8122 5.34218Z" fill="white"></path></g><defs><filter id="filter0_d_19461_8348" x="0.505707" y="0.75" width="19.7443" height="26.5" filterunits="userSpaceOnUse" color-interpolation-filters="sRGB"><feflood flood-opacity="0" result="BackgroundImageFix"></feflood><fecolormatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"></fecolormatrix><feoffset></feoffset><fegaussianblur stddeviation="2"></fegaussianblur><fecomposite in2="hardAlpha" operator="out"></fecomposite><fecolormatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.35 0"></fecolormatrix><feblend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_19461_8348"></feblend><feblend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_19461_8348" result="shape"></feblend></filter></defs></svg></button>
+				<button class="sectionBtn w-7 h-7 text-black absolute transition duration-250 transform hover:bg-gray-900 hover:text-white focus:outline-none text-sm md:text-base lg:w-9 lg:h-9 lg:text-xl xl:w-10 xl:h-10 3xl:w-12 3xl:h-12 3xl:text-2xl left-0 bg-white/25 shadow-transparent !w-12 !h-12 rounded-none hidden lg:flex justify-center items-center z-10 top-[66px] min-[1600px]:top-[84px] translate-y-0 m-0 swiper-button-disabled" id="recent-prev" aria-label="prev-button" disabled=""><svg width="26" height="28" viewbox="0 0 26 28" fill="none" xmlns="http://www.w3.org/2000/svg" class="rotate-[0deg]"><g filter="url(#filter0_d_19461_8348)"><path fill-rule="evenodd" clip-rule="evenodd" d="M15.8122 5.34218C16.4517 6.0669 16.3825 7.17278 15.6578 7.81224L8.645 14L15.6578 20.1878C16.3825 20.8273 16.4517 21.9331 15.8122 22.6579C15.1727 23.3826 14.0669 23.4517 13.3421 22.8122L5.26706 15.6872C4.25192 14.7914 4.25192 13.2086 5.26706 12.3129L13.3421 5.1878C14.0669 4.54835 15.1727 4.61747 15.8122 5.34218Z" fill="white"></path></g><defs><filter id="filter0_d_19461_8348" x="0.505707" y="0.75" width="19.7443" height="26.5" filterunits="userSpaceOnUse" color-interpolation-filters="sRGB"><feflood flood-opacity="0" result="BackgroundImageFix"></feflood><fecolormatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"></fecolormatrix><feoffset></feoffset><fegaussianblur stddeviation="2"></fegaussianblur><fecomposite in2="hardAlpha" operator="out"></fecomposite><fecolormatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.35 0"></fecolormatrix><feblend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_19461_8348"></feblend><feblend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_19461_8348" result="shape"></feblend></filter></defs></svg></button>
+				<button class="sectionBtn w-7 h-7 text-black absolute transition duration-250 transform hover:bg-gray-900 hover:text-white focus:outline-none text-sm md:text-base lg:w-9 lg:h-9 lg:text-xl xl:w-10 xl:h-10 3xl:w-12 3xl:h-12 3xl:text-2xl right-0 bg-white/25 shadow-transparent !w-12 !h-12 rounded-none hidden lg:flex justify-center items-center z-10 top-[66px] min-[1600px]:top-[84px] translate-y-0 m-0" id="recent-next" aria-label="next-button"><svg width="26" height="28" viewbox="0 0 26 28" fill="none" xmlns="http://www.w3.org/2000/svg" class="rotate-[180deg]"><g filter="url(#filter0_d_19461_8348)"><path fill-rule="evenodd" clip-rule="evenodd" d="M15.8122 5.34218C16.4517 6.0669 16.3825 7.17278 15.6578 7.81224L8.645 14L15.6578 20.1878C16.3825 20.8273 16.4517 21.9331 15.8122 22.6579C15.1727 23.3826 14.0669 23.4517 13.3421 22.8122L5.26706 15.6872C4.25192 14.7914 4.25192 13.2086 5.26706 12.3129L13.3421 5.1878C14.0669 4.54835 15.1727 4.61747 15.8122 5.34218Z" fill="white"></path></g><defs><filter id="filter0_d_19461_8348" x="0.505707" y="0.75" width="19.7443" height="26.5" filterunits="userSpaceOnUse" color-interpolation-filters="sRGB"><feflood flood-opacity="0" result="BackgroundImageFix"></feflood><fecolormatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"></fecolormatrix><feoffset></feoffset><fegaussianblur stddeviation="2"></fegaussianblur><fecomposite in2="hardAlpha" operator="out"></fecomposite><fecolormatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.35 0"></fecolormatrix><feblend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_19461_8348"></feblend><feblend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_19461_8348" result="shape"></feblend></filter></defs></svg></button>
 			</div>
 		</div>
 		`;
-	$(`.${Type}Box`).append(boxHeader);		
+	$(`.${key}Box`).append(boxHeader);
 }
+
+$(document).on('click', '.sortLink', function() {
+	const code = $(this).attr('data-code');
+	sessionStorage.setItem("detailCode", code);
+	location.href = "/product/listProduct";
+});
 
 
 // 정렬 Type 정리해준 리스트 랜덤으로 섞어주는 함수

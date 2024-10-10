@@ -25,37 +25,28 @@ function loading() {
 	$('#loadSvg').addClass('rotate');
 }
 
-
 $(window.parent).on('load', function() {
-	// 페이지 완전히 로드되면 검색어, 카테고리 클릭 이벤트 전달
-    const currentUrl = window.location.href; // 현재 URL 가져오기
-    if (currentUrl.includes('/product/listProduct')) { // 현재 페이지가 상품리스트 페이지 일때만 동작
-        const searchData = sessionStorage.getItem('searchText');
-        const detailCode = sessionStorage.getItem('detailCode');
-        
-        
-        const checkCode = setInterval(function() {
-			// 코드가 null 이면 전달하는 값이 없는거니까 반복 이벤트 삭제
-			if(detailCode === null) clearInterval(checkCode);
-			const dataId = $(window.parent.document).find(`[data-id="${detailCode}"]`)
+	var checkReadyInterval = setInterval(function() {
+		if (window.parent.document.readyState === "complete") {
+			clearInterval(checkReadyInterval); // 이벤트 삭제
 			
-			// 해당하는 요소가 아직 있으면 클릭하고 이벤트 삭제
-			if(dataId.length !== 0) {
-				dataId.trigger('click');
-				clearInterval(checkCode)
-			};
-        }, 100);
-        
-        // 검색어 전달
-        $(window.parent.document).find('#search-input').val(searchData).trigger('input'); // 부모 페이지의 요소에 값 설정
-        sessionStorage.removeItem('searchText'); // 검색어 입력 후 데이터 삭제
-    }
-    
-    
-	setTimeout(() => {
-        $('#loading-screen').remove();
-    }, 800);
+			// 검색어 || 카테고리 || 정렬 전달
+	        const searchData = sessionStorage.getItem('searchText');
+	        const detailCode = sessionStorage.getItem('detailCode');
+	        $(window.parent.document).find(`[data-id="${detailCode}"]`).trigger('click');
+	        $(window.parent.document).find('#search-input').val(searchData).trigger('input');
+	        
+	        // 스토리지에서 두 데이터 삭제
+	        sessionStorage.removeItem('searchText');
+    		sessionStorage.removeItem('detailCode');
+	        
+	        // 로딩 삭제
+	        setTimeout(() => $('#loading-screen').remove(), 500);
+	    }
+	    
+	}, 100); // 0.1초마다
 });
+
 
 // 탭 || 메인페이지 배너 클릭시 상품리스트의 해당 카테고리로 이동 
 $(document).on('click', '.pageNav', function() {
