@@ -112,7 +112,7 @@ public class MyPageController {
 			Map<String, Object> map = new HashMap<String, Object>();
 			String base64Url = "data:image/png;base64," + Base64.getEncoder().encodeToString(entity.get(i).getBanImg());
 			map.put("base64Url", base64Url);
-			map.put("link", entity.get(i).getBanLink());
+			map.put("link", entity.get(i).getBanCode());
 			data.add(map);
 		}
 		return ResponseEntity.ok().body(data);

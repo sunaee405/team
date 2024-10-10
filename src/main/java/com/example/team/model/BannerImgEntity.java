@@ -28,6 +28,6 @@ public class BannerImgEntity {
     @Column(name = "BAN_IMG", columnDefinition = "LONGBLOB")
     private byte[] banImg;
 	
-	@Column(name = "BAN_LINK")
-	private String banLink;
+	@Column(name = "BAN_CODE", length = 10)
+	private String banCode;
 }
