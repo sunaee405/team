@@ -52,6 +52,7 @@ public class MemberController {
 
 			session.setAttribute("MEM_ID", checkLogin.get("MEM_ID"));
 			response.put("success", true);
+			response.put("MEM_ID", checkLogin.get("MEM_ID"));
 
 		} else {
 

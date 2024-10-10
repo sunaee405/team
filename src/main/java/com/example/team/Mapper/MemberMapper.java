@@ -19,4 +19,10 @@ public interface MemberMapper {
 	Map<String, Object> checkLogin(Map<String, Object> data);
 
 	public void naverInsertUser(Map<String, Object> data);
+
+	String sendEmailId(String mEM_EMAIL);
+
+	String sendEmailPw(String mEM_EMAIL);
+
+	public void kakaoInsertUser(Map<String, Object> params);
 }

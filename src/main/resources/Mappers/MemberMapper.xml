@@ -9,33 +9,32 @@
 		SELECT MEM_ID
 		FROM MEMBERS
 		WHERE MEM_EMAIL = #{MEM_EMAIL}
+		AND MEM_SNS ='F'
 	</select>
 
 	<insert id="insertUser">
-		INSERT INTO MEMBERS (
-		MEM_ID,
-		MEM_PW,
-		MEM_NICK,
-		MEM_BIRTH,
-		MEM_EMAIL,
-		MEM_GENDER,
-		MEM_NAME,
-		MEM_TEL,
-		MEM_SNS,
-		MEM_STATUS
-		)
-		VALUES (
-		#{MEM_ID},
-		#{MEM_PW},
-		#{MEM_NICK},
-		#{MEM_BIRTH},
-		#{MEM_EMAIL},
-		#{MEM_GENDER},
-		#{MEM_NAME},
-		#{MEM_TEL},
-		#{MEM_SNS},
-		#{MEM_STATUS}
-		)
+		INSERT INTO MEMBERS ( MEM_ID
+							 ,MEM_PW
+							 ,MEM_NICK
+							 ,MEM_BIRTH
+							 ,MEM_EMAIL
+							 ,MEM_GENDER
+							 ,MEM_NAME
+							 ,MEM_TEL
+							 ,MEM_SNS
+							 ,MEM_STATUS
+							 )
+		VALUES ( #{MEM_ID}
+				,#{MEM_PW}
+				,#{MEM_NICK}
+				,#{MEM_BIRTH}
+				,#{MEM_EMAIL}
+				,#{MEM_GENDER}
+				,#{MEM_NAME}
+				,#{MEM_TEL}
+				,#{MEM_SNS}
+				,#{MEM_STATUS}
+				)
 	</insert>
 
 	<select id="checkLogin" resultType="map">
@@ -45,7 +44,7 @@
 	</select>
 
 	<insert id="naverInsertUser">
-		INSERT INTO MEMBERS (MEM_ID
+		INSERT INTO MEMBERS ( MEM_ID
 							, MEM_NICK
 							, MEM_GENDER
 							, MEM_EMAIL
@@ -68,6 +67,35 @@
 	</insert>
 
 
+
+	<select id="sendEmailId" resultType="string">
+        SELECT MEM_ID
+        FROM MEMBERS
+        WHERE MEM_EMAIL = #{MEM_EMAIL}
+        AND   MEM_SNS = 'F'
+    </select>
+    
+    <select id="sendEmailPw" resultType="string">
+        SELECT MEM_PW
+        FROM MEMBERS
+        WHERE MEM_EMAIL = #{MEM_EMAIL}
+        AND   MEM_SNS = 'F'
+    </select>
+
+	<insert id="kakaoInsertUser" parameterType="map">
+        INSERT INTO MEMBERS (MEM_ID
+        				    ,MEM_NAME
+        				    ,MEM_SNS
+        				    ,MEM_NICK
+        				    )
+        VALUES (#{kakaoId}
+        	   ,#{name}
+        	   ,#{MEM_SNS}
+        	   ,#{MEM_NICK}
+        	   )
+    </insert>
+
+	
 
 
 </mapper>

@@ -9,15 +9,12 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Data
 @Builder
@@ -53,11 +50,11 @@ public class MemberEntity {
 	@Column()
 //	@ColumnDefault(value = )
 	private LocalDateTime MEM_INPUT;	// 가입시간
-	@Getter @Setter
+	
 	private LocalDateTime MEM_RESPITE;	// 탈퇴유예시작시간
-	@Getter @Setter
+	
 	private LocalDateTime MEM_OUT;		// 탈퇴완료시간
-	@Getter @Setter
+	
 	private String MEM_STATUS;	// 탈퇴여부
 	
 	private String MEM_SNS;		// SNS로그인(연동?) 유무

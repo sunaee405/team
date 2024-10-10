@@ -61,6 +61,11 @@ public class MemberService {
 	public void insertUser(Map<String, Object> data) {
 		memberMapper.insertUser(data);
 	}
+	
+	public void kakaoInsertUser(Map<String, Object> parmas) {
+		memberMapper.kakaoInsertUser(parmas);
+	}
+
 
 	public Map<String, Object> checkLogin(Map<String, Object> data) {
 		return memberMapper.checkLogin(data);

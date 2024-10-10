@@ -2,7 +2,7 @@ $(document).ready(function() {
 	var isPhoneCheck = false;
 	var isNicknameCheck = false;
 	var isEmailCheck = false;
-	var emailNumber ='';
+	var emailNumber = '';
 
 
 	// 본인인증 사용횟수 제한 때문에 주석쳐둠
@@ -13,23 +13,17 @@ $(document).ready(function() {
       <div class="container">
         <form>
           <h1>로그인</h1>
-          <div class="social-links">
-            <div>
-              <a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a>
-            </div>
-            <div>
-              <a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-            </div>
-            <div>
-              <a href="#"><i class="fa fa-linkedin" aria-hidden="true"></i></a>
-            </div>
-          </div>
           <input type="text" id= loginId placeholder="ID">
           <input type="password" id = loginPw placeholder="Password">
           <button type="button" class="formBtn" id="signInBtn">로그인</button>
           <button type="button" class="formBtn" id="signUpBtn">회원가입</button>
           <button type="button" class="formBtn" id="findIdBtn">아이디,비밀번호찾기</button>
-          <button type="button" class="formBtn" id="naverLoginButton">네이버</button>
+          <div>
+          	<a href="#" id="naverLoginButton">
+   		  		<img src="images/naverLogin.png">
+		  	</a>
+          </div>
+          <button type="button" class="formBtn" id="kakaoLoginButton">카카오 로그인</button>
           <button type="button" class="formBtn" id="naverLogoutButton">임시 네이버 로그아웃</button>
         </form>
       </div>
@@ -392,6 +386,7 @@ $(document).ready(function() {
 	$(document).on("click", "#signInBtn", function() {
 		var id = $('#loginId').val();
 		var pw = $('#loginPw').val();
+		debugger;
 		$.ajax({
 			type: 'POST',
 			url: '/members/login',
@@ -399,7 +394,7 @@ $(document).ready(function() {
 			data: JSON.stringify({ MEM_ID: id, MEM_PW: pw }),
 			success: function(response) {
 				if (response.success) {
-					debugger;
+					sessionStorage.setItem('MEM_ID', response.MEM_ID);
 					window.location.href = '/myPage/main'; // 성공 시 페이지 이동
 				} else {
 					$('#loginMessage').text('일치하는 아이디, 비밀번호가 없습니다.');
@@ -595,12 +590,22 @@ $(document).ready(function() {
 	});
 
 
-	// 써야하는분 location.href = `/api/logout`; 여기로 요청하면 자동 로그아웃 됩니다. 
+	// 써야하는분 location.href = `/api/naverLogout`; 여기로 요청하면 자동 로그아웃 됩니다. 
 	$('#naverLogoutButton').click(function() {
 
-
-		location.href = `/api/logout`;
+		location.href = `/api/naverLogout`;
+		sessionStorage.clear();
 	});
+	
+	
+	
+	
+	$('#kakaoLoginButton').click(function() {
+		alert("test");
+		location.href = `/api/kakaoLogin`;
+	});
+	
+	
 
 
 
