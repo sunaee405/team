@@ -127,5 +127,37 @@
     </select>
 	
 
+	 <select id="SelectMember" resultType="map" parameterType="String"> 
+        SELECT MEM_TEL
+        	  ,MEM_EMAIL
+        FROM MEMBERS
+        WHERE 
+        MEM_NO = #{MEM_NO} 
+    </select>
+	
+	
+	<insert id="InsertInquiry" parameterType="map">
+    INSERT INTO INQUIRY (MEM_NO
+    					  ,INQ_TITLE
+    					  ,INQ_CONTENT
+    					  ,INQ_DATE
+    					  )
+    VALUES (#{MEM_NO}
+    	   ,#{INQ_TITLE}
+    	   ,#{INQ_CONTENT}
+    	   ,NOW())
+	</insert>
+
+
+	<select id="SelectNews" resultType="map">
+        SELECT NEW_CONTENT
+        	  ,NEW_NAME
+        	  ,NEW_DATE
+        FROM NEWS
+        ORDER BY NEW_DATE DESC
+    </select>
+
+
+
 
 </mapper>

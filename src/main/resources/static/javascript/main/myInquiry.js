@@ -168,7 +168,7 @@ function selectTable() {
             </tr>
         `;
 			});
-			debugger;			
+			debugger;
 			$('.tbl_notice_list tbody').html(tableContent);
 		}
 	});
@@ -179,7 +179,7 @@ $(document).ready(function() {
 });
 
 
-function AnswerHtml(INQ_TITLE, INQ_CONTENT, formattedDate, ANS_CONTENT, ANS_DATE,INQ_NO) {
+function AnswerHtml(INQ_TITLE, INQ_CONTENT, formattedDate, ANS_CONTENT, ANS_DATE, INQ_NO) {
 	const nickName = sessionStorage.getItem('memNick');
 	var AnswerClick =
 		`
@@ -204,10 +204,7 @@ function AnswerHtml(INQ_TITLE, INQ_CONTENT, formattedDate, ANS_CONTENT, ANS_DATE
 					<button type="button" class="round inblack" id="btn_list" style="background-color: #e0e0e0; border: none; padding: 5px 5px; border-radius: 5px; cursor: pointer; transition: background-color 0.3s;" onclick="window.history.back();">
 						<span>뒤로가기</span>
 					</button>
-					<button type="button" class="round inblack" id="BtnUpdate" style="background-color: #e0e0e0;  border: none; padding: 5px 5px; border-radius: 5px; cursor: pointer; transition: background-color 0.3s; margin-left: 240px;">
-						<span>수정하기</span>
-					</button>
-					<button type="button" class="round inblack" id="BtnDelete" style="background-color: #e0e0e0; border: none; padding: 5px 5px; border-radius: 5px; cursor: pointer; transition: background-color 0.3s; margin-left: 10px;" data-inq-no="${INQ_NO}">
+					<button type="button" class="round inblack" id="BtnDelete" style="background-color: #e0e0e0; border: none; padding: 5px 5px; border-radius: 5px; cursor: pointer; transition: background-color 0.3s;  margin-left: 330px; " data-inq-no="${INQ_NO}">
     					<span>삭제하기</span>
 					</button>
 				</div>
@@ -221,20 +218,103 @@ function AnswerHtml(INQ_TITLE, INQ_CONTENT, formattedDate, ANS_CONTENT, ANS_DATE
 }
 
 $(document).on('click', '#BtnDelete', function() {
-	  const INQ_NO = $(this).data('inq-no');
+	const INQ_NO = $(this).data('inq-no');
 	debugger;
 	if (confirm("해당 글을 지우겠습니까?")) {
 		$.ajax({
-			url: `/InquiryDelete`, 
-			type: 'POST', 
-			data: { INQ_NO: INQ_NO }, 
-			success: function(response) {
+			url: `/InquiryDelete`,
+			type: 'POST',
+			data: { INQ_NO: INQ_NO },
+			success: function() {
 				alert("글이 삭제되었습니다.");
-				Swindow.location.href = "http://localhost:8080/myPage/myInquiry";
+				window.location.href = "http://localhost:8080/myPage/myInquiry";
 			}
 		});
 	}
 });
+
+$(document).on('click', '#InquiryWrite', function() {
+	const nickName = sessionStorage.getItem('memNick');
+	const MEM_NO = sessionStorage.getItem('memNo');
+	debugger;	
+	$.ajax({
+		url: '/SelectMember', 
+		type: 'POST',
+		contentType: 'application/json',
+		data: JSON.stringify({ MEM_NO: MEM_NO }), 
+		success: function(data) {
+			var MEM_TEL = data.MEM_TEL;
+            var MEM_EMAIL = data.MEM_EMAIL;
+			nickName
+			
+			 var write = `
+                <div class="form-area">
+                    <label for="input-name">이름 </label>
+                    <input type="text" id="input-name" name="name" class="form-control" value="${nickName}" readonly  style="width: 100%; padding: 10px; margin-bottom: 15px; border-bottom: 1px solid #e0e0e0;"><br>
+                    
+                    <label for="input-tel">휴대전화 </label>
+                    <input type="text" id="input-tel" name="tel" class="form-control" value="${MEM_TEL}" readonly  style="width: 100%; padding: 10px; margin-bottom: 15px; border-bottom: 1px solid #e0e0e0;"><br>
+                    
+                    <label for="input-email">이메일 </label>
+                    <input type="email" id="input-email" name="email" class="form-control" value="${MEM_EMAIL}" readonly  style="width: 100%; padding: 10px; margin-bottom: 15px; border-bottom: 1px solid #e0e0e0;"><br>
+                    
+                    <label for="input-title">제목</label>
+                    <input type="text" id="INQ_TITLE" name="title" class="form-control" placeholder="제목을 작성해주세요"  style="width: 100%;  padding: 10px; margin-bottom: 15px; border-bottom: 1px solid #e0e0e0;"><br>
+                    
+                    <label for="input-content">내용</label>
+                    <textarea id="INQ_CONTENT" name="content" class="form-control" rows="5"placeholder="내용을 입력해주세요"  style="width: 100%;  padding: 10px; margin-bottom: 15px; border-bottom: 1px solid #e0e0e0;"></textarea><br>
+                    
+                    <button type="button" class="round inblack" id="InsertWrite" style="background-color: #e0e0e0; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; transition: background-color 0.3s; margin-left: auto; margin-top: 10px;">
+    					<span>등록하기</span>
+					</button>
+	                </div>
+            `;
+
+            $('.tbl_area').empty().append(write);
+			
+						
+			
+		}
+	});
+
+});
+
+
+
+
+$(document).on('click', '#InsertWrite', function() {
+    const MEM_NO = sessionStorage.getItem('memNo');
+    const INQ_TITLE = $('#INQ_TITLE').val();
+    const INQ_CONTENT = $('#INQ_CONTENT').val();
+
+	debugger;
+    if (!INQ_TITLE || !INQ_CONTENT) {
+        alert("제목과 내용을 모두 입력해주세요.");
+        return;
+    }
+
+    const inquiryData = {
+        MEM_NO: MEM_NO,
+        INQ_TITLE: INQ_TITLE,
+        INQ_CONTENT: INQ_CONTENT
+    };
+
+    $.ajax({
+        url: '/InsertInquiry',  
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(inquiryData), // 데이터 전송
+        success: function(response) {
+			alert("등록되었습니다!");
+			window.location.href = "http://localhost:8080/myPage/myInquiry";
+        }
+    });
+});
+
+
+
+
+
 
 
 
