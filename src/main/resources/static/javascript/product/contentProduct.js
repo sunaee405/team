@@ -198,6 +198,7 @@ $(document).ready(function() {
 				data: { memNo: memNo }, // MEM_NO를 전달
 				success: function(products) {
 					let otherProductHtml = '';
+					let otherProductHtml3 = '';
 
 					// products 배열을 무작위로 섞은 후, 앞에서부터 3개만 선택
 					const randomProducts = products.sort(() => 0.5 - Math.random()).slice(0, 3);
@@ -226,10 +227,19 @@ $(document).ready(function() {
 
 					// #otherProductByMemNo UL 태그 안에 상품 목록 추가
 					$('#otherProductByMemNo').html(otherProductHtml);
+					
+					otherProductHtml3 += `
+					<h3 class="md:text-[22px] font-bold text-jnBlack mr-2 text-lg empty:h-7">${response.MEM_ID}의
+						다른 상품</h3>`;
+						
+					$('#ohterProductByMemNoT').html(otherProductHtml3);
+					
+					
 				},
 				error: function(error) {
 					console.error('MEM_NO에 해당하는 랜덤 상품 정보를 가져오는 중 오류 발생:', error);
 				}
+				
 			});
 
 
@@ -268,6 +278,7 @@ $(document).ready(function() {
 
 					// #otherProductByMemNo UL 태그 안에 상품 목록 추가
 					$('#otherProductByCategory').html(otherProductHtml2);
+					
 				},
 				error: function(error) {
 					console.error('MEM_NO에 해당하는 랜덤 상품 정보를 가져오는 중 오류 발생:', error);
@@ -346,7 +357,7 @@ $(document).ready(function() {
 								// amount: price           // 결제 금액
 								amount: 10,
 								buyer_email: "",
-								buyer_name : "",
+								buyer_name : response.MEM_ID,
 							}, function(rsp) {
 								if (rsp.success) {
 									alert('결제가 완료되었습니다.');
