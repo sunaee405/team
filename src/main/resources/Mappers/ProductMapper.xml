@@ -264,6 +264,7 @@
          	 , TSC6.SCO_VALUE AS PRO_STATE_SUB
          	 , TDC6.DCO_VALUE AS PRO_STATE
          	 , M.MEM_ID
+         	 , M.MEM_EMAIL
     	  FROM PRODUCT PRO 
     	  JOIN TEST_DETAIL_CODE TDC1 
         	ON PRO.PRO_LOCATION = TDC1.DCO_ID
@@ -297,6 +298,18 @@
     	  FROM MEMBERS
     	 WHERE MEM_ID = #{memId}
 	</select>
+	
+	<select id="getReportCategory" resultType="map">
+    	SELECT DC.DCO_ID
+    		 , DC.DCO_VALUE	
+    	  FROM DETAIL_CODE DC
+    	 WHERE DCO_ID LIKE 'RED%'
+	</select>
+	
+	<insert id="insertReport">
+        INSERT INTO REPORT (MEM_NO, PRO_NO, REP_DATE, REP_CONTENT, REP_SECTION)
+        VALUES (#{memNo}, #{proNo}, NOW(), #{reportDescription}, #{categoryDcoId})
+    </insert>
 	
 
 

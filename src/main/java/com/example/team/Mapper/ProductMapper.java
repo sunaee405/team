@@ -27,6 +27,8 @@ public interface ProductMapper {
 
 	List<Map<String, Object>> getSortList();
 	
+	List<Map<String, Object>> getReportCategory();
+	
 	List<Map<String, Object>> getAllProductInfo();//채현 판매상태, 카테고리 공통코드 조인해서 이름 가져오는 쿼리
 
 	// 페이징 처리를 위한 메서드 수정
@@ -50,6 +52,12 @@ public interface ProductMapper {
 	Map<String, Object> getContentProduct(int proNo);
 
 	Integer getMemNoByMemId(String memId);
+
+	Map<String, Object> getReportProduct(int proNo);
+
+	void insertReport(Map<String, String> params);
+
+	
 
 	
 

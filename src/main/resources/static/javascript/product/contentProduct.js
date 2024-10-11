@@ -114,6 +114,9 @@ $(document).ready(function() {
                 <span class="text-jnGray-500 leading-[15px]">
                     ${timeAgo} · 조회수 ${views}
                 </span>
+                <a class=""
+							href="/product/reportProduct?proNo=${response.PRO_NO}&memNo=${response.MEM_NO}"><span
+							class="leading-4 underline underline-offset-4 text-jnGray-700">신고하기</span></a>
             `;
 			$('#product_etc').append(etcInfo); // ID가 "product_etc"인 <div>에 추가
 
@@ -356,7 +359,7 @@ $(document).ready(function() {
 								name: title,               // 상품명
 								// amount: price           // 결제 금액
 								amount: 10,
-								buyer_email: "",
+								buyer_email: response.MEM_EMAIL,
 								buyer_name : response.MEM_ID,
 							}, function(rsp) {
 								if (rsp.success) {

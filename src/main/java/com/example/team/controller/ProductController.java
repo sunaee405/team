@@ -4,11 +4,13 @@ import java.io.File;
 import java.net.MalformedURLException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -99,6 +101,12 @@ public class ProductController {
 	public List<Map<String, Object>> getProductStatus() {
 		return productService.getProductStatus();
 	}
+	
+	@GetMapping("/getReportCategory")
+	@ResponseBody
+	public List<Map<String, Object>> getReportCategory() {
+		return productService.getReportCategory();
+	}
 
 	@PostMapping("/insertProduct")
 	@ResponseBody
@@ -121,7 +129,7 @@ public class ProductController {
 
 		// 파일명을 ','로 구분한 문자열로 변환하여 params에 추가
 		params.put("fileNames", String.join(",", savedFileNames));
-
+		
 		// 서비스 호출
 		productService.insertProduct(params);
 
@@ -287,6 +295,21 @@ public class ProductController {
 		Map<String, String> response = new HashMap<>();
 		response.put("redirectUrl", "/myPage/main");
 		
+		return ResponseEntity.ok(response);
+	}
+	
+	// =================================== 상품 신고 ===================================
+	
+	@PostMapping("/insertReport")
+	@ResponseBody
+	public ResponseEntity<?> insertReport(@RequestParam Map<String, String> params) throws Exception {
+		
+		productService.insertReport(params);
+
+		// 로직 처리 후
+		Map<String, String> response = new HashMap<>();
+		response.put("redirectUrl", "/product/listProduct");
+
 		return ResponseEntity.ok(response);
 	}
 	

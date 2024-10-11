@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.apache.ibatis.logging.LogException;
 import org.apache.ibatis.session.SqlSession;
@@ -20,19 +21,23 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.example.team.Mapper.ProductMapper;
+import com.example.team.model.DetailCodeEntity;
 import com.example.team.model.LikeEntity;
 import com.example.team.model.MainCodeEntity;
 import com.example.team.model.MemberEntity;
 import com.example.team.model.PaymentEntity;
 import com.example.team.model.ProductEntity;
+import com.example.team.model.ReportEntity;
 import com.example.team.persistence.LikedRepository;
 import com.example.team.persistence.MemberRepository;
 import com.example.team.persistence.PaymentRepository;
 import com.example.team.persistence.ProductRepository;
+import com.example.team.persistence.ReportRepository;
 import com.mysql.cj.log.Log;
 
 import ch.qos.logback.classic.util.LogbackMDCAdapterSimple;
 import jakarta.inject.Inject;
+import jakarta.persistence.Transient;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 
@@ -51,10 +56,13 @@ public class ProductService {
 
 	@Autowired
 	PaymentRepository paymentRepository;
-
+	
+	@Autowired
+	ReportRepository reportRepository;
+	
 	@Autowired
 	ProductMapper productMapper;
-
+	
 	// =================================== 상품 등록 ===================================
 
 	public List<Map<String, Object>> getProductCategory() {
@@ -81,6 +89,10 @@ public class ProductService {
 
 	public List<Map<String, Object>> getProductStatus() {
 		return productMapper.getProductStatus();
+	}
+	
+	public List<Map<String, Object>> getReportCategory() {
+		return productMapper.getReportCategory();
 	}
 
 	public void insertProduct(Map<String, String> params) {
@@ -270,6 +282,44 @@ public class ProductService {
     private Integer convertMemNoToInteger(Long proNo) {
         return proNo != null ? proNo.intValue() : null;
     }
+    
+
+//    public void insertReport(Map<String, String> params) {
+//        
+//    	Long memNo = Long.parseLong(params.get("memNo"));
+//        int proNo = Integer.parseInt(params.get("proNo"));
+//        String categoryCode = (String) params.get("categoryDcoId");
+//        String reportDescription = (String) params.get("reportDescription");
+//        
+//        // MemberEntity 생성 및 memNo 설정
+//        MemberEntity memberEntity = new MemberEntity();
+//        memberEntity.setMemNo(memNo);  
+//        
+//        ProductEntity productEntity = new ProductEntity();
+//        productEntity.setProNo(proNo);  
+//        
+//        DetailCodeEntity detailCodeEntity = new DetailCodeEntity();
+//        detailCodeEntity.setDCO_ID(categoryCode);
+//        
+//        ReportEntity reportEntity = new ReportEntity();
+//        reportEntity.setMemberNo(memberEntity);
+//        reportEntity.setProductNo(productEntity);
+//        reportEntity.setREP_CONTENT(reportDescription);
+//        reportEntity.setSectionDetail(detailCodeEntity);        
+//
+//        // 리포지토리에 저장
+//        reportRepository.save(reportEntity);
+//    }
+    
+    public void insertReport(Map<String, String> params) {
+        // params를 맵퍼에 그대로 전달
+        productMapper.insertReport(params);
+    }
+
+	
+    
+	
+	
 
 	
 }
