@@ -1,4 +1,5 @@
 $(function () {
+	const url = document.referrer;
 	fetch('/getSession', {
 		headers: {'X-Requested-With': 'XMLHttpRequest'}
 	})
@@ -8,6 +9,16 @@ $(function () {
 			sessionStorage.setItem('memId', data.mem_id);
 			sessionStorage.setItem('memNo', data.mem_no);
 			sessionStorage.setItem('memNick', data.mem_nick);
+
+			if(!url.includes("/member/login") || data.mem_id !== 'admin') return;
+			
+			$.ajax({
+				url:'/adminAccess',
+				type:'GET',
+				success: (uri) => {
+					location.href = uri;
+				}
+			})
 		} else {
 			sessionStorage.clear();
 		}

@@ -3,7 +3,6 @@ $(function() {
 	
 	getCategory();
 	const currentUrl = window.location.href; // 현재 주소가 main일 경우 다른 스크립트에서 이벤트 동작
-	if(currentUrl != null && !currentUrl.includes('/myPage/main')) $(document).trigger('sessionLoaded');
 	
 	// 검색어 전달
 	$('#search-box').on('keyup', function(event) {
@@ -29,6 +28,9 @@ $(window.parent).on('load', function() {
 	var checkReadyInterval = setInterval(function() {
 		// 부모 요소의 DOM업로드가 완료될때까지 반복
 		if (window.parent.document.readyState === "complete") {
+			$(document).trigger('sessionLoaded'); // 로그인 유무확인하는 이벤트
+			
+			
 			clearInterval(checkReadyInterval); // 이벤트 삭제
 			
 			// 검색어 || 카테고리 || 정렬 전달
@@ -62,7 +64,7 @@ $(document).on('click', '.pageNav', function() {
 let isCategory = false;
 
 function getCategory() {
-    if (isCategory) return; // 값이 true면 함수 종료
+    if (isCategory) return; // 값이 true면 함수 종료해서 여러번 동작하지 않도록
     
     isCategory = true; // 값 변경
     
@@ -92,7 +94,6 @@ function getCategory() {
 $(document).on('sessionLoaded', function() {
 	const memId = sessionStorage.getItem('memId');
 	if(memId !==null && memId.length !== 0) {
-		
 		var text = `<ul id="myPageTab" class="border border-jnGray-300 z-10 text-xs text-center font-medium bg-white rounded-lg absolute flex flex-col justify-center top-[30px] right-[23px] w-[100px] [&amp;>li]:mx-2 [&amp;>li]:border-b [&amp;>li]:border-jnGray-200 [&amp;>li:last-of-type]:border-b-0" style="display:none;">
 					    <li class="pt-3 pb-2 ga4_main_top_menu">
 					   		<a href="/myPage/myPage">
@@ -121,10 +122,11 @@ $(document).on('click', '#logoutBtn', function() {
 // 마이페이지
 $(document).off('click', '.btnLink').on('click', '.btnLink', function() {
 	const className = $(this).attr('class');
+	
 	if(className.includes('loginBtn')) {
-		window.location.href = "/member/login";
+		window.location.href = "/member/login"; // 로그인 주소로 이동
 	} else if (className.includes('myPageBtn')) {
-		$('#myPageTab').toggle();
+		$('#myPageTab').toggle();// 마이페이지/로그아웃 이동 탭 토글
 	}
 });
 

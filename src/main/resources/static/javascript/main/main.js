@@ -7,7 +7,7 @@ $(async function() {
     $.ajax({
 		url: '/getBanner',
 		type: 'GET',
-		dataType: 'json',
+		data: 'json',
 		success: (data) => {
 			data.forEach(function(silde) {
 				var text =
@@ -20,16 +20,26 @@ $(async function() {
 			});
 		},
 		error: (error) => {
-			
+			debugger;
 		}
 	})
 });
+
+$(document).on('click', '.banImg', function() {
+	const code = $(this).attr('data-code');
+	sessionStorage.setItem('detailCode', code);
+	
+	location.href = "/product/listProduct";
+});
+
+
 
 // 슬라이들 자동이동 설정
 let setBanInterval;
 $(window).on('load', function() {
 	bannerInterbal();
 })
+
 function bannerInterbal() {
 	// 'click', '.bannerSwiper'이벤트에서 bannerInterbal()호출 시 이미 인터벌 설정 있으면 삭제하고 다시 생성
 	if(setBanInterval) clearInterval(setBanInterval);
@@ -279,7 +289,7 @@ function productSection(key, typeValue) {
 		`;
 	$(`.${key}Box`).append(boxHeader);
 }
-
+// 메인페이지 상품탭 바로가기 기능구현
 $(document).on('click', '.sortLink', function() {
 	const code = $(this).attr('data-code');
 	sessionStorage.setItem("detailCode", code);
