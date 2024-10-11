@@ -68,14 +68,21 @@ public class ReportEntity {
 	
 	@PrePersist
     public void prePersist() {
-        this.REP_DATE = LocalDateTime.now();
+		setDefaultValues();//기본값 설정 메서드
+        if (this.REP_DATE == null) { // null인 경우에만 현재 시간 설정
+            this.REP_DATE = LocalDateTime.now();
+        }
     }
 	
 	public void setDefaultValues() {
-	    this.resultDetail = new DetailCodeEntity();
-	    this.resultDetail.setDCO_ID("RRD3");
-	    this.statusDetail = new DetailCodeEntity();
-	    this.statusDetail.setDCO_ID("RSD1");
+		if (this.resultDetail == null) {
+            this.resultDetail = new DetailCodeEntity();
+            this.resultDetail.setDCO_ID("RRD3"); // 기본값 설정
+        }
+        if (this.statusDetail == null) {
+            this.statusDetail = new DetailCodeEntity();
+            this.statusDetail.setDCO_ID("RSD1"); // 기본값 설정
+        }
 	}
 
 	

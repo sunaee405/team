@@ -358,11 +358,6 @@ $(document).ready(function() {
 	        }
 	    });
 	}
-	
-	$('#detailButton').click(function(){
-		// 페이지 이동
-        window.location.href = 'detailCrud'; // 이동할 페이지의 경로로 변경
-	});
 
    
 });

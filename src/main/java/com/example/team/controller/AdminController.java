@@ -179,5 +179,44 @@ public class AdminController {
         return reportService.findAll();
     }
     
+    @PutMapping("report/update")
+    public List<ReportEntity> updateResult(@RequestBody List<ReportEntity> reportResults) {
+    	List<ReportEntity> reportList = new ArrayList<>();
+        for (ReportEntity result : reportResults) {
+        	reportList.add(reportService.update(result.getREP_NO(), result));
+        }
+        return reportList; // 업데이트된 데이터 반환
+    }
+    
+    @DeleteMapping("report/delete")
+    public void deleteReport(@RequestBody List<Long> ids) {
+    	for (Long id : ids) {
+    		reportService.delete(id); // 각 ID로 삭제 메서드 호출
+        }
+    }
+    
+    @GetMapping("report/{repNo}")
+    public ReportEntity getReport(@PathVariable("repNo") Long repNo) {
+        return reportService.findById(repNo); // 조회
+    }
+    
+    @PutMapping("report/{repNo}")
+    public ResponseEntity<ReportEntity> updateReport(
+    		@PathVariable("repNo") Long repNo, 
+    		@RequestBody Map<String, Object> updates) {
+    	System.out.println("@@@@@@@@@@@@@@@@@@@@@@@");
+    	System.out.println(updates);
+    	System.out.println(repNo);
+    	// 서비스 메서드를 호출하여 업데이트
+    	ReportEntity updateReport = reportService.updateReport(repNo, updates);
+    	
+    	// 업데이트 로직
+        return ResponseEntity.ok(updateReport);
+    }
+    
+    @DeleteMapping("report/{repNo}")
+    public void deleteReport(@PathVariable("repNo") Long repNo) {
+    	reportService.delete(repNo);
+    }
 
 }
