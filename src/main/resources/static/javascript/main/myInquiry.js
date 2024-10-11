@@ -230,7 +230,7 @@ $(document).on('click', '#BtnDelete', function() {
 			data: { INQ_NO: INQ_NO }, 
 			success: function(response) {
 				alert("글이 삭제되었습니다.");
-				window.history.back(); 
+				Swindow.location.href = "http://localhost:8080/myPage/myInquiry";
 			}
 		});
 	}

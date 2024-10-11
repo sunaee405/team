@@ -30,7 +30,8 @@ public class MemberController {
 
 	@Autowired
 	private MemberService memberService;
-
+	
+	//아이디 유무 체크
 	@PostMapping("/checkId")
 	public ResponseEntity<Map<String, Integer>> checkIdAndNickname(@RequestBody Map<String, String> data) {
 		String MEM_ID = data.get("id");
@@ -45,7 +46,8 @@ public class MemberController {
 
 		return ResponseEntity.ok(result);
 	}
-
+	
+	// 로그인
 	@PostMapping("/login")
 	public Map<String, Object> login(@RequestBody Map<String, Object> data, HttpSession session) {
 		Map<String, Object> response = new HashMap<>();
@@ -63,13 +65,15 @@ public class MemberController {
 
 		return response;
 	}
-
+	
+	// 회원가입시 값 넣기
 	@PostMapping("/insertUser")
 	public ResponseEntity<Void> insertUser(@RequestBody Map<String, Object> data ) {
 		memberService.insertUser(data);
 		return ResponseEntity.ok().build();
 	}
-
+	
+	//이메일 중복여부 
 	@PostMapping("/checkEmail")
 	public ResponseEntity<String> checkEmail(@RequestBody Map<String, String> data) {
 		String MEM_EMAIL = data.get("MEM_EMAIL");
@@ -83,7 +87,8 @@ public class MemberController {
 		}
 		return ResponseEntity.ok(result);
 	}
-
+	
+	// 메일보내기 
 	@PostMapping("/sendEmail")
 	public ResponseEntity<Map<String, String>> sendEmail(@RequestBody Map<String, String> data, HttpSession session) {
 		String randomNumber = randomNumber();
@@ -96,7 +101,8 @@ public class MemberController {
 		System.out.println("response:"+response);
 		return  ResponseEntity.ok(response);
 	}
-
+	
+	// 회원 문의 테이블값 가져오기 
 	@GetMapping("/selectTable")
 	public ResponseEntity<List<Map<String, Object>>> selectTable(@RequestParam("MEM_NO") String MEM_NO) {
 	    List<Map<String, Object>> data = memberService.selectTable(MEM_NO);

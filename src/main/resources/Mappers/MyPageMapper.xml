@@ -192,5 +192,10 @@
 		OR C.CHA_MEM2 = #{MEM_NO}
 	</select>
 	
+	<delete id="InquiryDelete" parameterType="int">
+    DELETE FROM INQUIRY
+    WHERE INQ_NO = #{INQ_NO}
+	</delete>
+
 
 </mapper>

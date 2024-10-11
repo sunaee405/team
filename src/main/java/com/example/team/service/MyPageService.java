@@ -131,6 +131,13 @@ public class MyPageService {
 
 
 
+	public void InquiryDelete(int INQ_NO) {
+		myPageMapper.InquiryDelete(INQ_NO);
+	}
+
+
+
+
 
 
 
