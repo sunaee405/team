@@ -149,4 +149,15 @@
 	</insert>
 
 
+	<select id="SelectNews" resultType="map">
+        SELECT NEW_CONTENT
+        	  ,NEW_NAME
+        	  ,NEW_DATE
+        FROM NEWS
+        ORDER BY NEW_DATE DESC
+    </select>
+
+
+
+
 </mapper>

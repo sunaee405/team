@@ -249,5 +249,9 @@ public class MemberService {
 		memberMapper.InsertInquiry(data);
 	}
 
+	public List<Map<String, Object>> SelectNews() {
+		return memberMapper.SelectNews();
+	}
+
 
 }

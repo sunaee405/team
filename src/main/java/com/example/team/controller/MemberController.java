@@ -112,7 +112,14 @@ public class MemberController {
 	    return ResponseEntity.ok(data);
 	}
 	
-	
+	@GetMapping("/SelectNews")
+	public ResponseEntity<List<Map<String, Object>>> SelectNews() {
+	    List<Map<String, Object>> data = memberService.SelectNews();
+	    System.out.println(data);
+	    
+	    
+	    return ResponseEntity.ok(data);
+	}
 	
 	
 	private String randomNumber() {

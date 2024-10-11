@@ -34,4 +34,6 @@ public interface MemberMapper {
 	Map<String, Object> SelectMember(String MEM_NO);
 
 	public void InsertInquiry(Map<String, Object> data);
+
+	List<Map<String, Object>> SelectNews();
 }

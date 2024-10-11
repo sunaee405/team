@@ -409,7 +409,7 @@ public class MyPageController {
 	        
 	        return ResponseEntity.ok(data); 
 	}
-	
+	// 재영 문의글 작성 insert 
 	 @PostMapping("/InsertInquiry")
 	 public void InsertInquiry(@RequestBody Map<String, Object> data) {
 		 System.out.println("@@@data"+data );
