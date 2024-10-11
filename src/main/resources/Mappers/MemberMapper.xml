@@ -153,7 +153,10 @@
         SELECT NEW_CONTENT
         	  ,NEW_NAME
         	  ,NEW_DATE
-        FROM NEWS
+        	  ,DCO_VALUE
+        FROM NEWS N
+        LEFT JOIN DETAIL_CODE D 
+        ON N.NEW_SECTION = D.DCO_ID
         ORDER BY NEW_DATE DESC
     </select>
 
