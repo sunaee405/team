@@ -100,7 +100,6 @@ function bodyInner() {
                                     <li class="shrink grow lg:grow-0 cursor-pointer py-4 basis-[84px] lg:basis-[160px] flex justify-center items-center font-medium transition duration-200 ease-in-out text-black border-b-[2px] border-black">전체 문의내역</li>
                                 </ul>
                             </div>
-                            <!-- 아래는 추가한 부분입니다. -->
                             <div class="tbl_area">
                                 <table cellspacing="0" cellpadding="0" class="tbl_notice_list">
                                     <colgroup>
@@ -123,7 +122,6 @@ function bodyInner() {
                                     	</tbody>
                                 </table>
                             </div>
-                            <!-- 추가한 부분 끝 -->
                         </div>
                     </div>
                 </div>
@@ -164,8 +162,7 @@ function selectTable() {
             </tr>
         `;
 			});
-			debugger;
-
+			
 			$('.tbl_notice_list tbody').html(tableContent);
 		}
 	});
