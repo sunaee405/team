@@ -35,13 +35,13 @@ public class ReportEntity {
 	
 	@ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "MEM_NO", referencedColumnName = "MEM_NO") // 외래 키 컬럼명
-	@JsonProperty("MEMBERS") // JSON 직렬화 시 이름을 지정
-    private MemberEntity memberEntity;
+	@JsonProperty("memberNo") // JSON 직렬화 시 이름을 지정
+    private MemberEntity memberNo;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "PRO_NO", referencedColumnName = "PRO_NO") // 외래 키 컬럼명
-	@JsonProperty("PRODUCT") // JSON 직렬화 시 이름을 지정
-    private ProductEntity productEntity; 
+	@JsonProperty("productNo") // JSON 직렬화 시 이름을 지정
+    private ProductEntity productNo; 
 	
 	@ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "REP_SECTION", referencedColumnName = "DCO_ID") // 외래 키 컬럼명
@@ -70,5 +70,13 @@ public class ReportEntity {
     public void prePersist() {
         this.REP_DATE = LocalDateTime.now();
     }
+	
+	public void setDefaultValues() {
+	    this.resultDetail = new DetailCodeEntity();
+	    this.resultDetail.setDCO_ID("RRD3");
+	    this.statusDetail = new DetailCodeEntity();
+	    this.statusDetail.setDCO_ID("RSD1");
+	}
+
 	
 }

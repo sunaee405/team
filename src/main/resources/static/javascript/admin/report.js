@@ -6,9 +6,9 @@ $(document).ready(function() {
 	let selectStatus = [];
 	let detailList = [];
 	
+	
 	// 초기 데이터 가져오기 (페이지 로드 시)
 	fetchData();
-	debugger;
 	// 텍스트 수정기능
 	class CustomTextEditor {
 	      constructor(props) {
@@ -54,45 +54,48 @@ $(document).ready(function() {
    	    {
           header: '처리상태',
           name: 'REP_STATUS',
+          validation: { required: true },//노란색
           filter: 'select',
-          formatter: 'listItemText',
-          editor: {
-            type: 'select',
-            options: {
-              listItems: selectStatus, //동적으로 설정
-            }
-          }
+//          formatter: 'listItemText',
+//          editor: {
+//            type: 'select',
+//            options: {
+//              listItems: selectStatus, //동적으로 설정
+//            }
+//          }
         },
         {
           header: '신고분류',
           name: 'REP_SECTION',
           filter: 'select',
-          formatter: 'listItemText',
-          editor: {
-            type: 'select',
-            options: {
-              listItems: selectedSection, //동적으로 설정
-            }
-          }
+//          formatter: 'listItemText',
+//          editor: {
+//            type: 'select',
+//            options: {
+//              listItems: selectedSection, //동적으로 설정
+//              disabled: true
+//            }
+//          }
         },
    	    {
-   	        header: '회원번호', // 숨길 NO
+   	        header: '회원아이디',
    	        name: 'MEM_NO',
+   	        hidden: true  // 숨기기 설정
    	    },
    	    {
-   	        header: '상품번호', // 숨길 NO
+   	        header: '상품번호',
    	        name: 'PRO_NO',
+   	        hidden: true  // 숨기기 설정
    	    },
         {
           header: '신고내용',
           name: 'REP_CONTENT',
-          validation: { required: true },//노란색
           filter: { type: 'text', showApplyBtn: true, showClearBtn: true },
           editor: {
             type: CustomTextEditor,//사용자 정의 편집기
             options: {
 			  maxLength: 5000, //글자수 제한
-              //disabled: true
+//              disabled: true
             }
           }
         },
@@ -117,17 +120,6 @@ $(document).ready(function() {
       ]
     });
     
-    // 행 추가 버튼 클릭 이벤트 처리
-    $('#addRowButton').click(function() {
-        const currentData = grid.getData();
-        // 새 행 추가
-        grid.appendRow({ REP_NO: null, NEW_SECTION: '', NEW_NAME: '', NEW_CONTENT: '', NEW_DATE: null });
-        // 편집 모드로 전환    
-        requestAnimationFrame(() => {
-            const indexToEdit = grid.getData().length - 1;
-            grid.setEditing(indexToEdit, 'NEW_SECTION');
-        });
-    });
     
 	// 그리드 이벤트 핸들러
     grid.on('beforeChange', ev => {
@@ -138,35 +130,28 @@ $(document).ready(function() {
     	console.log('after change:', ev);
     })
     
+    
     // 클릭 이벤트 핸들러
 	grid.on('click', (ev) => {
+		
 	    const { rowKey, columnName } = ev;
-	    const newsNo = grid.getValue(rowKey, 'NEW_NO');
-	    if (columnName === 'NEW_NAME' && ev.targetType !== 'columnHeader' && newsNo !== null) { // NEW_NAME 열이 클릭된 경우
-	        //const newsNo = grid.getValue(rowKey, 'NEW_NUM');
-	        window.location.href = `info?NEW_NO=${newsNo}`;
+	    const repNo = grid.getValue(rowKey, 'REP_NO');
+	    if (columnName === 'REP_SECTION' && ev.targetType !== 'columnHeader' && repNo !== null) {
+	        window.location.href = `info?REP_NO=${repNo}`;
 	    }
 	    
-	    if (columnName === 'NEW_CONTENT' && ev.targetType !== 'columnHeader') { // 수정할 열
-        const currentContent = grid.getValue(rowKey, 'NEW_CONTENT');
+	    if (columnName === 'REP_CONTENT' && ev.targetType !== 'columnHeader') { // 수정할 열
+        const currentContent = grid.getValue(rowKey, 'REP_CONTENT');
         document.getElementById('editTextArea').value = currentContent; // 현재 내용을 텍스트 영역에 표시
+        document.getElementById('editTextArea').readOnly = true; // 읽기 전용으로 설정
         
         // 모달과 오버레이 표시
         document.getElementById('editModal').style.display = 'block';
         document.getElementById('modalOverlay').style.display = 'block';
         
-        // 저장 버튼 클릭 이벤트
-        document.getElementById('saveEditButton').onclick = function() {
-            const newContent = document.getElementById('editTextArea').value;
-            grid.setValue(rowKey, 'NEW_CONTENT', newContent); // 그리드에 수정된 내용 반영
-            
-            // 모달 닫기
-            closeModal();
-        };
-        
-        // 취소 버튼 클릭 이벤트
+        // 닫기 버튼 클릭 이벤트
         document.getElementById('cancelEditButton').onclick = closeModal;
-    }
+    	}
 	    
 	    
 	});
@@ -347,7 +332,6 @@ $(document).ready(function() {
 		    text: item.text,  // 표시할 텍스트
 		    value: item.value  // 실제 값
 		}));
-	    
 	    $.ajax({
 	        type: 'GET',
 	        url: '/admin/report/list', // 데이터 가져올 API 엔드포인트
@@ -357,12 +341,12 @@ $(document).ready(function() {
 	            // 데이터를 그리드에 뿌리기
 	            grid.resetData(response.map(item => ({
 	                REP_NO: item.REP_NO,           
-	                MEM_NO: item.members.MEM_NO,
-	                PRO_NO: item.product.PRO_NO,
+	                MEM_NO: item.memberNo.mem_id,
+	                PRO_NO: item.productNo.pro_no,
 	                REP_CONTENT: item.REP_CONTENT, 
-	                REP_RESULT: item.resultDetail.REP_RESULT,
-	                REP_RESULT: item.statusDetail.REP_STATUS,
-	                REP_SECTION: item.sectionDetail.REP_SECTION,
+	                REP_RESULT: item.resultDetail.DCO_ID,
+	                REP_STATUS: `${item.statusDetail.DCO_ID}(${item.statusDetail.DCO_VALUE})`,
+	                REP_SECTION: `${item.sectionDetail.DCO_ID}(${item.sectionDetail.DCO_VALUE})`,
 	                REP_DATE: item.REP_DATE,
 	            })));
 	        },
