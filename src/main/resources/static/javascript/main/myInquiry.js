@@ -121,6 +121,9 @@ function bodyInner() {
                                     	<tbody>
                                     	</tbody>
                                 </table>
+                                <button type="button" class="round inblack" id="InquiryWrite" style="background-color: #e0e0e0; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; transition: background-color 0.3s; margin-left: auto; margin-top: 10px;">
+    								<span>글쓰기</span>
+								</button>
                             </div>
                         </div>
                     </div>
@@ -145,24 +148,27 @@ function selectTable() {
 			data.forEach(function(item) {
 				debugger;
 				const formattedDate = item.INQ_DATE.split('T')[0];
-
+				const ANS_DATE = item.ANS_DATE ? item.ANS_DATE : '';
 				tableContent += `
             <tr>
                 <td>${item.NUMBER}</td>
                 <td>${memId}</td>
                 <td>  
-                	<a href="/teamproject/inquiry/answer?INQ_TITLE=${item.INQ_TITLE}&
-            										 INQ_CONTENT=${item.INQ_CONTENT}&
-            										 ANS_CONTENT=${item.ANS_CONTENT}&
-          												  ANS_DATE=${item.ANS_DATE}">
-               		${item.INQ_TITLE}</a></td>
+                	<a href="#" onclick="AnswerHtml('${item.INQ_TITLE}'
+                									,'${item.INQ_CONTENT}'
+                									,'${formattedDate}'
+                									,'${item.ANS_CONTENT}'
+                									,'${ANS_DATE}'
+                									,'${item.INQ_NO}'
+                									)">
+                		${item.INQ_TITLE}</a></td>
                 <td>${formattedDate}</td>
                 <td>${item.RESULT}</td>
-                <td>${item.ANS_DATE}</td> 
+                <td>${ANS_DATE}</td> 
             </tr>
         `;
 			});
-			
+			debugger;			
 			$('.tbl_notice_list tbody').html(tableContent);
 		}
 	});
@@ -173,6 +179,62 @@ $(document).ready(function() {
 });
 
 
+function AnswerHtml(INQ_TITLE, INQ_CONTENT, formattedDate, ANS_CONTENT, ANS_DATE,INQ_NO) {
+	const nickName = sessionStorage.getItem('memNick');
+	var AnswerClick =
+		`
+		<div class="col-detail">
+			<div class="board_view_area">
+				<ul class="top_title_faq">
+					<li class="stit_area">
+						<span>등록일: <em class="regist_day">${formattedDate}</em></span>
+						<br>
+						<span class="check_tit_area">닉네임<em class="check_num">: ${nickName}</em></span>
+					</li>
+				</ul>
+				<br>
+				<div class="view_area">
+					<p style="line-height: 1.8;">
+						<span style="font-family: arial;"><b>${INQ_CONTENT}</b><br><br></span>
+					</p>
+				</div>
+				<label for="inp_textbox" style="font-weight: bold; margin-bottom: 5px;">답변 <em><img src="http://img.cgv.co.kr/R2014/images/common/ico/ico_redstar.png" alt="필수"></em></label>
+				<textarea cols="60" rows="5" id="inp_textbox" name="AS_DETAIL" class="inp_txtbox01" style="height: 94px; border: 1px solid #ccc; border-radius: 4px; padding: 10px; resize: none;" placeholder="${ANS_CONTENT}  ${ANS_DATE}" readonly></textarea>
+				<div class="customer_btn">
+					<button type="button" class="round inblack" id="btn_list" style="background-color: #e0e0e0; border: none; padding: 5px 5px; border-radius: 5px; cursor: pointer; transition: background-color 0.3s;" onclick="window.history.back();">
+						<span>뒤로가기</span>
+					</button>
+					<button type="button" class="round inblack" id="BtnUpdate" style="background-color: #e0e0e0;  border: none; padding: 5px 5px; border-radius: 5px; cursor: pointer; transition: background-color 0.3s; margin-left: 240px;">
+						<span>수정하기</span>
+					</button>
+					<button type="button" class="round inblack" id="BtnDelete" style="background-color: #e0e0e0; border: none; padding: 5px 5px; border-radius: 5px; cursor: pointer; transition: background-color 0.3s; margin-left: 10px;" data-inq-no="${INQ_NO}">
+    					<span>삭제하기</span>
+					</button>
+				</div>
+			</div>
+		</div>
+		`;
+
+	debugger;
+	$('.mt-3 ul#proListType li').text(INQ_TITLE);
+	$('.tbl_area').empty().append(AnswerClick);
+}
+
+$(document).on('click', '#BtnDelete', function() {
+	  const INQ_NO = $(this).data('inq-no');
+	debugger;
+	if (confirm("해당 글을 지우겠습니까?")) {
+		$.ajax({
+			url: `/InquiryDelete`, 
+			type: 'POST', 
+			data: { INQ_NO: INQ_NO }, 
+			success: function(response) {
+				alert("글이 삭제되었습니다.");
+				window.history.back(); 
+			}
+		});
+	}
+});
 
 
 

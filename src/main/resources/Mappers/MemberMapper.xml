@@ -109,8 +109,9 @@
 	</select>
 
 	<select id="selectTable" resultType="map" parameterType="String">
-        SELECT 
-        INQ_TITLE
+        SELECT
+        I.INQ_NO 
+       ,INQ_TITLE
        ,INQ_DATE
        ,ROW_NUMBER() OVER (ORDER BY INQ_DATE ASC) AS NUMBER
        ,INQ_CONTENT
