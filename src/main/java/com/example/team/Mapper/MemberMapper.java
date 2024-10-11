@@ -36,4 +36,9 @@ public interface MemberMapper {
 	public void InsertInquiry(Map<String, Object> data);
 
 	List<Map<String, Object>> SelectNews();
+	
+//	채현
+	List<Map<String, Object>> getAllInquiry();
+
+	Map<String, Object> getInquiry(int INQ_NO);
 }

@@ -67,7 +67,7 @@ $(document).ready(function() {
         {
           header: '신고분류',
           name: 'REP_SECTION',
-//          filter: 'select',
+          filter: 'select',
 //          formatter: 'listItemText',
 //          editor: {
 //            type: 'select',

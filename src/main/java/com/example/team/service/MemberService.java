@@ -235,6 +235,17 @@ public class MemberService {
      private String convertMemNoToString(Long memNo) {
          return memNo != null ? String.valueOf(memNo) : null;
      }
+     
+     public List<Map<String, Object>> getAllInquiry() {
+ 		return memberMapper.getAllInquiry();
+ 	}
+     
+     public Map<String, Object> getInquiry(int INQ_NO) {
+    	return memberMapper.getInquiry(INQ_NO);
+    }
+     
+     
+     
 
 	public List<Map<String, Object>> selectTable(String MEM_NO) {
 		return memberMapper.selectTable(MEM_NO);

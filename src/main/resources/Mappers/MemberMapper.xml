@@ -159,6 +159,44 @@
         ON N.NEW_SECTION = D.DCO_ID
         ORDER BY NEW_DATE DESC
     </select>
+    
+<!--     채현 ADMIN-->
+    <select id="getAllInquiry" resultType="map">
+		SELECT  I.INQ_NO
+			  , I.MEM_NO 
+		      , I.INQ_TITLE
+		      , I.INQ_DATE
+		      , I.INQ_CONTENT
+		      , A.ANS_DATE
+		      , CASE WHEN A.ANS_CONTENT IS NULL THEN '처리중' 
+		      								   ELSE '답변 완료'
+		        END AS RESULT
+		  FROM  INQUIRY I
+	 LEFT JOIN  ANSWER A 
+		    ON  I.INQ_NO = A.INQ_NO
+		        
+    </select>
+    
+    <select id="getInquiry" resultType="map">
+		
+	    SELECT  I.INQ_NO
+	    	  , I.MEM_NO 
+	          , I.INQ_TITLE
+	          , I.INQ_DATE
+	          , I.INQ_CONTENT
+<!-- 	          , A.ANS_CONTENT -->
+<!-- 	          , A.ANS_DATE -->
+			  , CASE WHEN A.ANS_CONTENT IS NULL THEN '' END AS ANS_CONTENT
+              , CASE WHEN A.ANS_DATE IS NULL THEN '' END AS ANS_DATE
+	          , CASE WHEN A.ANS_CONTENT IS NULL THEN '처리중' 
+	         									ELSE '답변 완료'
+	      	    END AS RESULT
+	      FROM  INQUIRY I
+	 LEFT JOIN  ANSWER A 
+	    	ON  I.INQ_NO = A.INQ_NO
+	     WHERE  I.INQ_NO = #{INQ_NO};
+		        
+    </select>
 
 
 

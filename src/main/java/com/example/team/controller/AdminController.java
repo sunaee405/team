@@ -23,6 +23,7 @@ import com.example.team.model.ReportEntity;
 import com.example.team.model.SubCodeEntity;
 import com.example.team.persistence.MemberRepository;
 import com.example.team.service.MemberService;
+import com.example.team.service.MyPageService;
 import com.example.team.service.NewsService;
 import com.example.team.service.ProductService;
 import com.example.team.service.ReportService;
@@ -217,6 +218,27 @@ public class AdminController {
     @DeleteMapping("report/{repNo}")
     public void deleteReport(@PathVariable("repNo") Long repNo) {
     	reportService.delete(repNo);
+    }
+    
+//  inquiry  ----------------------  
+    @Autowired
+    private MyPageService myPageService;
+    
+    @GetMapping("inquiry")
+    public List<Map<String, Object>> getAllInquiry() {
+        return memberService.getAllInquiry();
+    }
+    
+    @PostMapping("inquiry/delete")
+    public void deleteInquiry(@RequestBody List<Integer> inqNoList) {
+        for (Integer inqNo : inqNoList) {
+            myPageService.InquiryDelete(inqNo);
+        }
+    }
+    
+    @GetMapping("inquiry/{inqNo}")
+    public Map<String, Object> getInquiry(@PathVariable("inqNo") int inqNo) {
+        return memberService.getInquiry(inqNo); // 조회
     }
 
 }
