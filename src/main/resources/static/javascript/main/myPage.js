@@ -154,11 +154,12 @@ function bodyInner() {
 		                <div class="w-100vw h-[6px] bg-[#F1F4F6] -mx-4 md:-mx-8 lg:hidden"></div>
 		            </div>
 		            <div id="detailPoint" class="px-0 mt-8 lg:mt-[60px]">
-		                <div class="flex flex-col w-full mb-4 lg:mb-5">
+		                <div id="holdPoint" class="flex flex-col w-full mb-4 lg:mb-5">
 		                    <h3 class="text-lg font-bold md:text-[22px] text-jnBlack">내 상품</h3>
 		                    <div class="mt-3 mr-0 mb-9 lg:mt-2">
 		                        <ul id="proListType" class="colors flex flex-nowrap justify-between lg:justify-start -me-3 border-b border-[#DADEE5]">
 		                            <li class="shrink grow lg:grow-0 cursor-pointer py-4 basis-[84px] lg:basis-[160px] flex justify-center items-center font-medium transition duration-200 ease-in-out text-black border-b-[2px] border-black">판매중</li>
+		                            <li class="shrink grow lg:grow-0 cursor-pointer py-4 basis-[84px] lg:basis-[160px] flex justify-center items-center font-medium transition duration-200 ease-in-out text-[#9CA3AF]">구매상품</li>
 		                            <li class="shrink grow lg:grow-0 cursor-pointer py-4 basis-[84px] lg:basis-[160px] flex justify-center items-center font-medium transition duration-200 ease-in-out text-[#9CA3AF]">판매완료</li>
 		                            <li class="shrink grow lg:grow-0 cursor-pointer py-4 basis-[84px] lg:basis-[160px] flex justify-center items-center font-medium transition duration-200 ease-in-out text-[#9CA3AF]">찜한상품</li>
 		                        </ul>
@@ -202,24 +203,20 @@ async function getDetailMyProduct(selectType, sortType, memNo) {
 		    })
 	    });
 	    
-		 if (!response.ok) {
-	        // 응답의 텍스트를 읽기
-	        const errorMessage = await response.text();
-	        if (errorMessage === "noList") {
+		if (!response.ok) {
+			// 응답의 텍스트를 읽기
+			const errorMessage = await response.text();
+			if (errorMessage === "noList") {
 				// 리스트가 비어있는 경우
-	            if(divCheck) {
-					$('#detailPoint').append(`<p class="py-12 text-center">선택된 조건에 해당하는 상품이 없습니다.</p>`);
-				} else {
-					$('#getProDetail').replaceWith(`<p class="py-12 text-center">선택된 조건에 해당하는 상품이 없습니다.</p>`);
-				}
-				
-	        } else {
-	            throw new Error(`HTTP error! status: ${response.status}`);
-	        }
-	    }
+				debugger;
+				$('#detailPoint').children().not('#holdPoint').remove()
+				$('#detailPoint').append(`<p class="py-12 text-center">선택된 조건에 해당하는 상품이 없습니다.</p>`);
+			} else {
+				throw new Error(`HTTP error! status: ${response.status}`);
+			}
+		}
 		
 		responseData = await response.json();
-		
 		
 		$('#detailPoint .py-12').remove();
 		if(divCheck) {
@@ -227,6 +224,7 @@ async function getDetailMyProduct(selectType, sortType, memNo) {
 		} else {
 			$('#getProDetail').empty();
 		}
+		
 		responseData.forEach(function(data) {
 			const time = Math.floor((new Date() - new Date(data.PRO_DATE)) / 1000);
 	
@@ -334,11 +332,6 @@ function datailPage(typeText) {
 	</div>`
 	$('body').append(htmlText);
 }
-
-
-
-
-
 
 
 

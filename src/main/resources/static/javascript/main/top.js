@@ -27,6 +27,7 @@ function loading() {
 
 $(window.parent).on('load', function() {
 	var checkReadyInterval = setInterval(function() {
+		// 부모 요소의 DOM업로드가 완료될때까지 반복
 		if (window.parent.document.readyState === "complete") {
 			clearInterval(checkReadyInterval); // 이벤트 삭제
 			

@@ -20,15 +20,15 @@ public class WebConfig implements WebMvcConfigurer {
     }
     
     
-//    @Bean
-//    public ITemplateResolver yourTemplateResolver() {
-//        SpringResourceTemplateResolver resolver = new SpringResourceTemplateResolver();
-//        resolver.setOrder(1);
-//        resolver.setPrefix("classpath:/templates/"); // 템플릿 파일의 위치를 지정
-//        resolver.setSuffix(".html");
-//        resolver.setTemplateMode(TemplateMode.HTML);
-//        resolver.setCacheable(true);
-//        resolver.setCheckExistence(true); // 존재하지 않는 템플릿에 대한 예외 방지
-//        return resolver;
-//    }
+    @Bean
+    public ITemplateResolver yourTemplateResolver() {
+        SpringResourceTemplateResolver resolver = new SpringResourceTemplateResolver();
+        resolver.setOrder(1);
+        resolver.setPrefix("classpath:/templates/"); // 템플릿 파일의 위치를 지정
+        resolver.setSuffix(".html");
+        resolver.setTemplateMode(TemplateMode.HTML);
+        resolver.setCacheable(true);
+        resolver.setCheckExistence(true); // 존재하지 않는 템플릿에 대한 예외 방지
+        return resolver;
+    }
 }

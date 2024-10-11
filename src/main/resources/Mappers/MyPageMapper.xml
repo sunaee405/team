@@ -48,6 +48,11 @@
 				WHERE P.PRO_STATUS = 'STD2'
 				AND P.MEM_NO = #{MEM_NO}
 			</when>
+			<when test="SELECT_TYPE == '구매상품'">
+				JOIN PAYMENT PAY
+				ON P.PRO_NO = PAY.PRO_NO
+				WHERE PAY.SEL_MEM_NO = #{MEM_NO}
+			</when>
 		</choose>
 		<choose>
 			<when test="SORT_TYPE == '최신순'">
