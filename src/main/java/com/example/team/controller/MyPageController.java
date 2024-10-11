@@ -35,6 +35,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.example.team.model.BannerImgEntity;
 import com.example.team.model.ChattingEntity;
 import com.example.team.model.MemberEntity;
+import com.example.team.service.MemberService;
 import com.example.team.service.MyPageService;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -50,7 +51,10 @@ import retrofit2.http.POST;
 
 @RestController
 public class MyPageController {
-
+	
+	@Autowired
+	private MemberService memberService;
+	
 	@Autowired
 	private MyPageService myPageService;
 
@@ -395,5 +399,22 @@ public class MyPageController {
 	public void deleteInquiry(@RequestParam("INQ_NO") int INQ_NO) {
 		myPageService.InquiryDelete(INQ_NO);
 	}
-
+	
+	// 재영 회원 정보 select 
+	@PostMapping("/SelectMember") 	 
+	public ResponseEntity<Map<String, Object>> selectMember(@RequestBody Map<String, String> request) {
+	        String MEM_NO = request.get("MEM_NO"); 
+	        Map<String, Object> data = new HashMap<String, Object>();
+	        data = memberService.SelectMember(MEM_NO);
+	        
+	        return ResponseEntity.ok(data); 
+	}
+	
+	 @PostMapping("/InsertInquiry")
+	 public void InsertInquiry(@RequestBody Map<String, Object> data) {
+		 System.out.println("@@@data"+data );
+		 memberService.InsertInquiry(data);
+		 
+	 }
+	
 }

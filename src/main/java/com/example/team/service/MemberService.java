@@ -241,4 +241,13 @@ public class MemberService {
 		
 	}
 
+	public Map<String, Object> SelectMember(String MEM_NO) {
+		return memberMapper.SelectMember(MEM_NO);
+	}
+
+	public void InsertInquiry(Map<String, Object> data) {
+		memberMapper.InsertInquiry(data);
+	}
+
+
 }

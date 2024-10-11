@@ -30,4 +30,8 @@ public interface MemberMapper {
 	String checkPwEmail(Map<String, String> data);
 
 	List<Map<String, Object>> selectTable(String MEM_NO);
+
+	Map<String, Object> SelectMember(String MEM_NO);
+
+	public void InsertInquiry(Map<String, Object> data);
 }
