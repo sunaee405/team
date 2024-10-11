@@ -35,6 +35,8 @@ public interface MyPageMapper {
 	
 	// 마이페이지 회원 상품 목록
 	List<Map<String, Object>> getDetailMyProduct(Map<String, Object> data);
+
+	List<Map<String, Object>> getProCount(Map<String, Object> data);
 	
 	
 }

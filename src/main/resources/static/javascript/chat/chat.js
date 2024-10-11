@@ -85,24 +85,6 @@ $(document).on('click', '#chatList', function() {
 	});
 });
 
-// 개별 채팅룸 접속
-//$(document).on('click', '.roomNo', function() {
-//	const roomNo = $(this).find('input:hidden').val();
-//	const url = `/myPage/chatRoom?CHA_NO=${roomNo}`
-//	let chatRoom = window.open(url,
-//					 'chatRoom',
-//					 `width=${width},height=${height},
-//					  resizable=no,
-//					  top=${top},
-//					  left=${left},
-//					  toolbar=no,
-//					  menubar=no,
-//					  location=no,
-//					  status=no`
-//				   );
-//});
-
-
 
 // 채팅내역 팝업 삭제
 $(document).on('click', '.btnClose ', function() {

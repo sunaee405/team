@@ -1,37 +1,6 @@
 @charset "UTF-8";
 
 
-/* .chatRoom { */
-/*     width: 100%; */
-/*     height: 100%; */
-/*     border: 1px solid #ccc; */
-/*     background: white; */
-/*     display: flex; */
-/*     flex-direction: column; */
-/*     border-radius: 8px; */
-/*     overflow: hidden; */
-/*     position: relative; */
-/* } */
-
-/* #messageArea { */
-/*     flex: 1; */
-/*     width: 100%; */
-/*     height: 100%; */
-/*     padding: 10px; */
-/*     overflow-y: auto; */
-/*     border-bottom: 1px solid #ccc; */
-/* } */
-
-/* .inputArea { */
-/*     border: none; */
-/*     border-top: 1px solid #ccc; */
-/*     box-sizing: border-box; */
-/*     width: 100%; */
-/*     border-radius: 0; */
-/*     outline: none; */
-/* } */
-
-
 /* chatroom-styles.css */
 
 html, body {
@@ -52,7 +21,7 @@ body {
 
 .message-container {
 	height: calc(100% - 45px);
-	background-color: #a1c0d6;
+	background-color: #F5E7D6;
 	overflow: auto;
 }
 
@@ -88,14 +57,14 @@ body {
 }
 
 .from-me .body {
-	background-color: #ffe934;
+	background-color: #0AC26E;
 	margin-left: 5px;
 }
 
 .body {
 	padding: 10px 5px;
 	border-radius: 5px;
-	background-color: #ffffff;
+	background-color: #D0E4F7;
 	margin-right: 5px;
 }
 
@@ -132,8 +101,10 @@ body {
 }
 
 .input input {
+	border-radius: 5px;
 	width: 100%;
 	padding: 10px;
+	border: 0.5px solid #b4b4b4;
 }
 
 .input .fa-smile-o {
@@ -149,15 +120,7 @@ body {
 	cursor: pointer;
 }
 
-/* 스크롤바 조정 */
-/* 스크롤바 전체 영역 */
-/* ::-webkit-scrollbar { */
-/*   width: 12px; 스크롤바의 너비 */
-/*   height: 12px; 수평 스크롤바의 높이 (옵션) */
-/* } */
-
-/* 스크롤바의 막대 */
-/* 스크롤바 스타일 (웹킷 기반 브라우저) */
+/* 스크롤바 스타일 */
 .message-container::-webkit-scrollbar {
   width: 12px; /* 스크롤바의 너비 */
 }

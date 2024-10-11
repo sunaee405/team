@@ -62,7 +62,6 @@ $(async function() {
 
 			log.forEach(function(data, index) {
 				var currMe = data.USERID == memberNum ? "from-me" : "to-me";
-				debugger;
 				let time = new Date(data.TIME);
 				time = String(time.getHours()).padStart(2, '0') + "시" + String(time.getMinutes()).padStart(2, '0') + "분";
 				if(currMe === "from-me") {
@@ -82,14 +81,13 @@ $(async function() {
 				$(".message-container").append(text);
 			});
 			
-
+			$('.message-container').scrollTop($(document).height());
 	    })
 	    .catch(error => {
 			const em = error.message;
 			if (em === "notLogin") {
 				if (window.opener && !window.opener.closed) {
                 	window.opener.showAlert('로그인 상태가 아닙니다 다시 로그인해주세요');
-                	debugger;
 	            } else {
 	                alert('비정상적인 접근');
 	            }
@@ -129,9 +127,6 @@ $(async function() {
 			
 		$(".message-container").append(text);
 	}
-	
-	
-
 });
 
 // 채팅창 엔터누를시 메시지 전송
@@ -144,10 +139,20 @@ $(document).on('keyup', "#inputBox", function(a, b, c, d, e) {
 	}
 });
 
+$(window).on('beforeunload', function() {
+	const chaNo = $('.chat').attr('data-rnum');
+	if($('.message-container > .message').length !== 0) return;
+	debugger;
+	$.ajax({
+		url: '/deleteChatRoom',
+		type: 'POST',
+		data: {"CHA_NO":chaNo}
+	});
+});
+
 
 
 $(document).on('click', ".btn-success", function() {
-	debugger;
 	const chatRoomNo = $(".chat").attr("data-rNum");
 	const content = $("#inputBox").val();
 	const chatLog = JSON.stringify({

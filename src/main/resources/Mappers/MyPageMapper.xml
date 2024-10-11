@@ -70,6 +70,22 @@
 		</choose>
 	</select>
 	
+	<!-- 마이페이지 상품 판매, 구매, 찜한 수 -->
+	
+	<select id="getProCount">
+		SELECT 'PAYMENT' AS TYPE, COUNT(SEL_MEM_NO) AS COUNT
+		FROM PAYMENT
+		WHERE SEL_MEM_NO = #{MEM_NO}
+		UNION ALL
+		SELECT 'PRODUCT', COUNT(MEM_NO)
+		FROM PRODUCT
+		WHERE MEM_NO = #{MEM_NO}
+		UNION ALL
+		SELECT 'LIKED', COUNT(MEM_NO)
+		FROM LIKED
+		WHERE MEM_NO = #{MEM_NO}
+	</select>
+	
 	
 	
 	<!-- 메인페이지 상품목록 -->

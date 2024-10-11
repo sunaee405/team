@@ -5,10 +5,8 @@ $(document).on('click', '#bannerUpload', function() {
 		const imgCk = file.files[0].name.split('.').pop().toLowerCase();
         if (!['jpg', 'jpeg', 'png'].includes(imgCk)) return;
 		
-		
 		const formFile = new FormData();
         formFile.append('file', file.files[0]);
-		
 		
 		$.ajax({
 			url: '/insertBanner',

@@ -10,5 +10,5 @@ import org.springframework.stereotype.Repository;
 import com.example.team.model.ChattingEntity;
 
 @Repository
-public interface ChattingRepository extends JpaRepository<ChattingEntity, String> {
+public interface ChattingRepository extends JpaRepository<ChattingEntity, Long> {
 }

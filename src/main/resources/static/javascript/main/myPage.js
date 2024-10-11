@@ -1,19 +1,20 @@
 $(function() {
 	bodyInner();
+	proCount();
 	$('#proListType>li:first').trigger('click');
 });
 
+// 회원탈퇴 신청
 $(document).on('click', '#deleteMem', function() {
 	var confText = `<ol style="list-style-type: decimal; text-align: left;">
 						<li>탈퇴 신청일로부터 6개월 동안 동일한 아이디와 휴대폰 번호로 재가입이 불가능하며, 6개월이 경과한 후 계정이 삭제됩니다.</li> <br><br>
-						<li>회원 탈퇴 시 본인 계정에 등록된 모든 게시물은 삭제됩니다.</li>
+					<!-- <li>회원 탈퇴 시 본인 계정에 등록된 모든 게시물은 삭제됩니다.</li> -->
 					</ol>
 					`
-	
 	Swal.fire({
 	    title: '회원 탈퇴 동의',
 	    html: confText,
-	    background: '#fff', // 모달 배경 색상
+	    background: '#fff', // 배경 색상
 	    color: '#000', // 글자 색상
 	    confirmButtonColor: '#0AC26E', // 확인 버튼 색상
 	    cancelButtonColor: '#C0C0C0', // 취소 버튼 색상
@@ -119,18 +120,18 @@ function bodyInner() {
 		                        <div class="flex items-center translate-x-3 hidden lg:flex"><img alt="profile-image" src="" width="60" height="60" decoding="async" data-nimg="1" class="rounded-full w-[48px] h-[48px] lg:w-[60px] lg:h-[60px] hidden" loading="lazy" style="color: transparent;"><img alt="profile-image" src="https://img2.joongna.com/common/Profile/Default/profile_m.png" width="60" height="60" decoding="async" data-nimg="1" class="rounded-full w-[48px] h-[48px] lg:w-[60px] lg:h-[60px] box-content border-4 border-white -translate-x-3" loading="lazy" style="color: transparent;"></div>
 		                    </div>
 		                    <div class="relative flex justify-evenly w-full border border-gray-300 rounded-lg pl-[8px] pr-[15px] py-4 lg:py-6">
-		                        <dl class="flex justify-between items-center text-center text-jnGray-600 w-full m-0 [&amp;_div]:w-full [&amp;_div]:before:right-0 [&amp;_div]:before:top-1/2 [&amp;_div]:before:-translate-y-1/2 [&amp;_div]:before:absolute [&amp;_div]:before:w-[1px] [&amp;_div]:before:h-[40px] [&amp;_div]:before:bg-gray-300 [&amp;_div_dt]:text-[12px] [&amp;_div_dd]:text-[16px] lg:[&amp;_div_dt]:text-[14px] lg:[&amp;_div_dd]:text-[22px]">
+		                        <dl id="countTab" class="flex justify-between items-center text-center text-jnGray-600 w-full m-0 [&amp;_div]:w-full [&amp;_div]:before:right-0 [&amp;_div]:before:top-1/2 [&amp;_div]:before:-translate-y-1/2 [&amp;_div]:before:absolute [&amp;_div]:before:w-[1px] [&amp;_div]:before:h-[40px] [&amp;_div]:before:bg-gray-300 [&amp;_div_dt]:text-[12px] [&amp;_div_dd]:text-[16px] lg:[&amp;_div_dt]:text-[14px] lg:[&amp;_div_dd]:text-[22px]">
 		                            <div class="relative">
 		                                <dt class="justify-center mt-0">판매내역</dt>
-		                                <dd class="font-semibold text-jnblack">0</dd>
+		                                <dd class="font-semibold text-jnblack" data-type="PRODUCT">0</dd>
 		                            </div>
-		                 <!--           <div class="relative cursor-pointer">
+		                            <div class="relative cursor-pointer">
 		                                <dt class="justify-center mt-0">구매내역</dt>
-		                                <dd class="font-semibold text-jnblack">0</dd>
-		                            </div> -->
+		                                <dd class="font-semibold text-jnblack" data-type="PAYMENT">0</dd>
+		                            </div>
 		                            <div class="relative">
 		                                <dt class="justify-center mt-0">찜한 상품</dt>
-		                                <dd class="font-semibold text-jnblack">0</dd>
+		                                <dd class="font-semibold text-jnblack" data-type="LIKED">0</dd>
 		                            </div>
 		                        </dl>
 		                    </div>
@@ -183,6 +184,20 @@ function bodyInner() {
 	$('body').append(text);	
 }
 
+function proCount() {
+	const memNo = sessionStorage.getItem('memNo');
+	$.ajax({
+		url: '/myPage/proCount',
+		type: 'POST',
+		data: {'MEM_NO':memNo},
+		dataType: 'json',
+		success: (response) => {
+			response.forEach(function(data) {
+				$('#countTab').find(`[data-type=${data.TYPE}]`).html(data.COUNT);
+			});
+		}
+	});
+}
 
 
 //해당 상품영역 디테일
@@ -266,15 +281,15 @@ async function getDetailMyProduct(selectType, sortType, memNo) {
 			    </div>
 			    <div class="flex flex-col space-y-2 items-end absolute cursor-pointer right-0 top-3 w-full h-auto">
 			        <div>
-			            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="none" class="text-white mr-2 w-8 h-8">
+			         <!--   <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="none" class="text-white mr-2 w-8 h-8">
 			                <path fill="#fff" d="M16.003 17.803a1.8 1.8 0 1 0 0-3.6 1.8 1.8 0 0 0 0 3.6M16.003 9.4a1.8 1.8 0 1 0 0-3.6 1.8 1.8 0 0 0 0 3.6M16.003 26.202a1.8 1.8 0 1 0 0-3.6 1.8 1.8 0 0 0 0 3.6"></path>
-			            </svg>
+			            </svg> -->
 			        </div>
 			    </div>
 			</div>
 			`
 			$('#getProDetail').append(text);
-		})
+		});
 	} catch(error) {
 
 	}

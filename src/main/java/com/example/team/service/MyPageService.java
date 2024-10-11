@@ -118,6 +118,18 @@ public class MyPageService {
 
 
 
+	// 판매, 구매, 찜한 상품 개수
+	public List<Map<String, Object>> getProCount(Map<String, Object> data) {
+		return myPageMapper.getProCount(data); 
+	}
+	
+	
+	public void deleteChatRoom(Map<String, Object> data) {
+		chattingRepository.deleteById(Long.valueOf((String) data.get("CHA_NO")));
+	}
+
+
+
 
 
 

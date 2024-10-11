@@ -46,6 +46,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import reactor.netty.http.server.HttpServerRequest;
 import retrofit2.http.GET;
+import retrofit2.http.POST;
 
 @RestController
 public class MyPageController {
@@ -227,6 +228,12 @@ public class MyPageController {
 		}
 		
 	}
+	
+	@PostMapping("/myPage/proCount")
+	public ResponseEntity<List<Map<String, Object>>> proCount(@RequestParam Map<String, Object> data) {
+		return ResponseEntity.status(HttpStatus.OK).body(myPageService.getProCount(data)); 
+	}
+	
 	// 회원정보 찾기
 	@PostMapping("/getMemberData")	
 	public Optional<MemberEntity> getMemberData(HttpSession session) {
@@ -384,6 +391,13 @@ public class MyPageController {
 		return ResponseEntity.status(HttpStatus.OK).body(chattingEntity);
 	}
 	
+	
+	//채팅방 삭제
+	@PostMapping("/deleteChatRoom")
+	public void deleteChatRoom(@RequestParam Map<String, Object> data) {
+		System.out.println("채팅방삭제");
+		myPageService.deleteChatRoom(data);
+	}
 	
 	
 	

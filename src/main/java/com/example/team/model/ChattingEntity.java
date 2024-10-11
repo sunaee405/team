@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.type.SqlTypes;
 
 import jakarta.persistence.Access;
@@ -40,12 +42,14 @@ public class ChattingEntity {
 	@Column(name = "CHA_NO")
 	private Long chaNo;
 	
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne
 	@JoinColumn(name = "CHA_MEM1", referencedColumnName = "MEM_NO", nullable = false)
+	@OnDelete(action = OnDeleteAction.CASCADE)
 	private MemberEntity chaMem1;
-	
-	@ManyToOne(cascade = CascadeType.ALL)
+
+	@ManyToOne
 	@JoinColumn(name = "CHA_MEM2", referencedColumnName = "MEM_NO", nullable = false)
+	@OnDelete(action = OnDeleteAction.CASCADE)
 	private MemberEntity chaMem2;
 	
 	@Column(name = "CHA_LOG", columnDefinition = "JSON")
