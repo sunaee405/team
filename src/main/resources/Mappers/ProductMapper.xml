@@ -307,8 +307,16 @@
 	</select>
 	
 	<insert id="insertReport">
-        INSERT INTO REPORT (MEM_NO, PRO_NO, REP_DATE, REP_CONTENT, REP_SECTION)
-        VALUES (#{memNo}, #{proNo}, NOW(), #{reportDescription}, #{categoryDcoId})
+        INSERT INTO REPORT (MEM_NO
+        	 , PRO_NO
+<!--         	 , REP_DATE -->
+        	 , REP_CONTENT
+        	 , REP_SECTION)
+        VALUES (#{memNo}
+             , #{proNo}
+<!--              , NOW() -->
+             , #{reportDescription}
+             , #{categoryDcoId})
     </insert>
 	
 

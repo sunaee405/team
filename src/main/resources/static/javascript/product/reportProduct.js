@@ -80,7 +80,7 @@ $(document).ready(function() {
 			contentType: false,  // multipart/form-data 자동 처리
 			success: function(response) {
 				alert('신고를 완료했습니다!');
-				window.location.href = response.redirectUrl;  // 필요에 따라 활성화
+				window.close();  // 필요에 따라 활성화
 			},
 			error: function(xhr, status, error) {
 				console.error('Error occurred:', error);
@@ -91,8 +91,8 @@ $(document).ready(function() {
 
 	});
 
-	$('#backButton').on('click', function() {
-		window.history.back();
+	$('#closeButton').on('click', function() {
+		window.close();
 	});
 
 });

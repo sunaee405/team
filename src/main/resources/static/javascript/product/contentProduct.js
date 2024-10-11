@@ -114,11 +114,33 @@ $(document).ready(function() {
                 <span class="text-jnGray-500 leading-[15px]">
                     ${timeAgo} · 조회수 ${views}
                 </span>
-                <a class=""
-							href="/product/reportProduct?proNo=${response.PRO_NO}&memNo=${response.MEM_NO}"><span
-							class="leading-4 underline underline-offset-4 text-jnGray-700">신고하기</span></a>
+                <a class="" href="javascript:void(0);" 
+       				onclick="openReportWindow(${response.PRO_NO}, ${response.MEM_NO})">
+       				<span class="leading-4 underline underline-offset-4 text-jnGray-700">
+       				신고하기</span>
+    			</a>
             `;
 			$('#product_etc').append(etcInfo); // ID가 "product_etc"인 <div>에 추가
+
+			window.openReportWindow = function(proNo, memNo) {
+				const url = `/product/reportProduct?proNo=${proNo}&memNo=${memNo}`;
+
+				// 화면 크기를 가져옴
+				const screenWidth = window.screen.width;
+				const screenHeight = window.screen.height;
+
+				// 새 창의 크기 설정
+				const popupWidth = 500;
+				const popupHeight = 500;
+
+				// 창을 화면 중앙에 위치시키기 위한 계산
+				const popupLeft = (screenWidth - popupWidth) / 2;
+				const popupTop = (screenHeight - popupHeight) / 2;
+
+				// 창 옵션에 위치를 포함
+				const windowOptions = `width=${popupWidth},height=${popupHeight},scrollbars=no,resizable=no,left=${popupLeft},top=${popupTop}`;
+				window.open(url, "reportWindow", windowOptions);
+			};
 
 
 			// 제품상태 값 가져오기
@@ -230,19 +252,19 @@ $(document).ready(function() {
 
 					// #otherProductByMemNo UL 태그 안에 상품 목록 추가
 					$('#otherProductByMemNo').html(otherProductHtml);
-					
+
 					otherProductHtml3 += `
 					<h3 class="md:text-[22px] font-bold text-jnBlack mr-2 text-lg empty:h-7">${response.MEM_ID}의
 						다른 상품</h3>`;
-						
+
 					$('#ohterProductByMemNoT').html(otherProductHtml3);
-					
-					
+
+
 				},
 				error: function(error) {
 					console.error('MEM_NO에 해당하는 랜덤 상품 정보를 가져오는 중 오류 발생:', error);
 				}
-				
+
 			});
 
 
@@ -281,7 +303,7 @@ $(document).ready(function() {
 
 					// #otherProductByMemNo UL 태그 안에 상품 목록 추가
 					$('#otherProductByCategory').html(otherProductHtml2);
-					
+
 				},
 				error: function(error) {
 					console.error('MEM_NO에 해당하는 랜덤 상품 정보를 가져오는 중 오류 발생:', error);
@@ -346,9 +368,9 @@ $(document).ready(function() {
 
 						// 결제 버튼 클릭 시 결제 로직
 						$('#payButton').on('click', function() {
-//							console.log(proNo);
-//							console.log(sessionMemNo);
-//							console.log(sellerMemNo);
+							//							console.log(proNo);
+							//							console.log(sessionMemNo);
+							//							console.log(sellerMemNo);
 							var IMP = window.IMP; // 아임포트 객체 초기화
 							IMP.init("imp35316214"); // 가맹점 식별코드 입력
 
@@ -360,7 +382,7 @@ $(document).ready(function() {
 								// amount: price           // 결제 금액
 								amount: 10,
 								buyer_email: response.MEM_EMAIL,
-								buyer_name : response.MEM_ID,
+								buyer_name: response.MEM_ID,
 							}, function(rsp) {
 								if (rsp.success) {
 									alert('결제가 완료되었습니다.');

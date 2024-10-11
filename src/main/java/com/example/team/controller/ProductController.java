@@ -306,11 +306,7 @@ public class ProductController {
 		
 		productService.insertReport(params);
 
-		// 로직 처리 후
-		Map<String, String> response = new HashMap<>();
-		response.put("redirectUrl", "/product/listProduct");
-
-		return ResponseEntity.ok(response);
+		return ResponseEntity.ok().build();
 	}
 	
 	
