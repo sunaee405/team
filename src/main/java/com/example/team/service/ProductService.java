@@ -316,6 +316,10 @@ public class ProductService {
         productMapper.insertReport(params);
     }
 
+    public int getCountReport(Long memNo) {
+        return productMapper.getCountReport(memNo);
+    }
+
 	
     
 	

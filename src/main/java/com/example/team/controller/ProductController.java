@@ -309,5 +309,11 @@ public class ProductController {
 		return ResponseEntity.ok().build();
 	}
 	
+	@GetMapping("/getCountReport")
+	@ResponseBody
+	public ResponseEntity<Integer> getCountReport(@RequestParam("memNo") Long memNo) {
+		int reportCount = productService.getCountReport(memNo);
+		return ResponseEntity.ok(reportCount);
+	}
 	
 }

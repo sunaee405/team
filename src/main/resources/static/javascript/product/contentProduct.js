@@ -114,13 +114,50 @@ $(document).ready(function() {
                 <span class="text-jnGray-500 leading-[15px]">
                     ${timeAgo} · 조회수 ${views}
                 </span>
-                <a class="" href="javascript:void(0);" 
+                <a class="inline-block" href="javascript:void(0);" 
        				onclick="openReportWindow(${response.PRO_NO}, ${response.MEM_NO})">
-       				<span class="leading-4 underline underline-offset-4 text-jnGray-700">
-       				신고하기</span>
+       				<span class="leading-4 text-jnGray-700">
+       				 <img src="https://ccimage.hellomarket.com/img/web/item/detail/ico_safe_payment.svg" 
+                 		  class="inline-block ffiDRu" style="vertical-align: middle; width: 12px; height: 12px; border-bottom-width: 3px;">
+                 		  신고하기
+        			</span>
     			</a>
             `;
 			$('#product_etc').append(etcInfo); // ID가 "product_etc"인 <div>에 추가
+
+			$.ajax({
+				url: '/getCountReport',
+				type: 'GET',
+				data: { memNo: response.MEM_NO },
+				success: function(reportCount) {
+					let statusText = '';
+					let statusColor = '';
+
+					// 신고 횟수에 따라 텍스트와 색상 변경
+					if (reportCount === 0) {
+						statusText = '안전';
+						statusColor = 'green'; // 초록색
+					} else if (reportCount >= 1 && reportCount < 5) {
+						statusText = '주의';
+						statusColor = 'orange'; // 주황색
+					} else if (reportCount >= 5) {
+						statusText = '위험';
+						statusColor = 'red'; // 빨간색
+					}
+
+					// 신고 정보를 표시할 HTML 추가
+					const etcInfo3 = `
+                        <span class="leading-4 ml-auto">
+        					<span class="text-jnGray-700">${response.MEM_ID} 유저 신고 : ${reportCount} 회</span>
+        					<span style="color: ${statusColor};">(${statusText})</span>
+    					</span>
+                    `;
+					$('#product_etc22').append(etcInfo3);
+				},
+				error: function(error) {
+					console.error('신고 횟수 데이터를 가져오는 중 오류 발생:', error);
+				}
+			});
 
 			window.openReportWindow = function(proNo, memNo) {
 				const url = `/product/reportProduct?proNo=${proNo}&memNo=${memNo}`;
@@ -196,7 +233,6 @@ $(document).ready(function() {
 			`;
 
 			$('#product_etc2').append(etc2Info);
-
 
 			// 상품 내용 값 가져오기
 			const proContent = response.PRO_CONTENT // PRO_CONTENT 값

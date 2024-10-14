@@ -319,6 +319,12 @@
              , #{categoryDcoId})
     </insert>
 	
+	<select id="getCountReport"  resultType="int">
+		SELECT COUNT(*) AS REPORT_COUNT
+		  FROM REPORT REP
+		 WHERE REP.MEM_NO = #{memNo}
+		   AND REP.REP_RESULT = 'RRD1';
+	</select>
 
 
 

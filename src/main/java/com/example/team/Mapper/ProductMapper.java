@@ -56,6 +56,8 @@ public interface ProductMapper {
 	Map<String, Object> getReportProduct(int proNo);
 
 	void insertReport(Map<String, String> params);
+	
+	int getCountReport(@Param("memNo") Long memNo);
 
 	
 
