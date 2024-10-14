@@ -5,10 +5,6 @@
 
 <mapper namespace="com.example.team.Mapper.MyPageMapper">
 
-
-
-
-
 	<!-- 공통코드 호출 -->
 	<select id="getDetailCode" resultType="String">
 		SELECT JSON_OBJECTAGG(DCO_ID, DCO_VALUE)
@@ -107,7 +103,7 @@
 		FROM PRODUCT
 		WHERE PRO_STATUS = 'STD1'
 		<choose>
-			<when test="TYPE != null and TYPE = '최근등록순'">
+			<when test="TYPE != null and TYPE = '최근등록순'"> 
 				ORDER BY PRO_DATE
 			</when>
 			<when test="TYPE != null and TYPE = '조회순'">
@@ -138,13 +134,6 @@
 		</when>
 	</choose>
 	</select>
-<!-- 	SELECT CHA_NO -->
-<!-- 				, JSON_EXTRACT(CHA_LOG, CONCAT('$[', JSON_LENGTH(CHA_LOG) - 1, ']')) as CHA_LOG -->
-<!-- 				, CHA_MEM1 -->
-<!-- 				, CHA_MEM2  -->
-<!-- 			FROM CHATTING -->
-<!-- 			WHERE CHA_NO = #{CHA_NO} -->
-	
 
 	<!-- 채팅룸 생성 -->
 	<insert id="insertChatRoom">
@@ -191,11 +180,5 @@
 		WHERE C.CHA_MEM1 = #{MEM_NO}
 		OR C.CHA_MEM2 = #{MEM_NO}
 	</select>
-	
-	<delete id="InquiryDelete" parameterType="int">
-    DELETE FROM INQUIRY
-    WHERE INQ_NO = #{INQ_NO}
-	</delete>
-
 
 </mapper>

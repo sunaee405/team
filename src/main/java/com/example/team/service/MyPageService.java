@@ -98,8 +98,9 @@ public class MyPageService {
 
 
 	// 배너저장
-	public void insertBanner(BannerImgEntity bannerImgEntity) {
-		bannerImgRepository.save(bannerImgEntity);
+	public void insertBanner(List<BannerImgEntity> bannerImgEntity) {
+		bannerImgRepository.deleteAll();
+		bannerImgRepository.saveAll(bannerImgEntity);
 	}
 
 

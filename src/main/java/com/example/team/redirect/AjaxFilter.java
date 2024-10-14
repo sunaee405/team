@@ -25,7 +25,9 @@ public class AjaxFilter implements Filter {
 		HttpServletRequest httpRequest = (HttpServletRequest) request;
 
 		String rHeader = httpRequest.getHeader("X-Requested-With"); // ajax
+		String contentType = httpRequest.getContentType();
 		String url = httpRequest.getRequestURI();
+		
 
 		System.out.println(url);
 		// 필터 예외 조건
@@ -37,19 +39,20 @@ public class AjaxFilter implements Filter {
 		                url.startsWith("/main-web/") || 
 		                url.startsWith("/redirect/") || 
 		                url.equals("/") || 
-		                url.startsWith("/static/");
+		                url.startsWith("/static/") ||
+		                "application/json".equalsIgnoreCase(contentType) ||
+		                "multipart/form-data".equals(contentType) ||
+		                "XMLHttpRequest".equals(rHeader) ||
+		                url.startsWith("/error");
 		
 		if(check) {
 			chain.doFilter(request, response);
 			return;
 		}
 		
-		// AJAX 요청이 아니고 오류 페이지가 아닌 경우 주소 변경해서 재요청
-		if (!"XMLHttpRequest".equals(rHeader) && !url.startsWith("/error")) {
-			RequestDispatcher dispatcher = httpRequest.getRequestDispatcher("/redirect" + url);
-			dispatcher.forward(request, response); // 요청을 포워딩
-		} else {
-			chain.doFilter(request, response); // AJAX 요청 또는 오류 페이지인 경우 요청을 계속 진행
-		}
+		
+		// 조건에 맞지 않는 주소요청일 경우 redirect 붙여서 재요청
+		RequestDispatcher dispatcher = httpRequest.getRequestDispatcher("/redirect" + url);
+		dispatcher.forward(request, response); // 요청을 포워딩
 	}
 }

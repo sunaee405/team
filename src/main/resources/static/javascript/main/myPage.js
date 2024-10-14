@@ -36,7 +36,6 @@ $(document).on('click', '#deleteMem', function() {
 			'MEM_OUT' : MEM_OUT.toISOString()
 		}
 		
-		debugger;
 		
 		$.ajax({
 			url: '/deleteMember',
@@ -102,7 +101,7 @@ function bodyInner() {
 		                        <div class="flex items-start">
 		                        </div>
 		                    </div>
-		                    <div class="flex space-x-7 lg:pl-1 items-start">
+		            <!--        <div class="flex space-x-7 lg:pl-1 items-start">
 		                        <div class="flex-1 self-center">
 		                            <div class="flex justify-between items-center mb-2 text-[#0CB650] font-medium">
 										<span>
@@ -118,7 +117,7 @@ function bodyInner() {
 		                            </div>
 		                        </div>
 		                        <div class="flex items-center translate-x-3 hidden lg:flex"><img alt="profile-image" src="" width="60" height="60" decoding="async" data-nimg="1" class="rounded-full w-[48px] h-[48px] lg:w-[60px] lg:h-[60px] hidden" loading="lazy" style="color: transparent;"><img alt="profile-image" src="https://img2.joongna.com/common/Profile/Default/profile_m.png" width="60" height="60" decoding="async" data-nimg="1" class="rounded-full w-[48px] h-[48px] lg:w-[60px] lg:h-[60px] box-content border-4 border-white -translate-x-3" loading="lazy" style="color: transparent;"></div>
-		                    </div>
+		                    </div> -->
 		                    <div class="relative flex justify-evenly w-full border border-gray-300 rounded-lg pl-[8px] pr-[15px] py-4 lg:py-6">
 		                        <dl id="countTab" class="flex justify-between items-center text-center text-jnGray-600 w-full m-0 [&amp;_div]:w-full [&amp;_div]:before:right-0 [&amp;_div]:before:top-1/2 [&amp;_div]:before:-translate-y-1/2 [&amp;_div]:before:absolute [&amp;_div]:before:w-[1px] [&amp;_div]:before:h-[40px] [&amp;_div]:before:bg-gray-300 [&amp;_div_dt]:text-[12px] [&amp;_div_dd]:text-[16px] lg:[&amp;_div_dt]:text-[14px] lg:[&amp;_div_dd]:text-[22px]">
 		                            <div class="relative">
@@ -223,7 +222,6 @@ async function getDetailMyProduct(selectType, sortType, memNo) {
 			const errorMessage = await response.text();
 			if (errorMessage === "noList") {
 				// 리스트가 비어있는 경우
-				debugger;
 				$('#detailPoint').children().not('#holdPoint').remove()
 				$('#detailPoint').append(`<p class="py-12 text-center">선택된 조건에 해당하는 상품이 없습니다.</p>`);
 			} else {

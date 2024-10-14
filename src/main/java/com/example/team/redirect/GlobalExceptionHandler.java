@@ -22,7 +22,6 @@ import jakarta.servlet.http.HttpServletResponse;
 //            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 //    		return;
 //    	}
-//    	
 //        String redirectUrl = "/redirect" + requestUri;
 //        System.out.println(redirectUrl);
 //        // RequestDispatcher를 사용하여 포워딩

@@ -24,7 +24,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "BANNER")
 public class BannerImgEntity {
 	@Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)  // 기본 키 자동 생성
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)  // 기본 키 자동 생성
     @Column(name = "BAN_NO")  // PK를 ID로 사용
     private int banNo;      // 기본 키로 사용될 ID 필드
 	

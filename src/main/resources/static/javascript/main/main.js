@@ -10,9 +10,11 @@ $(async function() {
 		data: 'json',
 		success: (data) => {
 			data.forEach(function(silde) {
+				const imgUrl = displayImage(silde.ban_img);
+				
 				var text =
-				`<div class="banImg" data-code="${silde.link}" style="dispaly:none;">
-					<img src="${silde.base64Url}" style="height: 100%; width: 100%;">
+				`<div class="banImg" data-code="${silde.ban_code}" style="dispaly:none;">
+					<img src="${imgUrl}" style="height: 100%; width: 100%;">
 		        </div>`
 		        $('#adSlide').prepend(text);
 		        $('#adSlideTab').prepend(`<span class="bannerSwiper swiper-pagination-bullet"></span>`);
@@ -24,6 +26,19 @@ $(async function() {
 		}
 	})
 });
+
+function displayImage(base64Url) {
+	// Base64 문자열 디코딩
+	const byteString = atob(base64Url);
+	const ab = new Uint8Array(byteString.length);
+	for (let i = 0; i < byteString.length; i++) {
+	    ab[i] = byteString.charCodeAt(i);
+	}
+	// Blob 객체 생성
+	const blob = new Blob([ab], { type: 'image/png' });
+	const imageUrl = URL.createObjectURL(blob);
+	return imageUrl;
+}
 
 $(document).on('click', '.banImg', function() {
 	const code = $(this).attr('data-code');

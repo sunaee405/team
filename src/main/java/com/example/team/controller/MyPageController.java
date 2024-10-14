@@ -59,7 +59,7 @@ public class MyPageController {
 	private MyPageService myPageService;
 
 	private ObjectMapper objectMapper = new ObjectMapper();
-
+	
 	@GetMapping("/api/topLogout")
 	public ResponseEntity<?> logout(HttpSession session) {
 		System.out.println("로그아웃");
@@ -69,21 +69,25 @@ public class MyPageController {
 				.build();
 	}
 
-	@PostMapping("/insertBanner")
-	public ResponseEntity<?> insertBanner(@RequestParam("file") MultipartFile file) {
+	@PostMapping(consumes = "multipart/form-data", value = "/insertBanner")
+	public ResponseEntity<?> insertBanner(@RequestParam("files[]") MultipartFile[] files,
+									      @RequestParam("id[]") Integer[] ID,
+									      @RequestParam("BAN_CODE[]") String[] banCode) {
 		System.out.println("배너업로드");
+		
+		List<BannerImgEntity> entityList = new ArrayList<BannerImgEntity>();
+		for(int i = 0; i < files.length; i++) {
+			MultipartFile file = files[i];
+			try (ByteArrayOutputStream baos = new ByteArrayOutputStream();
+				ImageOutputStream ios = ImageIO.createImageOutputStream(baos)) {
+				// 클라이언트에서 업로드된 파일을 BufferedImage로 변환
+				BufferedImage bufferedImage = ImageIO.read(file.getInputStream());
 
-		try (ByteArrayOutputStream baos = new ByteArrayOutputStream();) {
-			// 클라이언트에서 업로드된 파일을 BufferedImage로 변환
-			BufferedImage bufferedImage = ImageIO.read(file.getInputStream());
-
-			// PNG 형식으로 변환하기 위한 ImageWriter 설정
-			Iterator<ImageWriter> writers = ImageIO.getImageWritersByFormatName("png");
-			ImageWriter writer = writers.next();
-			// 이미지 읽기
-			try (ImageOutputStream ios = ImageIO.createImageOutputStream(baos)) {
+				// PNG 형식으로 변환하기 위한 ImageWriter 설정
+				Iterator<ImageWriter> writers = ImageIO.getImageWritersByFormatName("png");
+				ImageWriter writer = writers.next();
+				// 이미지 읽기
 				writer.setOutput(ios);
-
 				// 이미지 파일 무손실 압축
 				ImageWriteParam param = writer.getDefaultWriteParam();
 				param.setCompressionMode(ImageWriteParam.MODE_EXPLICIT); // 압축 설정
@@ -94,31 +98,24 @@ public class MyPageController {
 
 				BannerImgEntity bannerImgEntity = new BannerImgEntity();
 				bannerImgEntity.setBanImg(baos.toByteArray());
-
-				myPageService.insertBanner(bannerImgEntity);
-			} finally {
-				// 닫기
-				writer.dispose();
-			}
-
-		} catch (IOException e) {
-			e.printStackTrace();
+				bannerImgEntity.setBanCode(banCode[i]);
+				bannerImgEntity.setBanNo(ID[i]);
+				entityList.add(bannerImgEntity);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}	
+			
+			myPageService.insertBanner(entityList);
+			
 		}
+		
 		return null;
 	}
 
 	@GetMapping("/getBanner")
 	public ResponseEntity<?> getBanner() {
 		List<BannerImgEntity> entity = myPageService.getBanner();
-		List<Map<String, Object>> data = new ArrayList();
-		for (int i = 0; i < entity.size(); i++) {
-			Map<String, Object> map = new HashMap<String, Object>();
-			String base64Url = "data:image/png;base64," + Base64.getEncoder().encodeToString(entity.get(i).getBanImg());
-			map.put("base64Url", base64Url);
-			map.put("link", entity.get(i).getBanCode());
-			data.add(map);
-		}
-		return ResponseEntity.ok().body(data);
+		return ResponseEntity.ok().body(entity);
 	}
 
 	// 공통코드 불러오기
@@ -173,8 +170,7 @@ public class MyPageController {
 		return (T) "실패";
 	}
 
-	// ========================================== 메인, TOP
-	// ======================================================
+	// ========================================== 메인, TOP ======================================================
 
 	// 상단영역 카테고리 불러오기
 	@GetMapping("/getCategory")
@@ -393,6 +389,24 @@ public class MyPageController {
 		System.out.println("채팅방삭제");
 		myPageService.deleteChatRoom(data);
 	}
+	
+	// ======================================= 관리자 페이지 연결 =============================================
+	@GetMapping("/adminAccess")
+	public ResponseEntity<String> adminAccess(HttpSession session) {
+		String id = (String)session.getAttribute("MEM_ID");
+		
+		System.out.println(URI.create("/admin/member/index"));
+		if("admin".equals(id.toLowerCase())) {
+			return ResponseEntity.status(HttpStatus.OK).body("/admin/member/index");
+		} else {
+			return ResponseEntity.status(HttpStatus.OK).body("/api/topLogout");
+		}
+	}
+	
+	
+	
+	
+	// ==================================== 문의글 관련 ================================================
 
 	// 재영 문의글 삭제
 	@PostMapping("/InquiryDelete")
