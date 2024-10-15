@@ -178,12 +178,12 @@
     </select>
     
     <select id="getInquiry" resultType="map">
-		
 	    SELECT  I.INQ_NO
 	    	  , I.MEM_NO 
 	          , I.INQ_TITLE
 	          , I.INQ_DATE
 	          , I.INQ_CONTENT
+	          , A.ANS_NO
 <!-- 	          , A.ANS_CONTENT -->
 <!-- 	          , A.ANS_DATE -->
 			  , CASE WHEN A.ANS_CONTENT IS NULL THEN '' END AS ANS_CONTENT
@@ -197,6 +197,27 @@
 	     WHERE  I.INQ_NO = #{INQ_NO};
 		        
     </select>
+    
+    <insert id="insertAnswer">
+    	INSERT INTO ANSWER ( INQ_NO
+	    				   , ANS_CONTENT
+	    				   )
+				    VALUES ( #{INQ_NO}
+				    	   , #{ANS_CONTENT}
+				    	   )
+	</insert>
+	
+    <delete id="deleteAnswer">
+        DELETE FROM  ANSWER
+              WHERE  ANS_NO = #{ANS_NO}
+    </delete>
+    
+    <update id="updateAnswer">
+    	 UPDATE  ANSWER
+    	 	SET  ANS_CONTENT = #{ANS_CONTENT}
+	      WHERE  ANS_NO 	 = #{ANS_NO}	
+	</update>
+    
 
 
 

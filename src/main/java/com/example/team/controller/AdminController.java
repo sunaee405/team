@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.team.model.MemberEntity;
@@ -239,6 +240,24 @@ public class AdminController {
     @GetMapping("inquiry/{inqNo}")
     public Map<String, Object> getInquiry(@PathVariable("inqNo") int inqNo) {
         return memberService.getInquiry(inqNo); // 조회
+    }
+    
+//  answer  ----------------------     
+    @PostMapping("answer/insert/{inqNo}")
+    public void insertAnswer(@PathVariable("inqNo") int inqNo, @RequestBody Map<String, Object> insert) {
+    	insert.put("INQ_NO", inqNo);
+        memberService.insertAnswer(insert); // 조회
+    }
+    
+ 	@PostMapping("answer/delete")
+ 	public void deleteAnswer(@RequestParam("ANS_NO") int ansNo) {
+ 		memberService.deleteAnswer(ansNo);
+ 	}
+ 	
+ 	@PostMapping("answer/update/{inqNo}")
+    public void updateAnswer(@PathVariable("inqNo") int inqNo, @RequestBody Map<String, Object> update) {
+ 		update.put("INQ_NO", inqNo);
+        memberService.updateAnswer(update); // 조회
     }
 
 }

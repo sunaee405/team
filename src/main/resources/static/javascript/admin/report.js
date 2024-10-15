@@ -14,13 +14,13 @@ $(document).ready(function() {
 	      constructor(props) {
 	        const el = document.createElement('input');
 	        const { maxLength } = props.columnInfo.editor.options;
-	        
+
 	        el.type = 'text';
 	        el.maxLength = maxLength;
 	        el.value = String(props.value);
 			
 			if (props.value !== ''){
-				el.disabled = props.columnInfo.editor.options.disabled;	
+				// el.disabled = props.columnInfo.editor.options.disabled;	
 			}
 			
 	        this.el = el;
@@ -68,13 +68,13 @@ $(document).ready(function() {
           header: '신고분류',
           name: 'REP_SECTION',
           filter: 'select',
-//          formatter: 'listItemText',
-//          editor: {
-//            type: 'select',
-//            options: {
-//              listItems: selectedSection, //동적으로 설정
-//            }
-//          }
+          formatter: 'listItemText',
+          editor: {
+            type: 'select',
+            options: {
+              listItems: selectedSection, //동적으로 설정
+            }
+          }
         },
    	    {
    	        header: '회원아이디',
@@ -118,7 +118,6 @@ $(document).ready(function() {
         },
       ]
     });
-    
     
 	// 그리드 이벤트 핸들러
     grid.on('beforeChange', ev => {
@@ -333,6 +332,7 @@ $(document).ready(function() {
         		});
 			}
 		}
+		
 		// SectionList를 셀렉트 박스의 옵션 형식으로 변환
 		selectedSection = SectionList.map(item => ({
 		    text: item.text,  // 표시할 텍스트
@@ -367,7 +367,7 @@ $(document).ready(function() {
 	                PRO_NO: item.productNo.pro_no,
 	                REP_CONTENT: item.REP_CONTENT, 
 	                REP_RESULT: item.resultDetail.DCO_ID,
-	                REP_SECTION: `${item.sectionDetail.DCO_ID}(${item.sectionDetail.DCO_VALUE})`,
+	                REP_SECTION: item.sectionDetail.DCO_ID,
 	                REP_STATUS: `${item.statusDetail.DCO_ID}(${item.statusDetail.DCO_VALUE})`,
 	                REP_DATE: item.REP_DATE,
 	            })));

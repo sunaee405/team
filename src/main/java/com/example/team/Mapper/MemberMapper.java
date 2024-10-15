@@ -41,4 +41,10 @@ public interface MemberMapper {
 	List<Map<String, Object>> getAllInquiry();
 
 	Map<String, Object> getInquiry(int INQ_NO);
+
+	public void insertAnswer(Map<String, Object> insert);
+	
+	public void deleteAnswer(int ANS_NO);
+
+	public void updateAnswer(Map<String, Object> update);
 }

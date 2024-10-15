@@ -264,5 +264,18 @@ public class MemberService {
 		return memberMapper.SelectNews();
 	}
 
+	public void insertAnswer(Map<String, Object> insert) {
+		memberMapper.insertAnswer(insert);
+	}
+	
+	public void deleteAnswer(int ANS_NO) {
+		memberMapper.deleteAnswer(ANS_NO);
+	}
+
+	public void updateAnswer(Map<String, Object> update) {
+		memberMapper.updateAnswer(update);
+		
+	}
+
 
 }
