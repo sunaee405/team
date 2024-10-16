@@ -45,7 +45,7 @@ $(function() {
                 </tr>
                 <tr>
                 	<th>이미지</th>
-                    <td>${data.PRO_IMG}</td>
+                    <td><a href="../../product/contentProduct?proNo=${data.PRO_NO}" target="_blank">이미지&판매글 보러가기</td>
                 </tr>
 	            `);
 	            

@@ -115,10 +115,28 @@ $(document).ready(function() {
 	                
 
 	            },
-	            error: function(xhr, status, error) {
-	                console.error('삭제 오류:', error);
-	                alert('삭제 실패! 오류: ' + error);
-	            }
+	            error: function(xhr) {
+			        console.error('삭제 오류:', xhr);
+			        let errorMessage;
+			
+			        // 서버에서 전달한 오류 메시지 확인
+			        if (xhr.status === 400) {
+						debugger;
+			            errorMessage = xhr.responseText || '삭제 실패! 외래 키 제약 조건을 확인하세요.';
+			        } else {
+						debugger;
+			            errorMessage = '삭제 실패! 오류 코드: ' + xhr.status + ', 메시지: ' + xhr.responseText;
+			        }
+			
+			        alert(errorMessage);
+			    }
+//	            error: function(xhr, status, error) {
+//	                console.error('삭제 오류:', error);
+//	                alert('삭제 실패! 오류: ' + error);
+//	                if (xhr.status === 400){
+//						alert('삭제 실패! 외래 키 제약 조건을 확인하세요.');
+//					}
+//	            }
 	        });
 	    }
 	});
@@ -140,7 +158,6 @@ $(document).ready(function() {
 	            alert(`"${dbData[i].MCO_ID}"는 이미 존재합니다. 다른 ID를 사용하세요.`);
 	            ev.changes[0].nextValue = "";
 	            grid.el.onfocus = true;
-	            debugger;
 	            return;
         	}
 		}

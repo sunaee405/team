@@ -110,10 +110,7 @@ $(function() {
 			            data: JSON.stringify(insert), // updates 객체를 JSON 문자열로 변환
 			            success: function(response) {
 			                alert('완료되었습니다.');
-			                // 각 셀의 텍스트 업데이트
-//			                $.each(insert, function(field, value) {
-//			                    $(`.editable[data-field="${field}"]`).text(value);
-//			                });
+			                loadInquiryData(inqNo);
 			            },
 			            error: function(error) {
 			                console.error('Error saving changes:', error);
@@ -134,7 +131,6 @@ $(function() {
 				        // ansNo 추가
     					update.ANS_NO = ansNo; // ansNo 변수를 insert 객체에 추가
 			    	});
-			    	debugger;
 			            //ajax 요청
 			            $.ajax({
 			            type: 'POST',
@@ -143,10 +139,7 @@ $(function() {
 			            data: JSON.stringify(update), // updates 객체를 JSON 문자열로 변환
 			            success: function(response) {
 			                alert('수정이 완료되었습니다.');
-			                // 각 셀의 텍스트 업데이트
-//			                $.each(insert, function(field, value) {
-//			                    $(`.editable[data-field="${field}"]`).text(value);
-//			                });
+			                loadInquiryData(inqNo);
 			            },
 			            error: function(error) {
 			                console.error('Error saving changes:', error);
@@ -168,7 +161,6 @@ $(function() {
 			url: `/InquiryDelete`, // 현재 상태에 따라 URL 선택
 	        type: 'POST',
 	        data: { INQ_NO: inqNo },
-//	        contentType: 'application/json',
 	        success: function(response) {
 	            alert('삭제되었습니다.'); // 성공 시 메시지
 	            window.location.href = 'list';//페이지 이동
@@ -188,9 +180,9 @@ $(function() {
 			url: `/admin/answer/delete`, // 현재 상태에 따라 URL 선택
 	        type: 'POST',
 	        data: { ANS_NO: ansNo },
-//	        contentType: 'application/json',
 	        success: function(response) {
 	            alert('답변이 삭제되었습니다.'); // 성공 시 메시지
+	            loadInquiryData(inqNo);
 	        },
 	        error: function(xhr, status, error) {
 	            // 오류 처리
@@ -205,3 +197,55 @@ $(function() {
 	       
 	
 });
+
+
+function loadInquiryData(inqNo) {
+    $.ajax({
+        type: 'GET',
+        url: `/admin/inquiry/${inqNo}`, // 상세 정보 API 엔드포인트
+        success: function(data) {
+            // 데이터 업데이트 로직 (상세 정보 가져오는 부분)
+            $('#inquiry-info').html(`
+                <tr>
+                    <th>번호</th>
+                    <td>${data.INQ_NO}</td>
+                </tr>
+                <tr>
+                    <th>*회원번호(클릭시 회원정보로 이동)</th>
+                    <td class="clickable" data-url="/admin/member/info?mem_no=${data.MEM_NO}">${data.MEM_NO}</td>
+                </tr>
+                <tr>
+                    <th>문의제목</th>
+                    <td data-field="INQ_TITLE">${data.INQ_TITLE}</td>
+                </tr>
+                <tr>
+                    <th>문의내용</th>
+                    <td class="editable" data-field="INQ_CONTENT"><span id="contentDisplay">${data.INQ_CONTENT}</span></td>
+                </tr>
+                <tr>
+                    <th>처리구분</th>
+                    <td data-field="RESULT">${data.RESULT}</td>
+                </tr>
+                <tr>
+                    <th>문의날자</th>
+                    <td data-field="INQ_DATE">${data.INQ_DATE}</td>
+                </tr>
+            `);
+            
+            $('#answer-info').html(`
+                <tr>
+                    <th>답변날자</th>
+                    <td data-field="ANS_DATE">${data.ANS_DATE}</td>
+                </tr>
+                <tr>
+                    <th>답변내용(*)</th>
+                    <td id="resultField" class="editable" data-field="ANS_CONTENT">${data.ANS_CONTENT}</td>
+                </tr>
+            `);
+        },
+        error: function(error) {
+            console.error('Error fetching inquiry details:', error);
+            alert('문의 정보를 가져오는 데 실패했습니다.');
+        }
+    });
+}

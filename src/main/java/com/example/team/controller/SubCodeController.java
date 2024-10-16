@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -54,9 +56,22 @@ public class SubCodeController {
     }
 
     @DeleteMapping
-    public void deleteSubCodes(@RequestBody List<Long> ids) {
-    	for (Long id : ids) {
-            subCodeService.delete(id); // 각 ID로 삭제 메서드 호출
+    public ResponseEntity<String> deleteSubCodes(@RequestBody List<Long> ids) {
+//    	for (Long id : ids) {
+//            subCodeService.delete(id); // 각 ID로 삭제 메서드 호출
+//        }
+    	
+    	try {
+            for (Long id : ids) {
+            	subCodeService.delete(id); // 각 ID로 삭제 메서드 호출
+            }
+            return ResponseEntity.ok("삭제되었습니다.");
+        } catch (DataIntegrityViolationException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("삭제 실패! 일부 항목은 외래 키 제약 조건으로 인해 삭제할 수 없습니다.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("서버 오류가 발생했습니다.");
         }
     }
 }

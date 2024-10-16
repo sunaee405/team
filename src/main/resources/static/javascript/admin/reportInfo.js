@@ -217,9 +217,7 @@ $(function() {
 				            success: function(response) {
 				                alert('수정이 완료되었습니다.');
 				                // 각 셀의 텍스트 업데이트
-				                $.each(updates, function(field, value) {
-				                    $(`.editable[data-field="${field}"]`).text(value);
-				                });
+				                fetchReportDetails(repNo);
 				            },
 				            error: function(error) {
 				                console.error('Error saving changes:', error);
@@ -255,3 +253,58 @@ $(function() {
 	});       
 	
 });
+
+function fetchReportDetails(repNo) {
+    $.ajax({
+        type: 'GET',
+        url: `/admin/report/${repNo}`,
+        success: function(data) {
+            $('#report-info').html(`
+                <tr>
+                    <th>번호</th>
+                    <td>${data.REP_NO}</td>
+                </tr>
+                <tr>
+                    <th>*회원 번호(클릭시 회원정보로 이동)</th>
+                    <td class="clickable" data-url="/admin/member/info?mem_no=${data.memberNo.mem_no}">${data.memberNo.mem_no}</td>
+                </tr>
+                <tr>
+                    <th>*상품 번호(클릭시 상품정보로 이동)</th>
+                    <td class="clickable" data-url="/admin/product/info?pro_no=${data.productNo.pro_no}">${data.productNo.pro_no}</td>
+                </tr>
+                <tr>
+                    <th>신고날자</th>
+                    <td data-field="REP_DATE">${data.REP_DATE}</td>
+                </tr>
+                <tr>
+                    <th>신고구분(*)</th>
+                    <td class="editable" data-field="REP_SECTION">${data.sectionDetail.DCO_ID}(${data.sectionDetail.DCO_VALUE})</td>
+                </tr>
+                <tr>
+                    <th>처리상태</th>
+                    <td id="statusField" data-field="REP_STATUS">${data.statusDetail.DCO_ID}(${data.statusDetail.DCO_VALUE})</td>
+                </tr>
+                <tr>
+                    <th>처리결과(*)</th>
+                    <td id="resultField" class="editable" data-field="REP_RESULT">${data.resultDetail.DCO_ID}(${data.resultDetail.DCO_VALUE})</td>
+                </tr>
+                <tr>
+                    <th>신고내용</th>
+                    <td class="editable" data-field="REP_CONTENT"><span id="contentDisplay">${data.REP_CONTENT}</span></td>
+                </tr>
+            `);
+
+            // 클릭 이벤트 핸들러
+            $(document).on('click', '.clickable', function() {
+                const url = $(this).data('url');
+                if (url) {
+                    window.location.href = url;
+                }
+            });
+        },
+        error: function(error) {
+            console.error('Error fetching report details:', error);
+            alert('신고 정보를 가져오는 데 실패했습니다.');
+        }
+    });
+}

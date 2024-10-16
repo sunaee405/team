@@ -40,22 +40,22 @@ $(function() {
                 // 데이터가 성공적으로 반환되면 테이블에 추가
 	            $('#news-info').html(`
 	            <tr>
-                    <th>*번호</th>
+                    <th>번호</th>
                     <td>${data.NEW_NO}</td>
                 </tr>
                 <tr>
-                    <th>섹션</th>
+                    <th>섹션(*)</th>
                     <td class="editable" data-field="NEW_SECTION">${data.detailCode.DCO_ID}(${data.detailCode.DCO_VALUE})</td>
                 </tr>
-                    <th>제목</th>
+                    <th>제목(*)</th>
                     <td class="editable" data-field="NEW_NAME">${data.NEW_NAME}</td>
                 </tr>
                 <tr>
-                    <th>*시간</th>
+                    <th>시간</th>
                     <td data-field="NEW_DATE">${data.NEW_DATE}</td>
                 </tr>
                 <tr>
-                	<th>내용</th>
+                	<th>내용(*)</th>
                 	<td class="editable" data-field="NEW_CONTENT"><span id="contentDisplay">${data.NEW_CONTENT}</span></td>
                 </tr>
 	            `);

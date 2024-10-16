@@ -12,29 +12,23 @@ $(function() {
                     <td>${data.mem_no}</td>
                     <th>아이디</th>
                     <td>${data.mem_id}</td>
-                    <th>회원등급</th>
-                    <td class="editable" data-field="mem_grade">${data.mem_grade}</td>
+                    <th>성별(*)</th>
+                    <td class="editable" data-field="mem_gender">${data.mem_gender}</td>
                 </tr>
                 <tr>
-                    <th>관리자유무</th>
-                    <td class="editable" data-field="isAdmin">${data.isAdmin}</td>
+                    <th>이름(*)</th>
+                    <td class="editable" data-field="mem_name">${data.mem_name}</td>
                     <th>닉네임</th>
                     <td>${data.mem_nick}</td>
-                    <th>전화번호</th>
+                    <th>전화번호(*)</th>
                     <td class="editable" data-field="mem_tel">${data.mem_tel}</td>
                 </tr>
                 <tr>
                     <th>이메일</th>
                     <td>${data.mem_email}</td>
-                    <th>비밀번호</th>
+                    <th>비밀번호(*)</th>
                     <td class="editable" data-field="mem_pw">${data.mem_pw}</td>
-                </tr>
-                <tr>
-                    <th>이름</th>
-                    <td class="editable" data-field="mem_name">${data.mem_name}</td>
-                    <th>성별</th>
-                    <td class="editable" data-field="mem_gender">${data.mem_gender}</td>
-                    <th>생년월일</th>
+                    <th>생년월일(*)</th>
                     <td class="editable" data-field="mem_birth">${data.mem_birth}</td>
                 </tr>
                 <tr>

@@ -124,10 +124,23 @@ $(document).ready(function() {
 	                
 
 	            },
-	            error: function(xhr, status, error) {
-	                console.error('삭제 오류:', error);
-	                alert('삭제 실패! 오류: ' + error);
-	            }
+	            error: function(xhr) {
+			        console.error('삭제 오류:', xhr);
+			        let errorMessage;
+			
+			        // 서버에서 전달한 오류 메시지 확인
+			        if (xhr.status === 400) {
+			            errorMessage = xhr.responseText || '삭제 실패! 외래 키 제약 조건을 확인하세요.';
+			        } else {
+			            errorMessage = '삭제 실패! 오류 코드: ' + xhr.status + ', 메시지: ' + xhr.responseText;
+			        }
+			
+			        alert(errorMessage);
+			    }
+//	            error: function(xhr, status, error) {
+//	                console.error('삭제 오류:', error);
+//	                alert('삭제 실패! 오류: ' + error);
+//	            }
 	        });
 	    }
 	});
