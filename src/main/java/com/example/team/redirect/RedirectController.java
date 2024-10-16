@@ -18,6 +18,7 @@ public class RedirectController {
 		
 		String pageUrl = request.getRequestURI();
 		pageUrl = pageUrl.replace("/redirect", "");
+		System.out.println(pageUrl);
 		
 		
 	    return pageUrl;

@@ -2,6 +2,8 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version '3.3.3'
 	id 'io.spring.dependency-management' version '1.1.6'
+	// TODO
+	id 'war'
 }
 
 group = 'com.example'
@@ -52,6 +54,9 @@ dependencies {
 	
 	// LOCALDATE타입 JSON 문자열 변환
 	implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.15.2'
+	
+	// TODO
+	providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
 }
 
 tasks.named('test') {

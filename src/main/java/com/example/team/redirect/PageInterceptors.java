@@ -22,11 +22,11 @@ public class PageInterceptors implements WebMvcConfigurer {
         		.addResourceLocations("classpath:/static/");
 	}
 	
-	@Bean
-	public FilterRegistrationBean<AjaxFilter> requestFilter() {
-		FilterRegistrationBean<AjaxFilter> fiBean = new FilterRegistrationBean<>();
-		fiBean.setFilter(new AjaxFilter());
-		fiBean.addUrlPatterns("/*");
-		return fiBean;
-	}
+//	@Bean
+//	public FilterRegistrationBean<AjaxFilter> requestFilter() {
+//		FilterRegistrationBean<AjaxFilter> fiBean = new FilterRegistrationBean<>();
+//		fiBean.setFilter(new AjaxFilter());
+//		fiBean.addUrlPatterns("/*");
+//		return fiBean;
+//	}
 }
