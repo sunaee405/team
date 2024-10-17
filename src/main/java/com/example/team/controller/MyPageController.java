@@ -395,12 +395,8 @@ public class MyPageController {
 	public ResponseEntity<String> adminAccess(HttpSession session) {
 		String id = (String)session.getAttribute("MEM_ID");
 		
-		System.out.println(URI.create("/admin/member/index"));
-		if("admin".equals(id.toLowerCase())) {
-			return ResponseEntity.status(HttpStatus.OK).body("/admin/member/index");
-		} else {
-			return ResponseEntity.status(HttpStatus.OK).body("/api/topLogout");
-		}
+		String url = "admin".equals(id.toLowerCase()) ? "/admin/member/list" : "/api/topLogout";
+		return ResponseEntity.status(HttpStatus.OK).body(url);
 	}
 	
 	

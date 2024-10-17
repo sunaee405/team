@@ -1,0 +1,57 @@
+/* 사이드바 */
+.sidebar {
+    background-color: #ffffff; 
+    color: #ffffff; 
+    font-family: 'Roboto', 'Noto Sans KR', sans-serif; 
+}
+
+.sidebar .nav-link {
+    color: #ffffff; /* 링크의 기본 색상 어두운 회색 */
+    font-size: 15px; /* 폰트 크기 조절 */
+}
+
+.sidebar .nav-link:hover {
+    color: #FF4500; /* 호버 시 부드러운 주황색으로 변경 */
+}
+
+.sidebar .sidebar-heading {
+    color: #ffffff; 
+    font-weight: bold;
+    margin-top: 20px;
+}
+
+.sidebar .sidebar-brand {
+    color: #ffffff; 
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.sidebar .collapse-item {
+    color: #333333; /* 내부 메뉴 아이템도 어두운 회색 */
+}
+
+.sidebar .collapse-item:hover {
+    color: #FF4500; /* 호버 시 부드러운 주황색으로 변경 */
+}
+
+.sidebar-divider {
+    border-top: 1px solid #DDDDDD; /* 구분선 연한 회색 */
+}
+
+/* 사이드바 토글 버튼 */
+#sidebarToggle {
+    background-color: #FF4500; /* 토글 버튼 주황색 */
+    border: none;
+};
+
+/* .bg-gradient-sidebar { */
+/*   background-color: #b71c1c !important; 어두운 빨간색 */
+/*   background-image: linear-gradient(180deg, #d32f2f 10%, #880e4f 100%) !important; 중간 밝기의 빨간색에서 자주색으로 그라데이션 */
+/*   background-size: cover !important; */
+/* } */
+
+.bg-gradient-sidebar {
+  background-color: #b71c1c !important; /* 어두운 빨간색 */
+  background-image: linear-gradient(180deg, #d32f2f 40%, #606060 100%) !important; /* 중간 밝기의 빨간색 -> 회색 -> 자주색으로 그라데이션 */
+  background-size: cover !important;
+}

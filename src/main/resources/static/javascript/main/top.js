@@ -93,7 +93,19 @@ function getCategory() {
 // 로그인 유무 확인
 $(document).on('sessionLoaded', function() {
 	const memId = sessionStorage.getItem('memId');
-	if(memId !==null && memId.length !== 0) {
+	if(memId !==null && memId.toLocaleLowerCase === 'admin'.toLocaleLowerCase) {
+		var text =
+		`
+		<li class="relative flex flex-1 pl-3">
+			<a class="flex items-center justify-center [&amp;>p]:ml-1" href="/admin/member/list">
+				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" size="24"><path stroke="#141313" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16.775 7.716a3.619 3.619 0 1 1-7.238.005 3.619 3.619 0 0 1 7.238-.005M13.15 13.371c-4.026 0-7.298 3.184-7.4 7.145h14.8c-.102-3.961-3.374-7.145-7.4-7.145"></path></svg>
+				<p id="myTab">관리자</p>
+			</a>
+		</li>
+		`
+		$('.ckTab').replaceWith(text);
+		
+	} else if(memId !==null && memId.length !== 0) {
 		var text = `<ul id="myPageTab" class="border border-jnGray-300 z-10 text-xs text-center font-medium bg-white rounded-lg absolute flex flex-col justify-center top-[30px] right-[23px] w-[100px] [&amp;>li]:mx-2 [&amp;>li]:border-b [&amp;>li]:border-jnGray-200 [&amp;>li:last-of-type]:border-b-0" style="display:none;">
 					    <li class="pt-3 pb-2 ga4_main_top_menu">
 					   		<a href="/myPage/myPage">

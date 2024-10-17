@@ -206,9 +206,6 @@ public class AdminController {
     public ResponseEntity<ReportEntity> updateReport(
     		@PathVariable("repNo") Long repNo, 
     		@RequestBody Map<String, Object> updates) {
-    	System.out.println("@@@@@@@@@@@@@@@@@@@@@@@");
-    	System.out.println(updates);
-    	System.out.println(repNo);
     	// 서비스 메서드를 호출하여 업데이트
     	ReportEntity updateReport = reportService.updateReport(repNo, updates);
     	
