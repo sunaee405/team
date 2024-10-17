@@ -27,7 +27,7 @@
 			, P.PRO_TITLE
 			, P.PRO_TYPE
 			, P.PRO_CONTENT
-			, P.PRO_IMG
+			, SUBSTRING_INDEX(P.PRO_IMG, ',', 1) AS PRO_IMG
 		FROM PRODUCT P
 		<choose>
 			<when test="SELECT_TYPE == '찜한상품'">
@@ -99,7 +99,7 @@
 			, PRO_TITLE
 			, PRO_TYPE
 			, PRO_CONTENT
-			, PRO_IMG
+			, SUBSTRING_INDEX(PRO_IMG, ',', 1) AS PRO_IMG
 		FROM PRODUCT
 		WHERE PRO_STATUS = 'STD1'
 		<choose>
