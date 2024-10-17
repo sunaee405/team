@@ -254,7 +254,7 @@ function forProductList(key, typeValue, data) {
 	let productList =
 		`<a href="/product/contentProduct?proNo=${data.PRO_NO}" class="productLink relative group box-border overflow-hidden flex rounded-md cursor-pointer pe-0 pb-2 lg:pb-3 flex-col items-start transition duration-200 ease-in-out transform bg-white ga4_main_latest_product">
 			<div class="relative w-full rounded-md overflow-hidden dim pt-[100%] mb-3 md:mb-3.5">
-				<img alt="${data.PRO_TITLE}" referrerpolicy="no-referrer" src="/static/${data.PRO_IMG}?impolicy=thumb&amp;size=150" decoding="async" data-nimg="fill" class="bg-gray-300 object-cover h-full group-hover:scale-105 w-full transition duration-200 ease-in rounded-md" loading="lazy" style="position:absolute;height:100%;width:100%;left:0;top:0;right:0;bottom:0;color:transparent">
+				<img alt="${data.PRO_TITLE}" referrerpolicy="no-referrer" src="/images/${data.PRO_IMG}?impolicy=thumb&amp;size=150" decoding="async" data-nimg="fill" class="bg-gray-300 object-cover h-full group-hover:scale-105 w-full transition duration-200 ease-in rounded-md" loading="lazy" style="position:absolute;height:100%;width:100%;left:0;top:0;right:0;bottom:0;color:transparent">
 			</div>
 			<div class="w-full overflow-hidden p-2 md:px-2.5 xl:px-4">
 				<h2 class="line-clamp-2 min-h-[2lh] text-sm md:text-base">${data.PRO_TITLE}</h2>
