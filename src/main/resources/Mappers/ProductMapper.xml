@@ -309,14 +309,18 @@
 	<insert id="insertReport">
         INSERT INTO REPORT (MEM_NO
         	 , PRO_NO
-<!--         	 , REP_DATE -->
+        	 , REP_DATE
         	 , REP_CONTENT
-        	 , REP_SECTION)
+        	 , REP_SECTION
+        	 , REP_RESULT
+        	 , REP_STATUS)
         VALUES (#{memNo}
              , #{proNo}
-<!--              , NOW() -->
+             , NOW()
              , #{reportDescription}
-             , #{categoryDcoId})
+             , #{categoryDcoId}
+             , 'RRD3'
+             , 'RSD1')
     </insert>
 	
 	<select id="getCountReport"  resultType="int">

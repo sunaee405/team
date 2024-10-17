@@ -18,8 +18,8 @@ $(document).ready(function() {
 				const imageUrl = '/images/' + image;
 				imageSlides += `
                     <div class="swiper-slide">
-                        <img src="${imageUrl}" alt="Product Image" class="object-cover w-full h-full">
-                    </div>
+    					<img src="${imageUrl}" alt="Product Image" decoding="async" class="bg-gray-300 object-cover w-full h-full transition duration-200 ease-in rounded-md group-hover:scale-105" style="position:absolute;width:100%;height:100%;left:0;top:0;right:0;bottom:0;color:transparent;">
+					</div>
                 `;
 			});
 
@@ -272,16 +272,16 @@ $(document).ready(function() {
 						// 숨겨둔 memNo
 						otherProductHtml += `
             				<li class="flex py-3 h-[160px] overflow-hidden">
-                				<a href="${productUrl}" rel="sponsored noreferrer" class="mr-3 flex justify-center items-start min-w-[120px] relative">
-                    				<img src="${imageUrl}" width="120" height="120" decoding="async" data-nimg="1" class="transition duration-150 ease-linear transform rounded-md cursor-pointer hover:scale-105" style="color: transparent;">
-                				</a>
-                				<div class="flex flex-col justify-start gap-1 py-1 break-all">
-                    				<h3>${product.pro_title}</h3>
-                    				<div class="flex gap-1 items-center">
-                        				<strong class="text-black">${product.pro_price + '원'}</strong>
-                    				</div>
-                				</div>
-            				</li>
+    							<a href="${productUrl}" rel="sponsored noreferrer" class="mr-3 flex justify-center items-start min-w-[120px] relative">
+        							<img src="${imageUrl}" width="120" height="120" decoding="async" data-nimg="1" class="transition duration-150 ease-linear transform rounded-md cursor-pointer hover:scale-105" style="color: transparent;height: 120px;">
+    							</a>
+    						<div class="flex flex-col justify-start gap-1 py-1 break-all w-full">
+        						<h3 class="w-full">${product.pro_title}</h3>
+        						<div class="flex gap-1 items-center w-full">
+            						<strong class="text-black">${product.pro_price + '원'}</strong>
+       						 	</div>
+    						</div>
+							</li>
             				<input type="hidden" id="selMember" name="" value="${memNo}"> 
         				`;
 					});
@@ -323,9 +323,9 @@ $(document).ready(function() {
 						const productUrl = '/product/contentProduct?proNo=' + product.pro_no;
 
 						otherProductHtml2 += `
-            				<li class="flex py-3 h-[160px] overflow-hidden">
+            				<li class="flex py-3 h-[120px] overflow-hidden">
                 				<a href="${productUrl}" rel="sponsored noreferrer" class="mr-3 flex justify-center items-start min-w-[120px] relative">
-                    				<img src="${imageUrl}" width="120" height="120" decoding="async" data-nimg="1" class="transition duration-150 ease-linear transform rounded-md cursor-pointer hover:scale-105" style="color: transparent;">
+                    				<img src="${imageUrl}" width="120" height="120" decoding="async" data-nimg="1" class="transition duration-120 ease-linear transform rounded-md cursor-pointer hover:scale-105" style="color: transparent;height: 120px;">
                 				</a>
                 				<div class="flex flex-col justify-start gap-1 py-1 break-all">
                     				<h3>${product.pro_title}</h3>

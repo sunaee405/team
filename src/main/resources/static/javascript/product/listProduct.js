@@ -349,7 +349,7 @@ $(document).ready(function() {
 		// 하위 지역 초기화
 		currentLocationDcoId = '';
 		$('#sub-location-filter').remove(); // 하위 지역 목록 제거
-		
+
 		// 상위 지역 전체로 설정
 		currentStatusId = '';
 		$('#status-filter a').removeClass('active');
@@ -428,7 +428,7 @@ $(document).ready(function() {
 			type: 'GET',
 			data: {
 				page: page,
-				size: 5, // 페이지당 20개의 상품을 가져옴
+				size: 20, // 페이지당 20개의 상품을 가져옴
 				sortType: currentSortType, // 선택한 정렬 기준을 서버로 전송
 				categoryId: currentCategoryId, // 선택한 카테고리 ID를 서버로 전송
 				locationScoId: currentLocationScoId, // 선택한 상위 지역 SCO_ID 전송
@@ -475,9 +475,9 @@ $(document).ready(function() {
                     <li class="">
                         <div>
                             <a class="relative group box-border overflow-hidden flex rounded-md cursor-pointer pe-0 pb-2 lg:pb-3 flex-col items-start transition duration-200 ease-in-out transform bg-white" href="/product/contentProduct?proNo=${product.PRO_NO}">
-                                <div class="relative w-full rounded-md overflow-hidden dim pt-[0%] mb-3 md:mb-3.5">
-                                    <img src="${imageUrl}" alt="Product Image">
-                                </div>
+                                <div class="relative w-full rounded-md overflow-hidden dim pt-[0%] mb-3 md:mb-3.5" style="width: 233.59px; height: 233.59px;">
+    								<img src="${imageUrl}" alt="Product Image" decoding="async" class="bg-gray-300 object-cover w-full h-full transition duration-200 ease-in rounded-md group-hover:scale-105" style="position:absolute;width:100%;height:100%;left:0;top:0;right:0;bottom:0;color:transparent;">
+								</div>
                                 <div class="w-full overflow-hidden p-2 md:px-2.5 xl:px-4">
                                     <h2 class="line-clamp-2 min-h-[2lh] text-sm md:text-base">${product.PRO_TITLE}</h2>
                                     <div class="font-semibold space-s-2 mt-0.5 text-heading lg:text-lg lg:mt-1.5">
