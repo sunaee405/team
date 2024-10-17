@@ -161,8 +161,6 @@ $(function() {
 				    $('#saveButton').off('click').on('click', function() {
 						const updates = {};
 						
-//						const resultDetailText = $('#resultField').text();
-//						const resId = resultDetailText.split('(')[0].trim(); // 괄호 앞의 값만 가져옴
 						let newStatus;
 					    
 				        // 각 입력 필드를 찾아서 값을 수집

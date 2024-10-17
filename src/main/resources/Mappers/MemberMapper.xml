@@ -188,8 +188,8 @@
       		  , COALESCE(A.ANS_DATE, '') AS ANS_DATE
 			  , CASE WHEN A.ANS_CONTENT IS NULL THEN '' END AS ANS_CONTENT
               , CASE WHEN A.ANS_DATE IS NULL THEN '' END AS ANS_DATE
-	          , CASE WHEN A.ANS_CONTENT IS NULL THEN '처리 전' 
-	         									ELSE '답변 완료'
+	          , CASE WHEN A.ANS_NO IS NULL THEN '처리 전' 
+	         							   ELSE '답변 완료'
 	      	    END AS RESULT
 	      FROM  INQUIRY I
 	 LEFT JOIN  ANSWER A 
