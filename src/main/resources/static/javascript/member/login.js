@@ -345,11 +345,8 @@ $(document).ready(function() {
 					sessionStorage.setItem('MEM_ID', response.MEM_ID);
 					window.location.href = '/myPage/main'; // 성공 시 페이지 이동
 				} else {
-					$('#loginMessage').text('일치하는 아이디, 비밀번호가 없습니다.');
+					alert("일치하는 아이디,비밀번호가 없습니다");
 				}
-			},
-			error: function() {
-				$('#loginMessage').text('서버 오류가 발생했습니다.');
 			}
 		});
 

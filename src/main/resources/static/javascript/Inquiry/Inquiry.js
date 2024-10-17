@@ -38,16 +38,27 @@ $(document).ready(function() {
                 cursor: pointer;
                 font-size: 16px;
             }
+            .category {
+                display: inline-block;
+                margin-right: 20px;
+                font-weight: bold;
+                font-size: 20px;
+                color: gray; /* 기본 색상 회색 */
+                cursor: pointer;
+            }
+            .active-category {
+                color: black; /* 클릭한 카테고리 색상 */
+            }
         </style>
         
         <div class="container" style="max-width: 800px; margin: 0 auto; padding: 20px;">
             <h2 style="font-size: 30px; font-weight: bold; margin-bottom: 20px; margin-top: 20px; text-align: left; color: black;">
-                자주 찾는 질문
+                QNA
             </h2>
             <div style="border-bottom: 3px solid #000; margin-bottom: 20px; margin-top: 10px;"></div> <!-- 상단 여백 추가 -->
             
-            <ul class="faq-list" id="faqList">
-            </ul>
+            <div id="categoryContainer"></div> <!-- 카테고리 영역 -->
+            <ul class="faq-list" id="faqList"></ul> <!-- FAQ 목록 -->
         </div>
     `;
 
@@ -60,38 +71,75 @@ $(document).ready(function() {
         type: 'GET',
         dataType: 'json',
         success: function(data) {
-            // 뉴스 목록 추가
+            // 카테고리별로 그룹화
+            let categories = {};
+
             data.forEach(function(item) {
-                $('#faqList').append(`<li class="faq-item">${item.NEW_NAME}</li>`);
+                const category = item.DCO_VALUE; // 카테고리 값
+
+                if (!categories[category]) {
+                    categories[category] = [];
+                }
+                categories[category].push(item);
             });
 
-            // li 클릭 이벤트 처리
-            $('.faq-item').on('click', function() {
-                // 클릭한 li의 제목을 가져오기
-                const selectedTitle = $(this).text();
+            // 카테고리 추가
+            for (const category in categories) {
+                $('#categoryContainer').append(`<div class="category" data-category="${category}">${category}</div>`);
+            }
 
-                // 선택된 뉴스 항목의 내용 및 날짜를 가져오기
-                const selectedNewsItem = data.find(item => item.NEW_NAME === selectedTitle);
-
-                // 내용 표시
-                const newsContent = `
-                    <div class="news-detail">
-                        <h3>${selectedNewsItem.NEW_NAME}</h3>
-                        <p>${selectedNewsItem.NEW_CONTENT}</p>
-                        <p>게시일: ${new Date(selectedNewsItem.NEW_DATE).toLocaleDateString()}</p>
-                    </div>
-                    <button class="back-button" id="backButton">뒤로가기</button>
-                `;
-
-                // 기존 내용 지우고 세부 내용으로 교체
-                $('.container').empty().append(faqPage).append(newsContent);
-
-                // 뒤로가기 버튼 클릭 이벤트
-                $('#backButton').on('click', function() {
-                    // Inquiry 페이지로 이동
-                    window.location.href = "http://localhost:8080/Inquiry/Inquiry";
-                });
+            // 기본 카테고리 클릭 이벤트
+            $('.category').on('click', function() {
+                const selectedCategory = $(this).data('category');
+                updateNewsList(categories[selectedCategory]);
+                $('.category').removeClass('active-category');
+                $(this).addClass('active-category');
             });
+
+            // 기본 카테고리의 첫 번째 항목 로드
+            if (Object.keys(categories).length > 0) {
+                const firstCategory = Object.keys(categories)[0];
+                $('.category[data-category="' + firstCategory + '"]').click(); // 첫 번째 카테고리 클릭
+            }
+        },
+        error: function(err) {
+            console.error('뉴스를 가져오는 데 실패했습니다.', err);
         }
     });
+
+    function updateNewsList(items) {
+        $('#faqList').empty(); // 기존 목록 비우기
+
+        items.forEach(function(item) {
+            $('#faqList').append(`<li class="faq-item" data-new-name="${item.NEW_NAME}">${item.NEW_NAME}</li>`);
+        });
+
+        // 뉴스 클릭 이벤트 처리
+        $('.faq-item').off('click').on('click', function() {
+            const selectedTitle = $(this).data('new-name');
+            const selectedNewsItem = items.find(item => item.NEW_NAME === selectedTitle);
+            showNewsDetail(selectedNewsItem);
+        });
+    }
+
+    // 뉴스 세부 사항을 보여주는 함수
+    function showNewsDetail(item) {
+        const newsContent = `
+            <div class="news-detail">
+                <h3>${item.NEW_NAME}</h3>
+                <p>${item.NEW_CONTENT}</p>
+                <p>게시일: ${new Date(item.NEW_DATE).toLocaleDateString()}</p>
+            </div>
+            <button class="back-button" id="backButton">뒤로가기</button>
+        `;
+
+        // 기존 내용 지우고 세부 내용으로 교체
+        $('.container').empty().append(faqPage).append(newsContent);
+
+        // 뒤로가기 버튼 클릭 이벤트
+        $('#backButton').on('click', function() {
+            // Inquiry 페이지로 이동
+            window.location.href = "http://localhost:8080/Inquiry/Inquiry";
+        });
+    }
 });
