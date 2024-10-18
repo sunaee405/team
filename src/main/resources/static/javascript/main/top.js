@@ -93,7 +93,8 @@ function getCategory() {
 // 로그인 유무 확인
 $(document).on('sessionLoaded', function() {
 	const memId = sessionStorage.getItem('memId');
-	if(memId !==null && memId.toLocaleLowerCase === 'admin'.toLocaleLowerCase) {
+	debugger;
+	if(memId !==null && memId.toLocaleLowerCase() === 'admin'.toLocaleLowerCase()) {
 		var text =
 		`
 		<li class="relative flex flex-1 pl-3">

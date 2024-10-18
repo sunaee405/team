@@ -251,7 +251,6 @@ function forProductList(key, typeValue, data) {
 		}
 	}
 	
-	debugger;
 	
 	let productList =
 		`<a href="/product/contentProduct?proNo=${data.PRO_NO}" class="productLink relative group box-border overflow-hidden flex rounded-md cursor-pointer pe-0 pb-2 lg:pb-3 flex-col items-start transition duration-200 ease-in-out transform bg-white ga4_main_latest_product">
