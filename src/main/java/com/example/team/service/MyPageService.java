@@ -36,7 +36,7 @@ public class MyPageService {
 	
 	// 상품 카테고리
 	public List<Map<String, Object>> getCategory() {
-		return productMapper.getProductCategory();
+		return myPageMapper.getMenuCategory();
 	}
 	
 	

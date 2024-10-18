@@ -32,11 +32,13 @@ $(window.parent).on('load', function() {
 			
 			
 			clearInterval(checkReadyInterval); // 이벤트 삭제
-			
 			// 검색어 || 카테고리 || 정렬 전달
 	        const searchData = sessionStorage.getItem('searchText');
 	        const detailCode = sessionStorage.getItem('detailCode');
-	        $(window.parent.document).find(`[data-id="${detailCode}"]`).trigger('click');
+	        
+	        $(window.parent.document).find(`[data-id="${detailCode}"]`).trigger('click'); // 상품 페이지 클릭 이벤트
+	        debugger;
+	        $(window.parent.document).find(`[data-category="${detailCode}"]`).trigger('click'); // 고객센터 카테고리 클릭
 	        $(window.parent.document).find('#search-input').val(searchData).trigger('input');
 	        
 	        // 스토리지에서 두 데이터 삭제
@@ -46,18 +48,24 @@ $(window.parent).on('load', function() {
 	        // 로딩 삭제
 	        setTimeout(() => $('#loading-screen').remove(), 500);
 	    }
-	    
 	}, 100); // 0.1초마다
 });
 
 
-// 탭 || 메인페이지 배너 클릭시 상품리스트의 해당 카테고리로 이동 
+// 메인페이지 탭 클릭시 상품리스트의 해당 카테고리로 이동 
 $(document).on('click', '.pageNav', function() {
 	const detailCode = $(this).attr('data-code');
 	sessionStorage.setItem("detailCode", detailCode);
-	
-	location.href = "/product/listProduct";
+	const scoId = $(this).attr('data-type').toLowerCase();
+	let hrefLink;
+	switch(scoId) {
+		case 'prs': hrefLink = '/product/listProduct'; break;
+		case 'nss': hrefLink = '/Inquiry/Inquiry'; break;
+		default: hrefLink = '/';
+	}
+	location.href = hrefLink; 
 });
+
 
 
 
@@ -73,11 +81,23 @@ function getCategory() {
         url: '/getCategory',
         dataType: 'json',
         success: (data) => {
-            data.forEach((data) => {
-                let htmlText = 
-                    `<div class="menuItem group cursor-pointer ">
-						<a data-code="${data.DCO_ID}" href="javascript:void(0);" class="pageNav ga4_main_gnb relative inline-flex items-center px-3 py-3 text-sm font-normal xl:text-base text-heading xl:px-4 group-hover:text-black" style="text-align: center;">${data.DCO_VALUE}</a>
+            data.forEach((item) => {
+				let htmlText;
+				const scoId = item.SCO_ID.toLowerCase();
+				const prevId = $('.menuItem:last>a').attr('data-type');
+				if(prevId != null && scoId != prevId) $('.headerMenu').append('<div style="transter">/</div>');
+				if(scoId === 'PRS'.toLowerCase()) {
+					htmlText = 
+                    `<div class="menuItem group cursor-pointer">
+						<a data-type="${scoId}" data-code="${item.DCO_ID}" href="javascript:void(0);" class="pageNav ga4_main_gnb relative inline-flex items-center px-3 py-3 text-sm font-normal xl:text-base text-heading xl:px-4 group-hover:text-black" style="text-align: center;">${item.DCO_VALUE}</a>
 					 </div>`;
+				} else if(scoId === 'NSS'.toLowerCase()) {
+					htmlText = 
+                    `<div class="menuItem group cursor-pointer ">
+						<a data-type="${scoId}" data-code="${item.DCO_VALUE}" javascript:void(0);" class="pageNav ga4_main_gnb relative inline-flex items-center px-3 py-3 text-sm font-normal xl:text-base text-heading xl:px-4 group-hover:text-black" style="text-align: center;">${item.DCO_VALUE}</a>
+					 </div>`;
+				}
+				
                 $('.headerMenu').append(htmlText);
             });
         },
