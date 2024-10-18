@@ -93,7 +93,6 @@ function getCategory() {
 // 로그인 유무 확인
 $(document).on('sessionLoaded', function() {
 	const memId = sessionStorage.getItem('memId');
-	debugger;
 	if(memId !==null && memId.toLocaleLowerCase() === 'admin'.toLocaleLowerCase()) {
 		var text =
 		`

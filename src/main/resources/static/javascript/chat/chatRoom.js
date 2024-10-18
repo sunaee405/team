@@ -1,4 +1,4 @@
-const socket = new WebSocket('ws://localhost:8080/chat'); // 소켓 연결
+const socket = new WebSocket('wss://localhost:8080/chat'); // 소켓 연결
 const memberNum = sessionStorage.getItem('memNo');
 $(async function() {
 	
@@ -129,16 +129,17 @@ $(async function() {
 	}
 });
 
-// 채팅창 엔터누를시 메시지 전송
-
-$(document).on('keyup', "#inputBox", function(a, b, c, d, e) {
+// 채팅창 엔터누를시 메시지 전송 이벤트 호출
+$(document).on('keyup', "#inputBox", function(event) {
 	var str = $(this).val();
 	if(str.trim().length == 0) return;
-	if(a.originalEvent.key === "Enter") {
+	if(event.originalEvent.key === "Enter") {
 		$('.btn-success').trigger('click');
 	}
 });
 
+
+// 창 닫힐때 채팅 내역이 없으면 채팅창 삭제
 $(window).on('beforeunload', function() {
 	const chaNo = $('.chat').attr('data-rnum');
 	if($('.message-container > .message').length !== 0) return;
@@ -151,7 +152,7 @@ $(window).on('beforeunload', function() {
 });
 
 
-
+// 채팅메시지 전송 이벤트
 $(document).on('click', ".btn-success", function() {
 	const chatRoomNo = $(".chat").attr("data-rNum");
 	const content = $("#inputBox").val();
