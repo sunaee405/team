@@ -111,13 +111,16 @@ public class ProductController {
 	@PostMapping("/insertProduct")
 	@ResponseBody
 	public ResponseEntity<?> insertProduct(@RequestParam("media") MultipartFile[] media,
-			@RequestParam Map<String, String> params) throws Exception {
+										   @RequestParam Map<String, String> params) throws Exception {
 
 		// 집
 //		String desktopPath = "C:\\Users\\Anibal\\Desktop\\upload";
 
 		// 파일 저장 경로 설정
-		String desktopPath = "C:\\Users\\ITWILL\\Desktop\\upload";
+//		String desktopPath = "C:\\Users\\ITWILL\\Desktop\\upload";
+		
+		// 배포 
+		String desktopPath = "/usr/local/tomcat/webapps/team/img/";
 		List<String> savedFileNames = new ArrayList<>();
 
 		for (MultipartFile file : media) {
@@ -215,7 +218,7 @@ public class ProductController {
 	public ResponseEntity<?> updateProduct(@RequestParam(value = "media", required = false) MultipartFile[] media,
 			@RequestParam Map<String, String> params) throws Exception {
 
-		String desktopPath = "C:\\Users\\ITWILL\\Desktop\\upload";
+		String desktopPath = "/usr/local/tomcat/webapps/team/img/";
 		List<String> savedFileNames = new ArrayList<>();
 
 		// 새로 업로드된 파일 처리
