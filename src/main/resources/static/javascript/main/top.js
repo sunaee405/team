@@ -37,7 +37,6 @@ $(window.parent).on('load', function() {
 	        const detailCode = sessionStorage.getItem('detailCode');
 	        
 	        $(window.parent.document).find(`[data-id="${detailCode}"]`).trigger('click'); // 상품 페이지 클릭 이벤트
-	        debugger;
 	        $(window.parent.document).find(`[data-category="${detailCode}"]`).trigger('click'); // 고객센터 카테고리 클릭
 	        $(window.parent.document).find('#search-input').val(searchData).trigger('input');
 	        
@@ -84,19 +83,37 @@ function getCategory() {
             data.forEach((item) => {
 				let htmlText;
 				const scoId = item.SCO_ID.toLowerCase();
-				const prevId = $('.menuItem:last>a').attr('data-type');
-				if(prevId != null && scoId != prevId) $('.headerMenu').append('<div style="transter">/</div>');
-				if(scoId === 'PRS'.toLowerCase()) {
-					htmlText = 
-                    `<div class="menuItem group cursor-pointer">
-						<a data-type="${scoId}" data-code="${item.DCO_ID}" href="javascript:void(0);" class="pageNav ga4_main_gnb relative inline-flex items-center px-3 py-3 text-sm font-normal xl:text-base text-heading xl:px-4 group-hover:text-black" style="text-align: center;">${item.DCO_VALUE}</a>
-					 </div>`;
-				} else if(scoId === 'NSS'.toLowerCase()) {
-					htmlText = 
-                    `<div class="menuItem group cursor-pointer ">
-						<a data-type="${scoId}" data-code="${item.DCO_VALUE}" javascript:void(0);" class="pageNav ga4_main_gnb relative inline-flex items-center px-3 py-3 text-sm font-normal xl:text-base text-heading xl:px-4 group-hover:text-black" style="text-align: center;">${item.DCO_VALUE}</a>
-					 </div>`;
+//				const prevId = $('.menuItem:last>a').attr('data-type');
+//				
+//				if(scoId != prevId) {
+//					let boxText;
+//					switch(scoId) {
+//						case 'prs': boxText = '상품목록'; break;
+//						case 'nss': boxText = '고객센터'; break;
+//						default: return;
+//					}
+//					let idBox = 
+//					`<div style="cursor: default;" class="flex items-center justify-center gap-2 px-3.5 xl:px-4 text-sm relative before:absolute before:-bottom-2.5 before:h-2.5 before:w-full before:z-10 font-semibold text-white transition-colors rounded-md cursor-pointer h-11 bg-heading">
+//				        <a data-type="${scoId}" javascript:void(0);" class="pageNav ga4_main_gnb relative inline-flex items-center px-3 py-3 text-sm font-normal xl:text-base xl:px-4 " style=" text-align: center;">${boxText}</a>
+//				    </div>`
+//					$('.headerMenu').append(idBox);
+//				}
+
+
+				let boxVal;
+				switch(scoId) {
+					case 'prs': boxVal = item.DCO_ID; break;
+					case 'nss': boxVal = item.DCO_VALUE; break;
 				}
+				
+//				htmlText = 
+//                    `<div class="menuItem group cursor-pointer">
+//						<a data-type="${scoId}" data-code="${boxVal}" href="javascript:void(0);" class="pageNav ga4_main_gnb relative inline-flex items-center px-3 py-3 text-sm font-normal xl:text-base text-heading xl:px-4 group-hover:text-black" style="font-size: 20px; font-family: 'Nanum Pen Script', serif; text-align: center;">${item.DCO_VALUE}</a>
+//					 </div>`;
+				htmlText = 
+                    `<div class="menuItem group cursor-pointer">
+						<a data-type="${scoId}" data-code="${boxVal}" href="javascript:void(0);" class="pageNav ga4_main_gnb relative inline-flex items-center px-3 py-3 text-sm font-normal xl:text-base text-heading xl:px-4 group-hover:text-black" style="font-weight: 900; text-align: center;">${item.DCO_VALUE}</a>
+					 </div>`;
 				
                 $('.headerMenu').append(htmlText);
             });
