@@ -65,7 +65,7 @@
 		</choose>
 		<choose>
 			<when test="SORT_TYPE == '최신순'">
-				ORDER BY P.PRO_DATE
+				ORDER BY P.PRO_DATE DESC
 			</when>
 			<when test="SORT_TYPE == '높은가격순'">
 				ORDER BY P.PRO_PRICE DESC
@@ -74,7 +74,7 @@
 				ORDER BY P.PRO_PRICE ASC
 			</when>
 			<when test="SORT_TYPE == '조회순'">
-				ORDER BY P.PRO_VIEWS
+				ORDER BY P.PRO_VIEWS DESC
 			</when>
 		</choose>
 	</select>
