@@ -39,6 +39,7 @@ public interface MyPageMapper {
 	List<Map<String, Object>> getProCount(Map<String, Object> data);
 
 	public void InquiryDelete(int INQ_NO);
+	List<Map<String, Object>> getMenuCategory();
 	
 	
 }

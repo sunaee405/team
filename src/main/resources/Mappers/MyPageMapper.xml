@@ -12,6 +12,19 @@
 	</select>
 	
 	
+	<!-- top영역 메뉴탭 생성 -->
+	<select id="getMenuCategory">
+		SELECT ID
+			, DCO_ID
+			, DCO_VALUE
+		    , SCO_ID
+		FROM DETAIL_CODE
+		WHERE SCO_ID IN (SELECT SCO_ID
+						 FROM SUB_CODE
+		                 WHERE LOWER(MCO_ID) = LOWER('MAM'));
+	</select>
+	
+	
 	<!-- 마이페이지 상품목록 -->
 	<select id="getDetailMyProduct">
 		SELECT P.MEM_NO
