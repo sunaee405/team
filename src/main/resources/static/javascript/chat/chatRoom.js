@@ -1,4 +1,4 @@
-const socket = new WebSocket('wss://localhost:8080/chat'); // 소켓 연결
+const socket = new WebSocket('wss://c2d2404t12.itwillbs.com:44041/chat'); // 소켓 연결
 const memberNum = sessionStorage.getItem('memNo');
 $(async function() {
 	
