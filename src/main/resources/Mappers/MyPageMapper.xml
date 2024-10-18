@@ -120,10 +120,10 @@
 		 WHERE PRO_STATUS = 'STD1'
 		<choose>
 		 <when test="TYPE == 'ARD1'">
-		 	ORDER BY PRO_VIEWS <!-- 조회순 -->
+		 	ORDER BY PRO_VIEWS DESC <!-- 조회순 -->
 		 </when>
 		 <when test="TYPE == 'ARD2'">
-		 	ORDER BY PRO_DATE <!-- 최신순 -->
+		 	ORDER BY PRO_DATE DESC <!-- 최신순 -->
 		 </when>
 		 <when test="TYPE == 'ARD3'">
 		 	ORDER BY PRO_PRICE DESC <!-- 높은가격순 -->

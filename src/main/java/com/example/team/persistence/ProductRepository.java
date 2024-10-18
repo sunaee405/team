@@ -15,7 +15,7 @@ import com.example.team.model.ProductEntity;
 
 @Repository
 public interface ProductRepository extends JpaRepository<ProductEntity, Integer>{
-	
+		
 	List<ProductEntity> findByMemNo(Integer memNo);
 	
 	List<ProductEntity> findByProCategory(String proCategory);
