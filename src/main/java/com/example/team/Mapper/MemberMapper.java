@@ -21,7 +21,7 @@ public interface MemberMapper {
 
 	public void naverInsertUser(Map<String, Object> data);
 
-	String sendEmailId(String mEM_EMAIL);
+	String sendEmailId(String mEM_EMAIL); 
 
 	String sendEmailPw(String mEM_EMAIL);
 
