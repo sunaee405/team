@@ -279,6 +279,7 @@ $(document).ready(function() {
 	        success: function(response) {
 	            console.log('업데이트 성공:', response);
 	            alert('업데이트 성공!');
+	            fetchData();
 	        },
 	        error: function(error) {
 	            console.error('업데이트 오류:', error);
