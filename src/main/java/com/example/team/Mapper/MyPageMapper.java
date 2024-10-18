@@ -40,6 +40,8 @@ public interface MyPageMapper {
 
 	public void InquiryDelete(int INQ_NO);
 	List<Map<String, Object>> getMenuCategory();
+
+	void deleteInq(int INQ_NO);
 	
 	
 }

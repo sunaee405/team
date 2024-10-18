@@ -217,6 +217,11 @@
     	 	SET  ANS_CONTENT = #{ANS_CONTENT}
 	      WHERE  ANS_NO 	 = #{ANS_NO}	
 	</update>
+	
+	<delete id="deleteInq">
+        DELETE FROM  INQUIRY
+              WHERE  INQ_NO = #{INQ_NO}
+    </delete>
     
 
 

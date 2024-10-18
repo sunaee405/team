@@ -156,12 +156,14 @@ $(function() {
 	        });
 	        
 	$('#deleteButton').click(function(){
+		debugger;
 	    // Ajax 요청으로 서버에 데이터 전송
 	    $.ajax({
-			url: `/InquiryDelete`, // 현재 상태에 따라 URL 선택
+			url: `/deleteInq`, // 현재 상태에 따라 URL 선택
 	        type: 'POST',
 	        data: { INQ_NO: inqNo },
 	        success: function(response) {
+				debugger;
 	            alert('삭제되었습니다.'); // 성공 시 메시지
 	            window.location.href = 'list';//페이지 이동
 	        },

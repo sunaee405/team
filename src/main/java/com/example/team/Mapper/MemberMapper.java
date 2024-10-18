@@ -47,4 +47,7 @@ public interface MemberMapper {
 	public void deleteAnswer(int ANS_NO);
 
 	public void updateAnswer(Map<String, Object> update);
+	
+	public void deleteInq(int INQ_NO);
+	
 }

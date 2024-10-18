@@ -259,6 +259,10 @@ public class MemberService {
 	public void InsertInquiry(Map<String, Object> data) {
 		memberMapper.InsertInquiry(data);
 	}
+	
+	public void deleteInq(int INQ_NO) {
+		memberMapper.deleteInq(INQ_NO);
+	}
 
 	public List<Map<String, Object>> SelectNews() {
 		return memberMapper.SelectNews();

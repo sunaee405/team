@@ -427,5 +427,12 @@ public class MyPageController {
 		 memberService.InsertInquiry(data);
 		 
 	 }
+	 
+	 @PostMapping("/deleteInq")
+		public void deleteInq(@RequestParam("INQ_NO") int INQ_NO) {
+		 System.out.println("#@@@@@@@@@@");
+		 System.out.println(INQ_NO);
+			memberService.deleteInq(INQ_NO);
+		}
 	
 }
