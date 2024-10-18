@@ -16,7 +16,7 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/images/**")
-                .addResourceLocations("file:///C:/Users/ITWILL/Desktop/upload/"); // 실제 이미지가 저장된 경로
+                .addResourceLocations("file:/usr/local/tomcat/webapps/team/img/"); // 실제 이미지가 저장된 경로
     }
     
     
