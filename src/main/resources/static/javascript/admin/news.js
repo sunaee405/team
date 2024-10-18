@@ -320,7 +320,7 @@ $(document).ready(function() {
 		// 로컬 스토리지에서 데이터 읽기
 	    detailList = JSON.parse(localStorage.getItem('detailList'));
 	    for(let i = 0; i < detailList.length; i++){
-			if(detailList[i].subCode.ID == 19){
+			if(detailList[i].subCode.ID == 5){
 				listItems.push({
             	text: `${detailList[i].DCO_ID}(${detailList[i].DCO_VALUE})`, // 표시할 텍스트
             	value: detailList[i].DCO_ID // 실제 값
