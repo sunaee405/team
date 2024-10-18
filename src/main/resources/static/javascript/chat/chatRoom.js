@@ -1,10 +1,8 @@
-const socket = new WebSocket('wss://c2d2404t12.itwillbs.com:44041/chat'); // 소켓 연결
+//const socket = new WebSocket('wss://c2d2404t12.itwillbs.com:44041/chat'); // 소켓 연결 => 배포 환경에서의 연결 문제로 sockjs로 대체
+const domainVal = window.location.hostname.includes('itwillbs') ? 'http://c2d2404t12.itwillbs.com/chat' : 'http://localhost:8080/chat'
+const socket = new SockJS(domainVal);
 const memberNum = sessionStorage.getItem('memNo');
 $(async function() {
-	
-	//$('body').css({'width':width, 'height':height});
-//	const urlParams = new URLSearchParams(window.location.search);
-//	const selMember = urlParams.get('selMember');
 	const url = new URL(location.href).searchParams;
 	// FormData 객체 생성
 	const formData = new FormData();
@@ -37,7 +35,9 @@ $(async function() {
 	        return response.json(); // 응답을 JSON으로 변환
 	    })
 	    .then(success => {
-				$(".chat").attr("data-rNum", success[0].CHA_NO);
+			debugger;
+			
+			$(".chat").attr("data-rNum", success[0].CHA_NO);
 				
 			const socketSession = JSON.stringify({
 					"TYPE"	 : "setSession",
@@ -84,6 +84,7 @@ $(async function() {
 			$('.message-container').scrollTop($(document).height());
 	    })
 	    .catch(error => {
+			debugger;
 			const em = error.message;
 			if (em === "notLogin") {
 				if (window.opener && !window.opener.closed) {
@@ -94,7 +95,6 @@ $(async function() {
 	        } else {
 //				
 			}
-			
 			window.close();
 	    });
 	}
@@ -164,7 +164,9 @@ $(document).on('click', ".btn-success", function() {
         "CHA_NO" 	: chatRoomNo
 	});
 	
+	debugger;
 	const url = '/updateChat';
+	debugger;
 	// 요청 옵션
 	const options = {
 		method: 'POST',
@@ -190,7 +192,7 @@ $(document).on('click', ".btn-success", function() {
 			const em = error.message;
 			if (em === "notLogin") {
 	           	alert('로그인 상태가 아닙니다 다시 로그인해주세요');
-	           	window.close();
+//	           	window.close();
 	        } else if(em === "failedUpdate") {
 				const check = confirm('메시지 업로드 실패.\n 메시지를 다시 전송 하시겠습니까?');
 				if(check) $('.btn-success').trigger('click');

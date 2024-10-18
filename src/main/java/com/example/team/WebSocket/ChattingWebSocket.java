@@ -13,7 +13,8 @@ public class ChattingWebSocket implements WebSocketConfigurer {
 	@Override
 	public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
 		registry.addHandler(new ChatSocketHandler(), "/chat") // "/chat" 엔드포인트에 핸들러 등록
-        		.setAllowedOrigins("*");
+        		.setAllowedOrigins("http://localhost:8080", "http://c2d2404t12.itwillbs.com")
+        		.withSockJS();
 	}
 
 }

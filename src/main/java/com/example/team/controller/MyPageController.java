@@ -349,6 +349,7 @@ public class MyPageController {
 	// 채팅방 값 찾기 + 값 없으면 채팅방 생성
 	@PostMapping("/chatRoom")
 	public ResponseEntity<?> getChatRoom(@RequestParam Map<String, Object> data, HttpSession session) {
+		System.out.println("방생성?");
 		String memId = (String) session.getAttribute("MEM_ID");
 		if (memId == null)
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("notLogin");
