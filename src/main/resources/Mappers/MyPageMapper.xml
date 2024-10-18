@@ -99,34 +99,40 @@
 	
 	<!-- 메인페이지 상품목록 -->
 	<select id="getMainProductList" resultType="Map">
-		SELECT MEM_NO
-			, PRO_NO
-			, PRO_VIEWS
-			, PRO_DATE
-			, PRO_CATEGORY
-			, PRO_LOCATION
-			, PRO_NEG
-			, PRO_PRICE
-			, PRO_STATE
-			, PRO_STATUS
-			, PRO_TITLE
-			, PRO_TYPE
-			, PRO_CONTENT
-			, SUBSTRING_INDEX(PRO_IMG, ',', 1) AS PRO_IMG
-		FROM PRODUCT
-		WHERE PRO_STATUS = 'STD1'
+		SELECT *
+		FROM (
+			SELECT MEM_NO
+				, PRO_NO
+				, PRO_VIEWS
+				, PRO_DATE
+				, PRO_CATEGORY
+				, PRO_LOCATION
+				, PRO_NEG
+				, CAST(REPLACE(PRO_PRICE, ',', '') AS UNSIGNED) AS PRO_PRICE
+				, PRO_STATE
+				, PRO_STATUS
+				, PRO_TITLE
+				, PRO_TYPE
+				, PRO_CONTENT
+				, SUBSTRING_INDEX(PRO_IMG, ',', 1) AS PRO_IMG
+			FROM PRODUCT
+		 ) AS P
+		 WHERE PRO_STATUS = 'STD1'
 		<choose>
-			<when test="TYPE != null and TYPE = '최근등록순'"> 
-				ORDER BY PRO_DATE
-			</when>
-			<when test="TYPE != null and TYPE = '조회순'">
-				ORDER BY PRO_VIEWS
-			</when>
-			<when test="TYPE != null and TYPE = '낮은가격순'">
-				ORDER BY PRO_PRICE
-			</when>
+		 <when test="TYPE == 'ARD1'">
+		 	ORDER BY PRO_VIEWS <!-- 조회순 -->
+		 </when>
+		 <when test="TYPE == 'ARD2'">
+		 	ORDER BY PRO_DATE <!-- 최신순 -->
+		 </when>
+		 <when test="TYPE == 'ARD3'">
+		 	ORDER BY PRO_PRICE DESC <!-- 높은가격순 -->
+		 </when>
+		 <when test="TYPE == 'ARD4'">
+		 	ORDER BY PRO_PRICE ASC <!-- 낮은가격순 -->
+		 </when>
 		</choose>
-		LIMIT 30;
+		LIMIT 30
 	</select>
 
 	<!-- 채팅룸 호출 -->

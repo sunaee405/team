@@ -2,6 +2,7 @@ let TypeList = [];
 
 $(async function() {
 	await getSort();
+	
     await getMainProductList();
     
     $.ajax({
@@ -22,7 +23,6 @@ $(async function() {
 			});
 		},
 		error: (error) => {
-			debugger;
 		}
 	})
 });
@@ -176,7 +176,7 @@ async function getMainProductList() {
 
     for(const Type of randomType) {
         try {
-            const response = await fetch(`/getMainProductList?TYPE=${Type.get("typeValue")}`, { 
+            const response = await fetch(`/getMainProductList?TYPE=${Type.get("keyId")}`, { 
                 method: 'GET',
                 headers: {
                     'X-Requested-With': 'XMLHttpRequest', // 필터에서 ajax 요청으로 인식하도록 헤더 설정
@@ -251,7 +251,11 @@ function forProductList(key, typeValue, data) {
 		}
 	}
 	
-	
+	// 가격 데이터를 문자열로 변경해서 숫자 데이터를 제외하고 전부 제거한 후 , 구분하는 문자열로 변경
+	const num = String(data.PRO_PRICE);
+	const rep = num.replace(/\D/g, ''); // \D는 숫자가 아닌 모든 문자
+	const price = Number(rep).toLocaleString();
+	//
 	let productList =
 		`<a href="/product/contentProduct?proNo=${data.PRO_NO}" class="productLink relative group box-border overflow-hidden flex rounded-md cursor-pointer pe-0 pb-2 lg:pb-3 flex-col items-start transition duration-200 ease-in-out transform bg-white ga4_main_latest_product">
 			<div class="relative w-full rounded-md overflow-hidden dim pt-[100%] mb-3 md:mb-3.5">
@@ -260,7 +264,7 @@ function forProductList(key, typeValue, data) {
 			<div class="w-full overflow-hidden p-2 md:px-2.5 xl:px-4">
 				<h2 class="line-clamp-2 min-h-[2lh] text-sm md:text-base">${data.PRO_TITLE}</h2>
 				<div class="font-semibold space-s-2 mt-0.5 text-heading lg:text-lg lg:mt-1.5">
-					${data.PRO_PRICE}원
+					${price}원
 				</div>
 				<div class="my-1 h-6">
 					<span class="text-sm text-gray-400">${data.PRO_LOCATION}</span><span class="mx-1 text-sm text-gray-400">|</span><span class="text-sm text-gray-400">${timeText} 전</span>

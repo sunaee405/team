@@ -44,7 +44,8 @@ public class MyPageService {
 	
 	// 메인페이지 상품 리스트
 	public List<Map<String, Object>> getMainProductList(Map<String, Object> data) {
-		
+		System.out.println(data);
+		String type = (String)data.get("TYPE");
 		return myPageMapper.getMainProductList(data);
 	}
 	
