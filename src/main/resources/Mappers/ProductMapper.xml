@@ -188,10 +188,10 @@
             ORDER BY PRO.PRO_DATE DESC
         	</when>
         	<when test="sortType == 'price_high'">
-            ORDER BY CAST(PRO.PRO_PRICE AS UNSIGNED) DESC
+            ORDER BY CAST(REPLACE(PRO.PRO_PRICE, ',', '') AS UNSIGNED) DESC
 	        </when>
     	    <when test="sortType == 'price_low'">
-            ORDER BY CAST(PRO.PRO_PRICE AS UNSIGNED) ASC
+            ORDER BY CAST(REPLACE(PRO.PRO_PRICE, ',', '') AS UNSIGNED) ASC
         	</when>
         	<otherwise>
             ORDER BY PRO.PRO_DATE DESC

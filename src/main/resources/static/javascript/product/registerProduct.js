@@ -333,6 +333,7 @@ $(document).ready(function() {
 
 	// 폼 제출 시
 	document.getElementById('insertProductForm').addEventListener('submit', function(e) {
+		debugger;
 		e.preventDefault();
 
 		const formData = new FormData(this);
@@ -344,7 +345,9 @@ $(document).ready(function() {
 
 		// 선택된 카테고리의 DCO_ID 가져오기
 		const categorySelect = document.getElementById('categoryList');
+		debugger;
 		const selectedCategoryOption = categorySelect.options[categorySelect.selectedIndex];
+		debugger;
 		const categoryDcoId = selectedCategoryOption.value;
 
 		// 카테고리 값 FormData에 추가
