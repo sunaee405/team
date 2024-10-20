@@ -13,9 +13,9 @@ public class TeamApplication extends SpringBootServletInitializer {
 		SpringApplication.run(TeamApplication.class, args);
 	}
 
-	// TODO
-	@Override
-	protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
-		return builder.sources(TeamApplication.class);
-	}
+//	// TODO
+//	@Override
+//	protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
+//		return builder.sources(TeamApplication.class);
+//	}
 }
