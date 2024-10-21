@@ -23,8 +23,9 @@ $(document).ready(function() {
    		  		<img src="images/naverLogin.png">
 		  	</a>
           </div>
-          <button type="button" class="formBtn" id="kakaoLoginButton">카카오 로그인</button>
-          <button type="button" class="formBtn" id="naverLogoutButton">임시 네이버 로그아웃</button>
+          <a href="#" id="kakaoLoginButton">
+   		  		<img src="/images/kakaoLogin.png">
+		  	</a>
         </form>
       </div>
     </div>
@@ -173,10 +174,10 @@ $(document).ready(function() {
 			alert('성별을 선택해 주세요!');
 			return;
 		}
-		//		if (isPhoneCheck == false) {
-		//			alert('휴대폰 인증 해주세요!');
-		//			return;
-		//		}
+				if (isPhoneCheck == false) {
+					alert('휴대폰 인증 해주세요!');
+					return;
+				}
 
 		if (isEmailCheck == false) {
 			alert('이메일 인증 해주세요!');
@@ -225,23 +226,22 @@ $(document).ready(function() {
 
 
 	// 본인인증 버튼 클릭 이벤트 start
-	//	$(document).on("click", "#checkPhone", function() {
-	//		let phone = $('#phone').val(); // 입력된 전화번호 값
-	//
-	//		if (!phone) {
-	//			alert('전화번호를 입력해 주세요!');
-	//			return;
-	//		}
-	//
-	//		sendMessage(phone);
-	//
-	//	});
+		$(document).on("click", "#checkPhone", function() {
+			let phone = $('#phone').val(); // 입력된 전화번호 값
+			if (!phone) {
+				alert('전화번호를 입력해 주세요!');
+				return;
+			}
+	
+			sendMessage(phone);
+	
+		});
 
 	// 전화번호란 수정 했을때 다시 본인인증 함수 
-	//	$(document).on("input", "#phone", function() {
-	//		isPhoneCheck = false;
-	//		sessionStorage.removeItem('randomNumber');
-	//	});
+		$(document).on("input", "#phone", function() {
+			isPhoneCheck = false;
+			sessionStorage.removeItem('randomNumber');
+		});
 
 
 	// 이메일 수정 했을때 다시 본인인증 함수 
@@ -291,44 +291,44 @@ $(document).ready(function() {
 
 
 	// 전화번호 인증 문자 발송 ajax 함수 start
-	//	function sendMessage(phone) {
-	//		$.ajax({
-	//			url: '/send-message',
-	//			type: 'POST',
-	//			data: JSON.stringify({ phone: phone }),
-	//			contentType: 'application/json',
-	//			success: function(response) {
-	//				alert('본인인증 메시지가 전송되었습니다.');
-	//				sessionStorage.setItem('randomNumber', response.randomNumber);
-	//				isPhoneCheck = false;
-	//			},
-	//			error: function(xhr) {
-	//				if (xhr.status === 409) { 
-	//					alert(xhr.responseText); 
-	//				} else {
-	//					alert('메시지 전송에 실패했습니다.');
-	//				}
-	//			}
-	//		});
-	//	}
+		function sendMessage(phone) {
+			$.ajax({
+				url: '/send-message',
+				type: 'POST',
+				data: JSON.stringify({ phone: phone }),
+				contentType: 'application/json',
+				success: function(response) {
+					alert('본인인증 메시지가 전송되었습니다.');
+					sessionStorage.setItem('randomNumber', response.randomNumber);
+					isPhoneCheck = false;
+				},
+				error: function(xhr) {
+					if (xhr.status === 409) { 
+						alert(xhr.responseText); 
+					} else {
+						alert('메시지 전송에 실패했습니다.');
+					}
+				}
+			});
+		}
 
 
 	//  전화번호 인증번호 확인 버튼 클릭 이벤트 start
-	//	$(document).on("click", "#check", function() {
-	//		let enterNumber = $('#checkNumber').val();
-	//		let randomNumber = sessionStorage.getItem('randomNumber');
-	//		if (!randomNumber) {
-	//			alert('먼저 본인인증을 진행해 주세요!');
-	//			return;
-	//		}
-	//		if (enterNumber === randomNumber) {
-	//			alert('인증이 완료되었습니다!');
-	//			isPhoneCheck = true;
-	//			sessionStorage.removeItem('randomNumber');
-	//		} else {
-	//			alert('인증번호가 틀립니다. 다시 시도해 주세요.');
-	//		}
-	//	});
+		$(document).on("click", "#check", function() {
+			let enterNumber = $('#checkNumber').val();
+			let randomNumber = sessionStorage.getItem('randomNumber');
+			if (!randomNumber) {
+				alert('먼저 본인인증을 진행해 주세요!');
+				return;
+			}
+			if (enterNumber === randomNumber) {
+				alert('인증이 완료되었습니다!');
+				isPhoneCheck = true;
+				sessionStorage.removeItem('randomNumber');
+			} else {
+				alert('인증번호가 틀립니다. 다시 시도해 주세요.');
+			}
+		});
 
 
 	// 로그인 버튼 클릭 함수 

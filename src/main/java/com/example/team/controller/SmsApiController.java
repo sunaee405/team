@@ -36,7 +36,7 @@ public class SmsApiController {
 	@PostMapping("/send-message")
 	public String sendMessage(@RequestBody Map<String, String> requestData, HttpSession session) {
 		String MEM_TEL = requestData.get("phone");
-
+		System.out.println(MEM_TEL + "@@@");
 		if (memberService.checkPhone(MEM_TEL)) {
 			throw new ResponseStatusException(HttpStatus.CONFLICT, "이미 등록된 전화번호입니다.");
 		}
