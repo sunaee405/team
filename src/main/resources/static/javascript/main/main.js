@@ -58,7 +58,7 @@ $(window).on('load', function() {
 function bannerInterbal() {
 	// 'click', '.bannerSwiper'이벤트에서 bannerInterbal()호출 시 이미 인터벌 설정 있으면 삭제하고 다시 생성
 	if(setBanInterval) clearInterval(setBanInterval);
-	// 인터벌 설정;
+	// 반복동작 설정 설정;
 	setBanInterval = setInterval(function() {
         $('[data-label="next"]').trigger('click');
     }, 3000);

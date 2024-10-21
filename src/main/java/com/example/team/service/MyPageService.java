@@ -16,7 +16,6 @@ import com.example.team.model.MemberEntity;
 import com.example.team.persistence.BannerImgRepository;
 import com.example.team.persistence.ChattingRepository;
 import com.example.team.persistence.MemberRepository;
-import com.querydsl.jpa.impl.JPAQueryFactory;
 
 @Service
 public class MyPageService {
@@ -32,18 +31,14 @@ public class MyPageService {
 	@Autowired
 	private BannerImgRepository bannerImgRepository;
 	
-	private final JPAQueryFactory jpaQueryFactory;
-	public MyPageService(JPAQueryFactory jpaQueryFactory) {
-		this.jpaQueryFactory = jpaQueryFactory;
-	}
+	
+	
 	
 	
 	// 상품 카테고리
 	public List<Map<String, Object>> getCategory() {
 		return myPageMapper.getMenuCategory();
 	}
-	
-	
 	
 	
 	// 메인페이지 상품 리스트

@@ -27,18 +27,19 @@ function loading() {
 $(window.parent).on('load', function() {
 	var checkReadyInterval = setInterval(function() {
 		// 부모 요소의 DOM업로드가 완료될때까지 반복
-		if (window.parent.document.readyState === "complete") {
+		if(window.parent.document.readyState === "complete") {
 			$(document).trigger('sessionLoaded'); // 로그인 유무확인하는 이벤트
-			
-			
 			clearInterval(checkReadyInterval); // 이벤트 삭제
+			
 			// 검색어 || 카테고리 || 정렬 전달
+			const triggerEvent = ['click', 'input']; 
+			
 	        const searchData = sessionStorage.getItem('searchText');
 	        const detailCode = sessionStorage.getItem('detailCode');
 	        
-	        $(window.parent.document).find(`[data-id="${detailCode}"]`).trigger('click'); // 상품 페이지 클릭 이벤트
-	        $(window.parent.document).find(`[data-category="${detailCode}"]`).trigger('click'); // 고객센터 카테고리 클릭
-	        $(window.parent.document).find('#search-input').val(searchData).trigger('input');
+	        $(window.parent.document).find(`[data-id="${detailCode}"]`).trigger(triggerEvent); // 상품 페이지 클릭 이벤트
+	        $(window.parent.document).find(`[data-category="${detailCode}"]`).trigger(triggerEvent); // 고객센터 카테고리 클릭
+	        $(window.parent.document).find('#search-input').val(searchData).trigger(triggerEvent); // 상품페이지 검색어 전달
 	        
 	        // 스토리지에서 두 데이터 삭제
 	        sessionStorage.removeItem('searchText');
