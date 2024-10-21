@@ -129,7 +129,9 @@ public class MyPageService {
 	
 	
 	public void deleteChatRoom(Map<String, Object> data) {
-		chattingRepository.deleteById(Long.valueOf((String) data.get("CHA_NO")));
+		Long id = Long.valueOf((String)data.get("CHA_NO"));
+		System.out.println(id);
+		chattingRepository.deleteById(id);
 	}
 
 	public void InquiryDelete(int INQ_NO) {
