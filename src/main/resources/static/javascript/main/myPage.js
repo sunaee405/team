@@ -165,7 +165,7 @@ function bodyInner() {
 		                        </ul>
 		                    </div>
 		                    <div class="flex flex-wrap items-center justify-between">
-		                        <div class="flex-shrink-0 mb-1 text-sm text-body md:text-base pe-4 md:me-6 lg:block">총 0 개</div>
+		                        <div class="flex-shrink-0 mb-1 text-sm text-body md:text-base pe-4 md:me-6 lg:block">총 <span class="proCount">0<span> 개</div>
 		                        <ul id="sortProduct" class="flex space-x-3">
 		                            <li><button class="text-sm font-medium text-[#141313]">최신순</button></li>
 		                            <li><span class="inline-block mb-0 w-[1px] h-[10px] border border-[#DADEE5]"></span></li>
@@ -259,11 +259,11 @@ async function getDetailMyProduct(selectType, sortType, memNo) {
 			}
 			
 			var text =
-			`<div class="relative">
+			`<div class="relative secr">
 			    <div class="relative">
 			        <a class="group box-border overflow-hidden flex rounded-md cursor-pointer pe-0 pb-2 lg:pb-3 flex-col items-start transition duration-200 ease-in-out transform bg-white" title="${data.PRO_TITLE}" href="/product/contentProduct?proNo=${data.PRO_NO}">
 			            <div class="relative w-full rounded-md overflow-hidden dim pt-[100%] mb-3 md:mb-3.5">
-			                <img alt="${data.PRO_TITLE}" referrerpolicy="no-referrer" src="/static/${data.PRO_IMG}?impolicy=thumb&amp;size=150" decoding="async" data-nimg="fill" class="bg-gray-300 object-cover h-full group-hover:scale-105 w-full transition duration-200 ease-in rounded-md" loading="lazy" style="position: absolute; height: 100%; width: 100%; inset: 0px; color: transparent;">
+			                <img alt="${data.PRO_TITLE}" referrerpolicy="no-referrer" src="/images/${data.PRO_IMG}?impolicy=thumb&amp;size=150" decoding="async" data-nimg="fill" class="bg-gray-300 object-cover h-full group-hover:scale-105 w-full transition duration-200 ease-in rounded-md" loading="lazy" style="position: absolute; height: 100%; width: 100%; inset: 0px; color: transparent;">
 			            </div>
 			            <div class="w-full overflow-hidden p-0 md:p-0 lg:p-0 xl:p-0 2xl:p-0">
 			                <h2 class="line-clamp-2 min-h-[2lh] text-sm md:text-base text-heading">${data.PRO_TITLE}</h2>
@@ -289,8 +289,12 @@ async function getDetailMyProduct(selectType, sortType, memNo) {
 			$('#getProDetail').append(text);
 		});
 	} catch(error) {
-
+		console.error(error.responsetext);
+	} finally {
+		const count = $('.secr').length;
+		$('.proCount').html(count !== 0 ? count : 0);
 	}
+	
 	
 };
 
