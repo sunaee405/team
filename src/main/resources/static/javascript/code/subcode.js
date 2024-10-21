@@ -2,11 +2,11 @@ $(document).ready(function() {
 	
 	let selectOptions = []; // 전역 변수로 선언하여 모든 함수에서 접근 가능하게 함
 	let mainList = [];
+	const listItems = [];// MCO_ID를 저장할 배열 초기화
 	
 	// 초기 데이터 가져오기 (페이지 로드 시)
 	//mainCode();
 	fetchData();
-	
 	// 텍스트 수정기능
 	class CustomTextEditor {
 	      constructor(props) {
@@ -208,7 +208,6 @@ $(document).ready(function() {
 		    mainCode: { ID: row.MCO_ID } // mainCode 객체에 MCO_ID 포함
 		}));
 		
-		
 		// 필드 체크
 		for (let i = 0; i < newData.length; i++) {
 	        const row = newData[i];
@@ -253,23 +252,23 @@ $(document).ready(function() {
 		}));
         
         
-        
 		// 수정할 데이터에 대한 중복 체크
 	    for (let i = 0; i < updatedData.length; i++) {
 	        const row = updatedData[i];
 	        if (row.MCO_ID === '' || row.SCO_ID === '' || row.SCO_VALUE === '') {
 	            alert('모든 필드를 채워야 저장할 수 있습니다. 비어 있는 행이 있습니다.');
 	            return;
-	        }for(let j = 0; j < mainList.length; j++){
-				if(updatedData[i].MCO_ID === mainList[j].MCO_ID){
-				updateList[i].mainCode.ID = mainList[j].ID;
-				break; // 변환이 완료되면 더 이상 반복할 필요 없음
+	        }
+	        
+	        for (let j = 0; j < mainList.length; j++){
+				if (updatedData[i].MCO_ID === mainList[j].MCO_ID){
+					updateList[i].mainCode.ID = mainList[j].ID;
+					break; // 변환이 완료되면 더 이상 반복할 필요 없음
 				}
 				
 			}
 
 	    }
-   
         
         // AJAX 요청으로 서버에 업데이트
 	    $.ajax({
@@ -277,7 +276,6 @@ $(document).ready(function() {
 	        url: '/admin/subcodes', // 데이터 업데이트를 위한 API 엔드포인트
 	        contentType: 'application/json',
 	        data: JSON.stringify(updateList), // 수정된 데이터 전송
-	
 	        success: function(response) {
 	            console.log('업데이트 성공:', response);
 	            alert('업데이트 성공!');
@@ -295,32 +293,39 @@ $(document).ready(function() {
     
     // DB에서 데이터 가져와서 화면에 뿌리기
 	function fetchData() {
-		
-		const listItems = [];// MCO_ID를 저장할 배열 초기화
-		// 로컬 스토리지에서 데이터 읽기
-	    mainList = JSON.parse(localStorage.getItem('mainList'));
-	    for(let i = 0; i < mainList.length; i++){
-			listItems.push({
-            	text: `${mainList[i].MCO_ID}(${mainList[i].MCO_VALUE})`, // 표시할 텍스트
-            	value: mainList[i].MCO_ID // 실제 값
-        	});
-		}
-		
-		// listItems를 셀렉트 박스의 옵션 형식으로 변환
-		selectOptions = listItems.map(item => ({
-		    text: item.text,  // 표시할 텍스트
-		    value: item.value  // 실제 값
-		}));
+	    
+	    let uniqueValues = new Set(); // 중복 제거를 위한 Set 초기화
 	    
 	    $.ajax({
 	        type: 'GET',
 	        url: '/admin/subcodes', // 데이터 가져올 API 엔드포인트
 	        success: function(response) {
 				console.log('서버 응답:', response); // 여기서 응답 데이터 출력
+				for (let i = 0; i < response.length; i++){
+					const id = response[i].mainCode.MCO_ID;
+					
+					// Set에 추가하여 중복 체크
+				    if (!uniqueValues.has(id)) {
+				        uniqueValues.add(id); // 중복이 아닌 경우 추가
+					    mainList.push({
+							ID: response[i].mainCode.ID,
+			            	MCO_ID: response[i].mainCode.MCO_ID, // 표시할 텍스트
+			            	MCO_VALUE: response[i].mainCode.MCO_VALUE // 실제 값
+		        		});
+		        		
+		        		selectOptions.push({
+				            text: `${response[i].mainCode.MCO_ID}(${response[i].mainCode.MCO_VALUE})`, // 표시할 텍스트
+				            value: id // 실제 값
+				        });
+				    }
+				}
+				for (let i = 0; i < mainList.length; i++){
+					listItems.push({
+		            	text: mainList[i].MCO_ID, // 표시할 텍스트
+		            	value: mainList[i].MCO_ID // 실제 값
+		        	});
+				}
 				
-				// 데이터를 로컬 스토리지에 저장
-            	localStorage.setItem('subList', JSON.stringify(response));
-	            
 	            // 데이터를 그리드에 뿌리기
 	            grid.resetData(response.map(item => ({
 	                ID: item.ID,           // ID 필드 포함
@@ -328,6 +333,8 @@ $(document).ready(function() {
 	                SCO_ID: item.SCO_ID,   // MCO_ID 필드
 	                SCO_VALUE: item.SCO_VALUE // MCO_VALUE 필드
 	            })));
+	            
+	            
 	        },
 	        error: function(error) {
 	            console.error('Error fetching data:', error);
@@ -340,7 +347,8 @@ $(document).ready(function() {
 		// 페이지 이동
         window.location.href = 'detailCrud'; // 이동할 페이지의 경로로 변경
 	});
-
+	
+	
    
 });
 

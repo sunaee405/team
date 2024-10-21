@@ -206,7 +206,6 @@ $(document).ready(function() {
 		    DCO_VALUE: row.DCO_VALUE,
 		    subCode: { ID: row.SCO_ID } // subCode 객체에 SCO_ID 포함
 		}));
-		
 		// 필드 체크
 		for (let i = 0; i < newData.length; i++) {
 	        const row = newData[i];
@@ -222,7 +221,6 @@ $(document).ready(function() {
 			}
 	        
 	    }
-	    
 		
         // AJAX 요청으로 서버에 INSERT
         $.ajax({
@@ -291,31 +289,38 @@ $(document).ready(function() {
 	function fetchData() {
 		
 		const listItems = [];// SCO_ID를 저장할 배열 초기화
-		// 로컬 스토리지에서 데이터 읽기
-	    subList = JSON.parse(localStorage.getItem('subList'));
-	    for(let i = 0; i < subList.length; i++){
-			listItems.push({
-            	text: `${subList[i].SCO_ID}(${subList[i].SCO_VALUE})`, // 표시할 텍스트
-            	value: subList[i].SCO_ID // 실제 값
-        	});
-		}
-		
-		// listItems를 셀렉트 박스의 옵션 형식으로 변환
-		selectOptions = listItems.map(item => ({
-		    text: item.text,  // 표시할 텍스트
-		    value: item.value  // 실제 값
-		}));
-	    
+	    let uniqueValues = new Set(); // 중복 제거를 위한 Set 초기화
 	    
 	    $.ajax({
 	        type: 'GET',
 	        url: '/admin/detailcodes', // 데이터 가져올 API 엔드포인트
 	        success: function(response) {
 				console.log('서버 응답:', response); // 여기서 응답 데이터 출력
-				
-				// 데이터를 로컬 스토리지에 저장
-            	localStorage.setItem('detailList', JSON.stringify(response));
-				
+            	for (let i = 0; i < response.length; i++){
+					const id = response[i].subCode.SCO_ID;
+					
+					// Set에 추가하여 중복 체크
+				    if (!uniqueValues.has(id)) {
+				        uniqueValues.add(id); // 중복이 아닌 경우 추가
+					    subList.push({
+							ID: response[i].subCode.ID,
+			            	SCO_ID: response[i].subCode.SCO_ID, // 표시할 텍스트
+			            	SCO_VALUE: response[i].subCode.SCO_VALUE // 실제 값
+		        		});
+		        		
+		        		selectOptions.push({
+				            text: `${response[i].subCode.SCO_ID}(${response[i].subCode.SCO_VALUE})`, // 표시할 텍스트
+				            value: id // 실제 값
+				        });
+				    }
+				}
+				for (let i = 0; i < subList.length; i++){
+					listItems.push({
+		            	text: subList[i].SCO_ID, // 표시할 텍스트
+		            	value: subList[i].SCO_ID // 실제 값
+		        	});
+				}
+            	
 	            // 데이터를 그리드에 뿌리기
 	            grid.resetData(response.map(item => ({
 	                ID: item.ID,           // ID 필드 포함
@@ -330,8 +335,14 @@ $(document).ready(function() {
 	        }
 	    });
 	}
+	
+	
 
    
 });
+
+
+
+	
 
 

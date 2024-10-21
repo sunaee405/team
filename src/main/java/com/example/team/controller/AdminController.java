@@ -79,6 +79,7 @@ public class AdminController {
         return ResponseEntity.ok(updatedMember);
     }
     
+    
     // 멤버 탈퇴 유예처리
     @PutMapping("members/delete") 
     public ResponseEntity<String> deleteMember(@RequestBody Map<String, Object> data) {

@@ -169,7 +169,6 @@ $(document).ready(function() {
 	        //const newsNo = grid.getValue(rowKey, 'NEW_NUM');
 	        window.location.href = `info?NEW_NO=${newsNo}`;
 	    }
-	    
 	    if (columnName === 'NEW_CONTENT' && ev.targetType !== 'columnHeader') { // 수정할 열
         const currentContent = grid.getValue(rowKey, 'NEW_CONTENT');
         document.getElementById('editTextArea').value = currentContent; // 현재 내용을 텍스트 영역에 표시
@@ -201,20 +200,20 @@ $(document).ready(function() {
         const currentData = grid.getData();
 		
 		// 수정된 데이터 필터링
-    const updatedData = currentData.filter((row, index) => {
-		// 인덱스가 초기 데이터 길이 내에 있는지 확인
-	    if (index < initialData.length) {
-	        const initialRow = initialData[index];
-	        // 필드 비교하여 변경된 경우만 필터링
-	        return (
-	            row.NEW_NO !== null && // 업데이트할 데이터 확인
-	            (row.NEW_NAME !== initialRow.NEW_NAME || 
-	             row.NEW_CONTENT !== initialRow.NEW_CONTENT || 
-	             row.NEW_SECTION !== initialRow.detailCode.DCO_ID)
-	        );
-	    }
-    return false; // 유효하지 않은 인덱스인 경우 false 반환
-    });//////
+	    const updatedData = currentData.filter((row, index) => {
+			// 인덱스가 초기 데이터 길이 내에 있는지 확인
+		    if (index < initialData.length) {
+		        const initialRow = initialData[index];
+		        // 필드 비교하여 변경된 경우만 필터링
+		        return (
+		            row.NEW_NO !== null && // 업데이트할 데이터 확인
+		            (row.NEW_NAME !== initialRow.NEW_NAME || 
+		             row.NEW_CONTENT !== initialRow.NEW_CONTENT || 
+		             row.NEW_SECTION !== initialRow.detailCode.DCO_ID)
+		        );
+		    }
+	    	return false; // 유효하지 않은 인덱스인 경우 false 반환
+    	});//////
     
 		//아이디가 null이 아니면 update
 		//const updatedData = currentData.filter((row, index) => row.NEW_NO !== null);
@@ -236,10 +235,11 @@ $(document).ready(function() {
 	            alert('모든 필드를 채워야 저장할 수 있습니다. 비어 있는 행이 있습니다.');
 	            return;
 	        }
-	        for(let j = 0; j < detailList.length; j++){
-				if(newData[i].NEW_SECTION === detailList[j].DCO_ID){
-				dataToInsert[i].detailCode.ID = detailList[j].ID;
-				break; // 변환이 완료되면 더 이상 반복할 필요 없음
+	        
+	        for (let j = 0; j < detailList.length; j++){
+				if (newData[i].NEW_SECTION === detailList[j].DCO_ID){
+					dataToInsert[i].detailCode.ID = detailList[j].ID;
+					break; // 변환이 완료되면 더 이상 반복할 필요 없음
 				}
 			}
 	        
@@ -277,12 +277,13 @@ $(document).ready(function() {
 	        if (row.NEW_SECTION === '' || row.NEW_NAME === '' || row.NEW_CONTENT === '') {
 	            alert('모든 필드를 채워야 저장할 수 있습니다. 비어 있는 행이 있습니다.');
 	            return;
-	        }for(let j = 0; j < detailList.length; j++){
-				if(updatedData[i].NEW_SECTION === detailList[j].DCO_ID){
-				updateList[i].detailCode.ID = detailList[j].ID;
-				break; // 변환이 완료되면 더 이상 반복할 필요 없음
+	        }
+	        
+	        for (let j = 0; j < detailList.length; j++){
+				if (updatedData[i].NEW_SECTION === detailList[j].DCO_ID){
+					updateList[i].detailCode.ID = detailList[j].ID;
+					break; // 변환이 완료되면 더 이상 반복할 필요 없음
 				}
-				
 			}
 	    }
    
@@ -317,41 +318,82 @@ $(document).ready(function() {
 	function fetchData() {
 		
 		const listItems = [];// DCO_ID를 저장할 배열 초기화
+		
+		let uniqueValues = new Set(); // 중복 제거를 위한 Set 초기화
 		// 로컬 스토리지에서 데이터 읽기
-	    detailList = JSON.parse(localStorage.getItem('detailList'));
-	    for(let i = 0; i < detailList.length; i++){
-			if(detailList[i].subCode.ID == 5){
-				listItems.push({
-            	text: `${detailList[i].DCO_ID}(${detailList[i].DCO_VALUE})`, // 표시할 텍스트
-            	value: detailList[i].DCO_ID // 실제 값
-        		});
-			}
-			
-		}
+//	    detailList = JSON.parse(localStorage.getItem('detailList'));
+//	    for(let i = 0; i < detailList.length; i++){
+//			if(detailList[i].subCode.ID == 5){
+//				listItems.push({
+//            	text: `${detailList[i].DCO_ID}(${detailList[i].DCO_VALUE})`, // 표시할 텍스트
+//            	value: detailList[i].DCO_ID // 실제 값
+//        		});
+//			}
+//			
+//		}
 		
 		// listItems를 셀렉트 박스의 옵션 형식으로 변환
-		selectOptions = listItems.map(item => ({
-		    text: item.text,  // 표시할 텍스트
-		    value: item.value  // 실제 값
-		}));
+//		selectOptions = listItems.map(item => ({
+//		    text: item.text,  // 표시할 텍스트
+//		    value: item.value  // 실제 값
+//		}));
 		
-	    
-	    $.ajax({
+		
+		$.ajax({
 	        type: 'GET',
-	        url: '/admin/news/list', // 데이터 가져올 API 엔드포인트
+	        url: '/admin/detailcodes', // 데이터 가져올 API 엔드포인트
 	        success: function(response) {
 				console.log('서버 응답:', response); // 여기서 응답 데이터 출력
-				initialData = response; // 초기 데이터 저장(데이터 수정시 비교)
-
-	            // 데이터를 그리드에 뿌리기
-	            grid.resetData(response.map(item => ({
-	                NEW_NO: item.NEW_NO,           
-	                NEW_SECTION: item.detailCode.DCO_ID,
-	                NEW_NAME: item.NEW_NAME, 
-	                NEW_CONTENT: item.NEW_CONTENT,   
-	                NEW_DATE: item.NEW_DATE 
-	            })));
-	        },
+            	for (let i = 0; i < response.length; i++){
+					const id = response[i].DCO_ID;
+					// Set에 추가하여 중복 체크
+				    if (!uniqueValues.has(id)) {
+				        uniqueValues.add(id); // 중복이 아닌 경우 추가
+					    detailList.push({
+							ID: response[i].ID,
+			            	DCO_ID: id, // 표시할 텍스트
+			            	DCO_VALUE: response[i].DCO_VALUE, // 실제 값
+			            	subCode: {ID: response[i].subCode.ID, 
+			            			  SCO_ID: response[i].subCode.SCO_ID, 
+			            			  SCO_VALUE: response[i].subCode.SCO_VALUE,
+			            			  }
+		        		});
+				    }
+				    
+				    if(detailList[i].subCode.ID == 5){
+						selectOptions.push({
+			            	text: `${detailList[i].DCO_ID}(${detailList[i].DCO_VALUE})`, // 표시할 텍스트
+			            	value: detailList[i].DCO_ID // 실제 값
+		        		});
+					}
+				}
+		
+	    
+		    $.ajax({
+		        type: 'GET',
+		        url: '/admin/news/list', // 데이터 가져올 API 엔드포인트
+		        success: function(response) {
+					console.log('서버 응답:', response); // 여기서 응답 데이터 출력
+					
+					
+					initialData = response; // 초기 데이터 저장(데이터 수정시 비교)
+	
+		            // 데이터를 그리드에 뿌리기
+		            grid.resetData(response.map(item => ({
+		                NEW_NO: item.NEW_NO,           
+		                NEW_SECTION: item.detailCode.DCO_ID,
+		                NEW_NAME: item.NEW_NAME, 
+		                NEW_CONTENT: item.NEW_CONTENT,   
+		                NEW_DATE: item.NEW_DATE 
+		            })));
+		        },
+		        error: function(error) {
+		            console.error('Error fetching data:', error);
+		            alert('데이터를 가져오는 데 실패했습니다.'); // 사용자에게 에러 메시지 알림
+		        }
+		    });
+	    
+	    },
 	        error: function(error) {
 	            console.error('Error fetching data:', error);
 	            alert('데이터를 가져오는 데 실패했습니다.'); // 사용자에게 에러 메시지 알림

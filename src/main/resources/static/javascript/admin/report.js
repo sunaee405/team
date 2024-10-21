@@ -306,78 +306,167 @@ $(document).ready(function() {
 		const StatusList = [];
 		
 		// 로컬 스토리지에서 데이터 읽기
-	    detailList = JSON.parse(localStorage.getItem('detailList'));
+	    //detailList = JSON.parse(localStorage.getItem('detailList'));
 	    
-	    //처리결과
-	    for(let i = 0; i < detailList.length; i++){
-			if(detailList[i].subCode.ID === 12){
-				ResultList.push({
-            	text: `${detailList[i].DCO_ID}(${detailList[i].DCO_VALUE})`, // 표시할 텍스트
-            	value: detailList[i].DCO_ID // 실제 값
-        		});
-			}
-		}
-		
-		// ResultList를 셀렉트 박스의 옵션 형식으로 변환
-		selectedResult = ResultList.map(item => ({
-		    text: item.text,  // 표시할 텍스트
-		    value: item.value  // 실제 값
-		}));
-		
-		//신고 섹션
-		for(let i = 0; i < detailList.length; i++){
-			if(detailList[i].subCode.ID == 8){
-				SectionList.push({
-            	text: `${detailList[i].DCO_ID}(${detailList[i].DCO_VALUE})`, // 표시할 텍스트
-            	value: detailList[i].DCO_ID // 실제 값
-        		});
-			}
-		}
-		
-		// SectionList를 셀렉트 박스의 옵션 형식으로 변환
-		selectedSection = SectionList.map(item => ({
-		    text: item.text,  // 표시할 텍스트
-		    value: item.value  // 실제 값
-		}));
-		
-		//처리상태
-		for(let i = 0; i < detailList.length; i++){
-			if(detailList[i].subCode.ID == 11){
-				StatusList.push({
-            	text: `${detailList[i].DCO_ID}(${detailList[i].DCO_VALUE})`, // 표시할 텍스트
-            	value: detailList[i].DCO_ID // 실제 값
-        		});
-			}
-		}
-		
-		// StatusList를 셀렉트 박스의 옵션 형식으로 변환
-		selectStatus = StatusList.map(item => ({
-		    text: item.text,  // 표시할 텍스트
-		    value: item.value  // 실제 값
-		}));
+	    
+	    // DB에서 데이터 가져와서 화면에 뿌리기
+		const listItems = [];// SCO_ID를 저장할 배열 초기화
+	    let uniqueValues = new Set(); // 중복 제거를 위한 Set 초기화
+	    
 	    $.ajax({
 	        type: 'GET',
-	        url: '/admin/report/list', // 데이터 가져올 API 엔드포인트
+	        url: '/admin/detailcodes', // 데이터 가져올 API 엔드포인트
 	        success: function(response) {
 				console.log('서버 응답:', response); // 여기서 응답 데이터 출력
-				initialData = response; // 초기 데이터 저장(데이터 수정시 비교)
-	            // 데이터를 그리드에 뿌리기
-	            grid.resetData(response.map(item => ({
-	                REP_NO: item.REP_NO,           
-	                MEM_NO: item.memberNo.mem_id,
-	                PRO_NO: item.productNo.pro_no,
-	                REP_CONTENT: item.REP_CONTENT, 
-	                REP_RESULT: item.resultDetail.DCO_ID,
-	                REP_SECTION: item.sectionDetail.DCO_ID,
-	                REP_STATUS: `${item.statusDetail.DCO_ID}(${item.statusDetail.DCO_VALUE})`,
-	                REP_DATE: item.REP_DATE,
-	            })));
+            	for (let i = 0; i < response.length; i++){
+					const id = response[i].DCO_ID;
+					// Set에 추가하여 중복 체크
+				    if (!uniqueValues.has(id)) {
+				        uniqueValues.add(id); // 중복이 아닌 경우 추가
+					    detailList.push({
+							ID: response[i].ID,
+			            	DCO_ID: id, // 표시할 텍스트
+			            	DCO_VALUE: response[i].DCO_VALUE, // 실제 값
+			            	subCode: {ID: response[i].subCode.ID, 
+			            			  SCO_ID: response[i].subCode.SCO_ID, 
+			            			  SCO_VALUE: response[i].subCode.SCO_VALUE,
+			            			  }
+		        		});
+		        		if (response[i].subCode.ID === 12){
+							selectedResult.push({
+				            	text: `${detailList[i].DCO_ID}(${detailList[i].DCO_VALUE})`, // 표시할 텍스트
+				            	value: detailList[i].DCO_ID // 실제 값
+			        		});
+						}
+						
+						if(detailList[i].subCode.ID == 8){
+							selectedSection.push({
+				            	text: `${detailList[i].DCO_ID}(${detailList[i].DCO_VALUE})`, // 표시할 텍스트
+				            	value: detailList[i].DCO_ID // 실제 값
+				        	});
+						}
+						
+						if(detailList[i].subCode.ID == 11){
+							selectStatus.push({
+				            	text: `${detailList[i].DCO_ID}(${detailList[i].DCO_VALUE})`, // 표시할 텍스트
+				            	value: detailList[i].DCO_ID // 실제 값
+			        		});
+						}
+						
+						// ResultList를 셀렉트 박스의 옵션 형식으로 변환
+//						selectedResult = ResultList.map(item => ({
+//						    text: item.text,  // 표시할 텍스트
+//						    value: item.value  // 실제 값
+//						}));
+		        		
+				    }
+				}
+				//처리결과
+//			    for(let i = 0; i < detailList.length; i++){
+//					if(detailList[i].subCode.ID === 12){
+//						ResultList.push({
+//		            	text: `${detailList[i].DCO_ID}(${detailList[i].DCO_VALUE})`, // 표시할 텍스트
+//		            	value: detailList[i].DCO_ID // 실제 값
+//		        		});
+//					}
+//				}
+//				
+//				// ResultList를 셀렉트 박스의 옵션 형식으로 변환
+//				selectedResult = ResultList.map(item => ({
+//				    text: item.text,  // 표시할 텍스트
+//				    value: item.value  // 실제 값
+//				}));
+				
+				//신고 섹션
+//				for(let i = 0; i < detailList.length; i++){
+//					if(detailList[i].subCode.ID == 8){
+//						SectionList.push({
+//		            	text: `${detailList[i].DCO_ID}(${detailList[i].DCO_VALUE})`, // 표시할 텍스트
+//		            	value: detailList[i].DCO_ID // 실제 값
+//		        		});
+//					}
+//				}
+//				// SectionList를 셀렉트 박스의 옵션 형식으로 변환
+//				selectedSection = SectionList.map(item => ({
+//				    text: item.text,  // 표시할 텍스트
+//				    value: item.value  // 실제 값
+//				}));
+				
+				//처리상태
+//				for(let i = 0; i < detailList.length; i++){
+//					if(detailList[i].subCode.ID == 11){
+//						StatusList.push({
+//		            	text: `${detailList[i].DCO_ID}(${detailList[i].DCO_VALUE})`, // 표시할 텍스트
+//		            	value: detailList[i].DCO_ID // 실제 값
+//		        		});
+//					}
+//				}
+//				
+//				// StatusList를 셀렉트 박스의 옵션 형식으로 변환
+//				selectStatus = StatusList.map(item => ({
+//				    text: item.text,  // 표시할 텍스트
+//				    value: item.value  // 실제 값
+//				}));
+//				debugger;
+			    $.ajax({
+			        type: 'GET',
+			        url: '/admin/report/list', // 데이터 가져올 API 엔드포인트
+			        success: function(response) {
+						console.log('서버 응답:', response); // 여기서 응답 데이터 출력
+						initialData = response; // 초기 데이터 저장(데이터 수정시 비교)
+			            // 데이터를 그리드에 뿌리기
+			            grid.resetData(response.map(item => ({
+			                REP_NO: item.REP_NO,           
+			                MEM_NO: item.memberNo.mem_id,
+			                PRO_NO: item.productNo.pro_no,
+			                REP_CONTENT: item.REP_CONTENT, 
+			                REP_RESULT: item.resultDetail.DCO_ID,
+			                REP_SECTION: item.sectionDetail.DCO_ID,
+			                REP_STATUS: `${item.statusDetail.DCO_ID}(${item.statusDetail.DCO_VALUE})`,
+			                REP_DATE: item.REP_DATE,
+			            })));
+			        },
+			        error: function(error) {
+			            console.error('Error fetching data:', error);
+			            alert('데이터를 가져오는 데 실패했습니다.'); // 사용자에게 에러 메시지 알림
+			        }
+			    });
+
 	        },
 	        error: function(error) {
 	            console.error('Error fetching data:', error);
 	            alert('데이터를 가져오는 데 실패했습니다.'); // 사용자에게 에러 메시지 알림
 	        }
 	    });
+	    
+//	    $.ajax({
+//	        type: 'GET',
+//	        url: '/admin/report/list', // 데이터 가져올 API 엔드포인트
+//	        success: function(response) {
+//				console.log('서버 응답:', response); // 여기서 응답 데이터 출력
+//				initialData = response; // 초기 데이터 저장(데이터 수정시 비교)
+//	            // 데이터를 그리드에 뿌리기
+//	            grid.resetData(response.map(item => ({
+//	                REP_NO: item.REP_NO,           
+//	                MEM_NO: item.memberNo.mem_id,
+//	                PRO_NO: item.productNo.pro_no,
+//	                REP_CONTENT: item.REP_CONTENT, 
+//	                REP_RESULT: item.resultDetail.DCO_ID,
+//	                REP_SECTION: item.sectionDetail.DCO_ID,
+//	                REP_STATUS: `${item.statusDetail.DCO_ID}(${item.statusDetail.DCO_VALUE})`,
+//	                REP_DATE: item.REP_DATE,
+//	            })));
+//	        },
+//	        error: function(error) {
+//	            console.error('Error fetching data:', error);
+//	            alert('데이터를 가져오는 데 실패했습니다.'); // 사용자에게 에러 메시지 알림
+//	        }
+//	    });
+	    
+	    
+	    
+	    
+	    
 	}
 
    

@@ -182,7 +182,7 @@
            </if>
     	<choose>
 	        <when test="sortType == 'views'">
-            ORDER BY PRO.PRO_VIEWS DESC
+         	ORDER BY PRO.PRO_VIEWS DESC
         	</when>
         	<when test="sortType == 'date'">
             ORDER BY PRO.PRO_DATE DESC
@@ -208,13 +208,11 @@
            AND PRO.PRO_CATEGORY = #{categoryId}
            </if>
            <if test="locationScoId != null and locationScoId != ''">
-           AND PRO.PRO_LOCATION IN (
-        SELECT TDC.DCO_ID 
-          FROM DETAIL_CODE TDC
-          JOIN SUB_CODE TSC
-            ON TDC.SCO_ID = TSC.SCO_ID
-         WHERE TSC.SCO_ID = #{locationScoId}
-        	)
+           AND PRO.PRO_LOCATION IN (SELECT TDC.DCO_ID 
+          							  FROM DETAIL_CODE TDC
+          							  JOIN SUB_CODE TSC
+            							ON TDC.SCO_ID = TSC.SCO_ID
+         							 WHERE TSC.SCO_ID = #{locationScoId})
     	  </if>
     	  <if test="locationDcoId != null and locationDcoId != ''">
      	   AND PRO.PRO_LOCATION = #{locationDcoId}

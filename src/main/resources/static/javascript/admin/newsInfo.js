@@ -3,24 +3,52 @@ $(function() {
 	const newsNo = urlParams.get('NEW_NO');
 	
 	const listItems = [];// DCO_ID를 저장할 배열 초기화
+	let detailList = [];
+	let selectOptions = [];
+//	let uniqueValues = new Set(); // 중복 제거를 위한 Set 초기화
 	// 로컬 스토리지에서 데이터 읽기
-    let detailList = JSON.parse(localStorage.getItem('detailList'));
-    for(let i = 0; i < detailList.length; i++){
-		if(detailList[i].subCode.ID == 9){
-			listItems.push({
-        	text: `${detailList[i].DCO_ID}(${detailList[i].DCO_VALUE})`, // 표시할 텍스트
-        	value: detailList[i].DCO_ID // 실제 값
-    		});
-		}
-		
-	}
-		
-		// listItems를 셀렉트 박스의 옵션 형식으로 변환
-		selectOptions = listItems.map(item => ({
-		    text: item.text,  // 표시할 텍스트
-		    value: item.value  // 실제 값
-		}));
+//    let detailList = JSON.parse(localStorage.getItem('detailList'));
+//    for(let i = 0; i < detailList.length; i++){
+//		if(detailList[i].subCode.ID == 9){
+//			listItems.push({
+//        		text: `${detailList[i].DCO_ID}(${detailList[i].DCO_VALUE})`, // 표시할 텍스트
+//        		value: detailList[i].DCO_ID // 실제 값
+//    		});
+//		}
+//		
+//	}
+//		
+//		// listItems를 셀렉트 박스의 옵션 형식으로 변환
+//		selectOptions = listItems.map(item => ({
+//		    text: item.text,  // 표시할 텍스트
+//		    value: item.value  // 실제 값
+//		}));
 	
+	$.ajax({
+        type: 'GET',
+        url: '/admin/detailcodes', // 데이터 가져올 API 엔드포인트
+        success: function(response) {
+			console.log('서버 응답:', response); // 여기서 응답 데이터 출력
+        	for (let i = 0; i < response.length; i++){
+			    detailList.push({
+					ID: response[i].ID,
+	            	DCO_ID: response[i].DCO_ID, // 표시할 텍스트
+	            	DCO_VALUE: response[i].DCO_VALUE, // 실제 값
+	            	subCode: {ID: response[i].subCode.ID, 
+	            			  SCO_ID: response[i].subCode.SCO_ID, 
+	            			  SCO_VALUE: response[i].subCode.SCO_VALUE,
+	            			  }
+        		});
+        		
+			    if (response[i].subCode.ID == 5){
+					selectOptions.push({
+		            	text: `${response[i].DCO_ID}(${response[i].DCO_VALUE})`, // 표시할 텍스트
+		            	value: response[i].DCO_ID // 실제 값
+	    			});
+				}
+		    }
+		    
+		    
 	
 	$.ajax({
             type: 'GET',
@@ -35,7 +63,6 @@ $(function() {
 				        `).join('')}
 				    </select>
 				`;
-				
 				
                 // 데이터가 성공적으로 반환되면 테이블에 추가
 	            $('#news-info').html(`
@@ -116,29 +143,26 @@ $(function() {
 				    	});
 			            //ajax 요청
 			            $.ajax({
-			            type: 'PUT', // 수정하는 경우 PUT 메서드를 사용
-			            url: `/admin/news/${newsNo}`, // 수정 API 엔드포인트
-			            contentType: 'application/json', // JSON 형식으로 설정
-			            data: JSON.stringify(updates), // updates 객체를 JSON 문자열로 변환
-			            success: function(response) {
-			                alert('수정이 완료되었습니다.');
-			                // 각 셀의 텍스트 업데이트
-			                $.each(updates, function(field, value) {
-			                    $(`.editable[data-field="${field}"]`).text(value);
-			                });
-			                // NEW_DATE를 업데이트
-			                const newDateValue = response.NEW_DATE; // 서버에서 반환된 NEW_DATE 값
-						    $('td[data-field="NEW_DATE"]').text(newDateValue); // 시간 셀 업데이트
-
-			            },
-			            error: function(error) {
-			                console.error('Error saving changes:', error);
-			                alert('수정하는 데 실패했습니다.');
-			            }
-			        });
-				        
-				        
-				        
+				            type: 'PUT', // 수정하는 경우 PUT 메서드를 사용
+				            url: `/admin/news/${newsNo}`, // 수정 API 엔드포인트
+				            contentType: 'application/json', // JSON 형식으로 설정
+				            data: JSON.stringify(updates), // updates 객체를 JSON 문자열로 변환
+				            success: function(response) {
+				                alert('수정이 완료되었습니다.');
+				                // 각 셀의 텍스트 업데이트
+				                $.each(updates, function(field, value) {
+				                    $(`.editable[data-field="${field}"]`).text(value);
+				                });
+				                // NEW_DATE를 업데이트
+				                const newDateValue = response.NEW_DATE; // 서버에서 반환된 NEW_DATE 값
+							    $('td[data-field="NEW_DATE"]').text(newDateValue); // 시간 셀 업데이트
+	
+				            },
+				            error: function(error) {
+				                console.error('Error saving changes:', error);
+				                alert('수정하는 데 실패했습니다.');
+				            }
+				        });
 				    });
 		
 		        });
@@ -148,7 +172,18 @@ $(function() {
 	                console.error('Error fetching member details:', error);
 	                alert('회원 정보를 가져오는 데 실패했습니다.');
 	            }
+	            
+	            
 	        });
+	        	    },
+	        error: function(error) {
+	            console.error('Error fetching data:', error);
+	            alert('데이터를 가져오는 데 실패했습니다.'); // 사용자에게 에러 메시지 알림
+	        }
+	    });
+	
+	        
+	        
 	        
 	$('#deleteButton').click(function(){
 	    // Ajax 요청으로 서버에 데이터 전송
@@ -167,6 +202,7 @@ $(function() {
 	            alert('처리에 실패했습니다.');
 	        }
 	    });
+	    
 	});       
 	
 });
