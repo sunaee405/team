@@ -14,7 +14,7 @@ $(async function() {
 				const imgUrl = displayImage(silde.ban_img);
 				
 				var text =
-				`<div class="banImg" data-code="${silde.ban_code}" style="dispaly:none;">
+				`<div class="banImg" data-code="${silde.ban_code}" style="dispaly:none; cursor: pointer;">
 					<img src="${imgUrl}" style="height: 100%; width: 100%;">
 		        </div>`
 		        $('#adSlide').prepend(text);

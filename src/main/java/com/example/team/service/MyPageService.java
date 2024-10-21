@@ -16,6 +16,7 @@ import com.example.team.model.MemberEntity;
 import com.example.team.persistence.BannerImgRepository;
 import com.example.team.persistence.ChattingRepository;
 import com.example.team.persistence.MemberRepository;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 
 @Service
 public class MyPageService {
@@ -31,7 +32,10 @@ public class MyPageService {
 	@Autowired
 	private BannerImgRepository bannerImgRepository;
 	
-	
+	private final JPAQueryFactory jpaQueryFactory;
+	public MyPageService(JPAQueryFactory jpaQueryFactory) {
+		this.jpaQueryFactory = jpaQueryFactory;
+	}
 	
 	
 	// 상품 카테고리
@@ -45,16 +49,12 @@ public class MyPageService {
 	// 메인페이지 상품 리스트
 	public List<Map<String, Object>> getMainProductList(Map<String, Object> data) {
 		String type = (String)data.get("TYPE");
-		
-		
-		
 		return myPageMapper.getMainProductList(data);
 	}
 	
 	// 해당 회원들간의 채팅방이 있는지 찾기
 	public List<ChattingEntity> getChatRoom(Map<String, Object> data) {
 		List<ChattingEntity> chattingEntity = myPageMapper.getChatRoom(data);
-		
 		return chattingEntity;
 	}
 	
@@ -131,9 +131,6 @@ public class MyPageService {
 	public void deleteChatRoom(Map<String, Object> data) {
 		chattingRepository.deleteById(Long.valueOf((String) data.get("CHA_NO")));
 	}
-
-
-
 
 	public void InquiryDelete(int INQ_NO) {
 		myPageMapper.InquiryDelete(INQ_NO);

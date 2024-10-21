@@ -91,7 +91,7 @@ public class MyPageController {
 				// 이미지 파일 무손실 압축
 				ImageWriteParam param = writer.getDefaultWriteParam();
 				param.setCompressionMode(ImageWriteParam.MODE_EXPLICIT); // 압축 설정
-				param.setCompressionQuality(1.0f); // 압축 비율
+				param.setCompressionQuality(0.7f); // 압축 비율
 
 				// 변환한 이미지 저장
 				writer.write(null, new IIOImage(bufferedImage, null, null), param);
