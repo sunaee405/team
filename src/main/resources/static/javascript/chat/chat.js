@@ -5,7 +5,6 @@ $(document).on('click', '#chatList', function() {
 		window.location.href = "/member/login";
 		return;
 	}
-	
 	let chatList = 
 		`<div>
 		    <div class="rc-drawer rc-drawer-right rc-drawer-open" tabindex="-1">
@@ -45,6 +44,7 @@ $(document).on('click', '#chatList', function() {
 		`;
 	// top.html 호출중인 현재 페이지(부모페이지)에 접근
 	window.parent.$('body').append(chatList);
+	
 	
 	
 	// 해당 회원 값
