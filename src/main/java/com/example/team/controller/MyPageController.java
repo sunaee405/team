@@ -7,12 +7,14 @@ import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Base64;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import javax.imageio.IIOImage;
 import javax.imageio.ImageIO;
@@ -35,13 +37,19 @@ import org.springframework.web.multipart.MultipartFile;
 import com.example.team.model.BannerImgEntity;
 import com.example.team.model.ChattingEntity;
 import com.example.team.model.MemberEntity;
+import com.example.team.model.ProductEntity;
 import com.example.team.service.MemberService;
 import com.example.team.service.MyPageService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.querydsl.core.Tuple;
 
+import ch.qos.logback.core.boolex.Matcher;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.criteria.CriteriaBuilder.In;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -57,6 +65,10 @@ public class MyPageController {
 	
 	@Autowired
 	private MyPageService myPageService;
+	
+	
+	
+	
 
 	private ObjectMapper objectMapper = new ObjectMapper();
 	
@@ -138,17 +150,22 @@ public class MyPageController {
 			objectMapper.registerModule(new JavaTimeModule());
 			objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
 			Map<String, Object> code = getDetailCode();
+			
 			String str = objectMapper.writeValueAsString(data);
+			
 
 			// 키를 | 로 구분해 정규표현식에 사용할 문자열 패턴 생성
-			String regex = String.join("|", code.keySet());
+			String regex = code.keySet().stream()
+							   .sorted(Comparator.comparingInt(String::length).reversed().thenComparing(Comparator.naturalOrder()))
+							   // 정규표현식에 ard1, ard11등이 있을때 ard11이란 값이 들어오면 ard1에서 먼저 가로채기 때문에 반대로 정렬함
+	                   		   .map(Pattern::quote)  // 키를 안전하게 정규 표현식에 사용할 수 있도록 변환
+	                   		   .collect(Collectors.joining("|"));
 
 			// 정규표현식 패턴
 			Pattern pattern = Pattern.compile(regex);
-
 			// 치환
-			String result = pattern.matcher(str).replaceAll(match -> {
-				String matchedKey = match.group();
+			String result = pattern.matcher(str.trim()).replaceAll(match -> {
+				String matchedKey = match.group(0);
 				return code.get(matchedKey).toString();
 			});
 
@@ -156,8 +173,6 @@ public class MyPageController {
 //				    	   .replaceAll("=\"\"", ": \"\"") // 빈 값 처리
 //				    	   .replaceAll("=(\\d+)", ": $1") // 숫자는 그대로 유지
 //				    	   .replaceAll("=(\\w+)", ": \"$1\""); // 문자열 값에 큰따옴표 추가
-
-			System.out.println(result);
 			if (data instanceof Map) {
 				return (T) objectMapper.readValue(result, Map.class);
 			} else if (data instanceof List) {
@@ -182,7 +197,7 @@ public class MyPageController {
 	// 메인페이지 상품메뉴 생성
 	@GetMapping("/getMainProductList")
 	public ResponseEntity<?> getMainProductList(@RequestParam Map<String, Object> data) {
-		List<Map<String, Object>> productList = myPageService.getMainProductList(data);
+		List<ProductEntity> productList = myPageService.getMainProductList(data);
 
 		productList = transCode(productList);
 
@@ -207,18 +222,20 @@ public class MyPageController {
 	// ============================================ 마이페이지
 	// ========================================================================
 	@PostMapping("/getDetailMyProduct")
-	public ResponseEntity<?> getDetailMyProduct(@RequestBody Map<String, Object> data) {
+	public ResponseEntity<?> getDetailMyProduct(@RequestBody Map<String, Object> data) throws JsonProcessingException {
 		System.out.println(data);
 
 		List<Map<String, Object>> proList = myPageService.getDetailMyProduct(data);
 
 		System.out.println("마이페이지 상품목록" + proList);
-		if (proList != null && proList.size() != 0) {
-			proList = transCode(proList);
-			return ResponseEntity.status(HttpStatus.OK).body(proList);
-		} else {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("noList");
-		}
+//		if (proList != null && proList.size() != 0) {
+//			proList = transCode(proList);
+//			return ResponseEntity.status(HttpStatus.OK).body(proList);
+//		} else {
+//			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("noList");
+//		}
+		
+		return null;
 
 	}
 

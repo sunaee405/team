@@ -28,7 +28,6 @@ public class AjaxFilter implements Filter {
 		String contentType = httpRequest.getContentType();
 		String url = httpRequest.getRequestURI();
 		
-		System.out.println(url);
 		// 필터 예외 조건
 		boolean check = url.startsWith("/api/") || 
 		                url.startsWith("/images/") || 
@@ -49,7 +48,8 @@ public class AjaxFilter implements Filter {
 			return;
 		}
 		
-		
+		System.out.println(url);
+
 		// 조건에 맞지 않는 주소요청일 경우 redirect 붙여서 재요청
 		RequestDispatcher dispatcher = httpRequest.getRequestDispatcher("/redirect" + url);
 		dispatcher.forward(request, response); // 요청을 포워딩

@@ -8,7 +8,7 @@
 	<!-- 공통코드 호출 -->
 	<select id="getDetailCode" resultType="String">
 		SELECT JSON_OBJECTAGG(DCO_ID, DCO_VALUE)
-		FROM TEST_DETAIL_CODE;
+		FROM DETAIL_CODE;
 	</select>
 	
 	

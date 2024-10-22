@@ -16,7 +16,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Builder				// Bulider 패턴으로 객체 생성 가능
 @NoArgsConstructor		// 기본생성자
 @AllArgsConstructor		// 모든 멤버변수 초기화하는 생성자
 @Data  // get/set 및 toString 오버라이딩
