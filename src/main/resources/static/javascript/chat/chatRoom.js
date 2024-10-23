@@ -23,7 +23,7 @@ $(async function() {
 	    body: formData
 	};
 
-	// 소켓 연결시 ajax에서 유저 정보로 채팅내역 불러오기
+	// 소켓 연결시 유저 정보로 채팅내역 불러오기
 	socket.onopen = () => {
 		fetch(roomUrl, options)
 	    .then(response => {
@@ -35,7 +35,6 @@ $(async function() {
 	        return response.json(); // 응답을 JSON으로 변환
 	    })
 	    .then(success => {
-			debugger;
 			
 			$(".chat").attr("data-rNum", success[0].CHA_NO);
 				
@@ -164,9 +163,7 @@ $(document).on('click', ".btn-success", function() {
         "CHA_NO" 	: chatRoomNo
 	});
 	
-	debugger;
 	const url = '/updateChat';
-	debugger;
 	// 요청 옵션
 	const options = {
 		method: 'POST',

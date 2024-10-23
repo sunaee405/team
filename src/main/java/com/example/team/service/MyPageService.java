@@ -29,6 +29,8 @@ import com.querydsl.core.Tuple;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.core.types.dsl.NumberExpression;
+import com.querydsl.core.types.dsl.NumberPath;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
@@ -73,13 +75,15 @@ public class MyPageService {
 		
 		// 정렬 타입 정의
 		OrderSpecifier<?> specifier = null;
+		// varchar 형으로 관리되고 있는 proPrice 정렬을 위해 정수로 활용 할 수 있도록 따로 저장
+		NumberExpression<Integer>
+			proPrice = Expressions.numberTemplate(Integer.class, "CAST(REPLACE({0}, ',', '') AS INTEGER)", product.proPrice);
 		switch (type) {
 			case "ARD2": specifier = product.proDate.desc(); break; // 최근등록
-			case "ARD3": specifier = product.proPrice.desc(); break; // 높은가격
-			case "ARD4": specifier = product.proPrice.asc(); break; // 낮은가격
+			case "ARD3": specifier = proPrice.desc(); break; // 높은가격
+			case "ARD4": specifier = proPrice.asc(); break; // 낮은가격
 			default: specifier = product.proViews.desc();
 		}
-		
 		
 		List<ProductEntity> list = q.select(product)
 									.from(product)
@@ -87,7 +91,6 @@ public class MyPageService {
 									.orderBy(specifier)
 									.limit(30)
 									.fetch();
-		
 		return list;
 	}
 	

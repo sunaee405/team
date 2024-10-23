@@ -33,14 +33,14 @@ $(window.parent).on('load', function() {
 			clearInterval(checkReadyInterval); // 이벤트 삭제
 			
 			// 검색어 || 카테고리 || 정렬 전달
-			const triggerEvent = ['click', 'input']; 
+//			const triggerEvent = ['click', 'input']; 
 			
 	        const searchData = sessionStorage.getItem('searchText');
 	        const detailCode = sessionStorage.getItem('detailCode');
 	        
-	        $(window.parent.document).find(`[data-id="${detailCode}"]`).trigger(triggerEvent); // 상품 페이지 클릭 이벤트
-	        $(window.parent.document).find(`[data-category="${detailCode}"]`).trigger(triggerEvent); // 고객센터 카테고리 클릭
-	        $(window.parent.document).find('#search-input').val(searchData).trigger(triggerEvent); // 상품페이지 검색어 전달
+	        $(window.parent.document).find(`[data-id="${detailCode}"]`).trigger('click'); // 상품 페이지 클릭 이벤트
+	        $(window.parent.document).find(`[data-category="${detailCode}"]`).trigger('click'); // 고객센터 카테고리 클릭
+	        $(window.parent.document).find('#search-input').val(searchData).trigger('input'); // 상품페이지 검색어 전달
 	        
 	        // 스토리지에서 두 데이터 삭제
 	        sessionStorage.removeItem('searchText');

@@ -131,7 +131,10 @@ public class MyPageController {
 	}
 
 	// 공통코드 불러오기
-	public Map<String, Object> getDetailCode() {
+	public static  Map<String, Object> getDetailCode() {
+		ObjectMapper objectMapper = new ObjectMapper();
+		MyPageService myPageService = new MyPageService();
+		
 		String jsonStr = myPageService.getDetailCode();
 		Map<String, Object> code = new HashMap<String, Object>();
 		try {
@@ -145,14 +148,14 @@ public class MyPageController {
 	}
 
 	// 테이블 공통코드 변환
-	public <T> T transCode(Object data) {
+	public static <T> T transCode(Object data) {
 		try {
+			ObjectMapper objectMapper = new ObjectMapper();
 			objectMapper.registerModule(new JavaTimeModule());
 			objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
-			Map<String, Object> code = getDetailCode();
+			Map<String, Object> code = MyPageController.getDetailCode();
 			
 			String str = objectMapper.writeValueAsString(data);
-			
 
 			// 키를 | 로 구분해 정규표현식에 사용할 문자열 패턴 생성
 			String regex = code.keySet().stream()
@@ -199,7 +202,7 @@ public class MyPageController {
 	public ResponseEntity<?> getMainProductList(@RequestParam Map<String, Object> data) {
 		List<ProductEntity> productList = myPageService.getMainProductList(data);
 
-		productList = transCode(productList);
+		productList = MyPageController.transCode(productList);
 
 		if (productList != null && !productList.isEmpty()) {
 			return ResponseEntity.status(HttpStatus.OK).body(productList);

@@ -231,7 +231,6 @@ async function getMainProductList() {
 
 // 각 상품 영역 찍어주는 함수
 function forProductList(key, typeValue, data) {
-	debugger;
 	// 등록일과 현재 시각 초단위로 얼마나 차이나는지	
 	const time = Math.floor((new Date() - new Date(data.proDate)) / 1000);
 
@@ -256,11 +255,13 @@ function forProductList(key, typeValue, data) {
 	const num = String(data.proPrice);
 	const rep = num.replace(/\D/g, ''); // \D는 숫자가 아닌 모든 문자
 	const price = Number(rep).toLocaleString();
-	//
+	// 하나의 컬럼에 여러 이미지가 있을수 있음
+	const imgUrl = data.proImg.split(',')[0];
+	debugger;
 	let productList =
 		`<a href="/product/contentProduct?proNo=${data.proNo}" class="productLink relative group box-border overflow-hidden flex rounded-md cursor-pointer pe-0 pb-2 lg:pb-3 flex-col items-start transition duration-200 ease-in-out transform bg-white ga4_main_latest_product">
 			<div class="relative w-full rounded-md overflow-hidden dim pt-[100%] mb-3 md:mb-3.5">
-				<img alt="${data.proTitle}" referrerpolicy="no-referrer" src="/images/${data.proImg}?impolicy=thumb&amp;size=150" decoding="async" data-nimg="fill" class="bg-gray-300 object-cover h-full group-hover:scale-105 w-full transition duration-200 ease-in rounded-md" loading="lazy" style="position:absolute;height:100%;width:100%;left:0;top:0;right:0;bottom:0;color:transparent">
+				<img alt="${data.proTitle}" referrerpolicy="no-referrer" src="/images/${imgUrl}" decoding="async" data-nimg="fill" class="bg-gray-300 object-cover h-full group-hover:scale-105 w-full transition duration-200 ease-in rounded-md" loading="lazy" style="position:absolute;height:100%;width:100%;left:0;top:0;right:0;bottom:0;color:transparent">
 			</div>
 			<div class="w-full overflow-hidden p-2 md:px-2.5 xl:px-4">
 				<h2 class="line-clamp-2 min-h-[2lh] text-sm md:text-base">${data.proTitle}</h2>

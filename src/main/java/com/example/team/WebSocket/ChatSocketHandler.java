@@ -17,9 +17,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class ChatSocketHandler extends TextWebSocketHandler {
 //	private List<WebSocketSession> socketSessions = new ArrayList<WebSocketSession>();
+	
 	 // WebSocketSession과 채팅방 번호를 연결하는 맵
 	 private final Map<String, List<WebSocketSession>> chatSession =
-			 new ConcurrentHashMap<String, List<WebSocketSession>>();
+			 										new ConcurrentHashMap<String, List<WebSocketSession>>();
 	
 	// 소켓연결 될때 동작하는 메서드
 //	@Override
@@ -41,7 +42,6 @@ public class ChatSocketHandler extends TextWebSocketHandler {
 	    
 	    if(type.equals("setSession")) {
 	    	chatSession.computeIfAbsent(chaNo, t -> new ArrayList()).add(session);
-	    	
 	    } else if(type.equals("chatMessage")) {
 	    	
 	    	System.out.println("chat chatMessage");
@@ -66,7 +66,6 @@ public class ChatSocketHandler extends TextWebSocketHandler {
 //	소켓의 연결이 종료될때 동작하는 메서드 
 	@Override
 	public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
-		
 //		chatSession.get(endChatNo).removeIf(sessions -> sessions.equals(session));
 		
 		chatSession.values().removeIf(sessions -> {
