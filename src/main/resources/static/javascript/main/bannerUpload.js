@@ -5,14 +5,16 @@ $(async function() {
         dataType: 'json',
         success: (data) => {
 			$('body').append(`<table id="bannerTable" border="1 solid black"><tr><td>id</td><td>파일</td><td>코드</td><td>상세정보</td></tr></table>`);
-			data.forEach((item) => {
-				var line =`<tr> 
-							<td class="numId">${item.ID}</td>
-							<td><input data-id={item.DCO_ID} class="bannerFile" type="file"></td>
-							<td class="dcId">${item.DCO_ID}</td>
-							<td class="dcVal">${item.DCO_VALUE}</td>
-						   </tr>`
-				$('#bannerTable').append(line);
+			
+			const filt = data.filter(item => item.SCO_ID === 'PRS');
+			filt.forEach((item) => {
+			    var line = `<tr> 
+			                    <td class="numId">${item.ID}</td>
+			                    <td><input data-id="${item.DCO_ID}" class="bannerFile" type="file"></td>
+			                    <td class="dcId">${item.DCO_ID}</td>
+			                    <td class="dcVal">${item.DCO_VALUE}</td>
+			                </tr>`;
+			    $('#bannerTable').append(line);
 			});
 		},
 		error: (error) => {

@@ -46,6 +46,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.querydsl.core.Tuple;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import ch.qos.logback.core.boolex.Matcher;
 import jakarta.persistence.EntityManager;
@@ -103,7 +104,7 @@ public class MyPageController {
 				// 이미지 파일 무손실 압축
 				ImageWriteParam param = writer.getDefaultWriteParam();
 				param.setCompressionMode(ImageWriteParam.MODE_EXPLICIT); // 압축 설정
-				param.setCompressionQuality(0.7f); // 압축 비율
+				param.setCompressionQuality(0.5f); // 압축 비율
 
 				// 변환한 이미지 저장
 				writer.write(null, new IIOImage(bufferedImage, null, null), param);
@@ -129,12 +130,9 @@ public class MyPageController {
 		List<BannerImgEntity> entity = myPageService.getBanner();
 		return ResponseEntity.ok().body(entity);
 	}
-
+	
 	// 공통코드 불러오기
-	public static  Map<String, Object> getDetailCode() {
-		ObjectMapper objectMapper = new ObjectMapper();
-		MyPageService myPageService = new MyPageService();
-		
+	public Map<String, Object> getDetailCode() {
 		String jsonStr = myPageService.getDetailCode();
 		Map<String, Object> code = new HashMap<String, Object>();
 		try {
@@ -148,12 +146,12 @@ public class MyPageController {
 	}
 
 	// 테이블 공통코드 변환
-	public static <T> T transCode(Object data) {
+	public <T> T transCode(Object data) {
 		try {
 			ObjectMapper objectMapper = new ObjectMapper();
 			objectMapper.registerModule(new JavaTimeModule());
 			objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
-			Map<String, Object> code = MyPageController.getDetailCode();
+			Map<String, Object> code = getDetailCode();
 			
 			String str = objectMapper.writeValueAsString(data);
 
@@ -202,7 +200,9 @@ public class MyPageController {
 	public ResponseEntity<?> getMainProductList(@RequestParam Map<String, Object> data) {
 		List<ProductEntity> productList = myPageService.getMainProductList(data);
 
-		productList = MyPageController.transCode(productList);
+		productList = transCode(productList);
+		
+		System.out.println("productList" + productList);
 
 		if (productList != null && !productList.isEmpty()) {
 			return ResponseEntity.status(HttpStatus.OK).body(productList);
@@ -231,15 +231,12 @@ public class MyPageController {
 		List<Map<String, Object>> proList = myPageService.getDetailMyProduct(data);
 
 		System.out.println("마이페이지 상품목록" + proList);
-//		if (proList != null && proList.size() != 0) {
-//			proList = transCode(proList);
-//			return ResponseEntity.status(HttpStatus.OK).body(proList);
-//		} else {
-//			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("noList");
-//		}
-		
-		return null;
-
+		if (proList != null && proList.size() != 0) {
+			proList = transCode(proList);
+			return ResponseEntity.status(HttpStatus.OK).body(proList);
+		} else {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("noList");
+		}
 	}
 
 	@PostMapping("/myPage/proCount")

@@ -1,36 +1,30 @@
 package com.example.team.service;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
 
+import org.hibernate.transform.Transformers;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.ApplicationContextFactory;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 
 import com.example.team.Mapper.MyPageMapper;
 import com.example.team.Mapper.ProductMapper;
 import com.example.team.model.BannerImgEntity;
 import com.example.team.model.ChattingEntity;
+import com.example.team.model.DetailCodeEntity;
 import com.example.team.model.MemberEntity;
 import com.example.team.model.ProductEntity;
-import com.example.team.model.QLikeEntity;
-import com.example.team.model.QPaymentEntity;
+import com.example.team.model.QDetailCodeEntity;
 import com.example.team.model.QProductEntity;
 import com.example.team.persistence.BannerImgRepository;
 import com.example.team.persistence.ChattingRepository;
 import com.example.team.persistence.MemberRepository;
-import com.querydsl.core.BooleanBuilder;
-import com.querydsl.core.Tuple;
 import com.querydsl.core.types.OrderSpecifier;
-import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.NumberExpression;
-import com.querydsl.core.types.dsl.NumberPath;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
@@ -111,10 +105,13 @@ public class MyPageService {
 	}
 
 
-
 	// 공통코드 호출
 	public String getDetailCode() {
-		return myPageMapper.getDetailCode();
+		QDetailCodeEntity detailCode = QDetailCodeEntity.detailCodeEntity;
+		String detail = q.select(Expressions.stringTemplate("JSON_OBJECTAGG({0}, {1})", detailCode.DCO_ID, detailCode.DCO_VALUE))
+						 	   .from(detailCode)
+						 	   .fetchOne();
+		return detail; 
 	}
 
 
@@ -132,6 +129,7 @@ public class MyPageService {
 	
 	
 	public List<Map<String, Object>> getDetailMyProduct(Map<String, Object> data) {
+		// 쿼리 실행
 		return myPageMapper.getDetailMyProduct(data);
 	}
 	

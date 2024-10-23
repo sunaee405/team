@@ -124,11 +124,11 @@ function bodyInner() {
 		                                <dt class="justify-center mt-0">판매내역</dt>
 		                                <dd class="font-semibold text-jnblack" data-type="PRODUCT">0</dd>
 		                            </div>
-		                            <div class="relative cursor-pointer">
+		                            <div class="relative">
 		                                <dt class="justify-center mt-0">구매내역</dt>
 		                                <dd class="font-semibold text-jnblack" data-type="PAYMENT">0</dd>
 		                            </div>
-		                            <div class="relative">
+		                            <div class="relative noneContent">
 		                                <dt class="justify-center mt-0">찜한 상품</dt>
 		                                <dd class="font-semibold text-jnblack" data-type="LIKED">0</dd>
 		                            </div>
@@ -165,7 +165,7 @@ function bodyInner() {
 		                        </ul>
 		                    </div>
 		                    <div class="flex flex-wrap items-center justify-between">
-		                        <div class="flex-shrink-0 mb-1 text-sm text-body md:text-base pe-4 md:me-6 lg:block">총 <span class="proCount">0<span> 개</div>
+		                        <div class="flex-shrink-0 mb-1 text-sm text-body md:text-base pe-4 md:me-6 lg:block">총 <span class="proCount">0</span> 개</div>
 		                        <ul id="sortProduct" class="flex space-x-3">
 		                            <li><button class="text-sm font-medium text-[#141313]">최신순</button></li>
 		                            <li><span class="inline-block mb-0 w-[1px] h-[10px] border border-[#DADEE5]"></span></li>
@@ -257,7 +257,7 @@ async function getDetailMyProduct(selectType, sortType, memNo) {
 					break;
 				}
 			}
-			
+			debugger;
 			var text =
 			`<div class="relative secr">
 			    <div class="relative">
